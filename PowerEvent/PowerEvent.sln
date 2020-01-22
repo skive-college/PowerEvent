@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerEvent", "PowerEvent\PowerEvent.csproj", "{3E57BF1C-FC83-4525-8091-798E7AFDD12F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3E57BF1C-FC83-4525-8091-798E7AFDD12F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E57BF1C-FC83-4525-8091-798E7AFDD12F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E57BF1C-FC83-4525-8091-798E7AFDD12F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E57BF1C-FC83-4525-8091-798E7AFDD12F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9012C1A5-6359-4FA2-BE4E-3FAEB1FA5176}
+	EndGlobalSection
+EndGlobal
