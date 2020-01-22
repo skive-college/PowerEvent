@@ -8,6 +8,10 @@
     <Folder Include="Pages\Models\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DatabaseClassLibrary\DatabaseClassLibrary.csproj" />
+  </ItemGroup>
+
 
 
 </Project>
