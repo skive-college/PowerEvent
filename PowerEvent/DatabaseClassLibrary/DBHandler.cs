@@ -6,5 +6,6 @@ namespace DatabaseClassLibrary
 {
     class DBHandler
     {
+
     }
 }
