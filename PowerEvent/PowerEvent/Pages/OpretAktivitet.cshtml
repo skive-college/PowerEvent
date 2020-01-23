@@ -5,15 +5,17 @@
 }
 
     <div container>
-        Opræt aktivitet: <input type="text" name="txtAktivitet" placeholder="Aktivitet">
-        <select>
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-            <option value="mercedes">Mercedes</option>
-            <option value="audi">Audi</option>
-        </select>
-        <button type="submit" asp-page-handler="cmdSubmit">Save</button>
-    </div></br>
-    <select data-val="true" asp-items="@Model.People" data-val-required="The Person field is required." id="Person" name="Person" multiple style=" height: 400px; width: 250px">
-        
+        <form method="Post">
+            Opræt aktivitet: <input type="text" asp-for="@Model.Aktivitet" name="txtAktivitet" placeholder="Aktivitet">
+                             <input type="text" id="Member_Name"           name="Member.Name" value="" />
+            <select>
+                <option value="volvo">Volvo</option>
+                <option value="saab">Saab</option>
+                <option value="mercedes">Mercedes</option>
+                <option value="audi">Audi</option>
+            </select>
+            <button type="submit" asp-page-handler="cmdSubmit">Save</button>
+        </form>
+    </div><br/>
+    <select data-val="true" asp-items="@Model.People" data-val-required="The Person field is required." id="Person" name="Person" multiple style=" height: 400px; width: 250px"> 
     </select>
