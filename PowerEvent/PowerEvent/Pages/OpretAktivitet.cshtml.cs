@@ -33,12 +33,7 @@ namespace PowerEvent.Pages
         
         public void OnPost()
         {
-            
-        }
-        public void OnPostCmdSubmit()
-        {
-            string test;
-            test = Aktivitet;
+
         }
     }
 }
