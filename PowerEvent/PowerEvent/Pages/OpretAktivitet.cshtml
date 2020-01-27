@@ -6,15 +6,13 @@
 
     <div container>
         <form method="Post">
-            Opret aktivitet: <input type="text" asp-for="@Model.Aktivitet" placeholder="Aktivitet">
-            <select>
-                <option value="MaxSec">MaxSec</option>
-                <option value="MinSec">MinSec</option>
-                <option value="MaxPoint">MaxPoint</option>
-                <option value="MinPoint">MinPoint</option>
-            </select>
-            <input type="submit" value="save" asp-page-handler="CmdSubmit"/>
+            Opret aktivitet: <input type="text" asp-for="@Model.Aktivitet" placeholder="Aktivitet"/>
+            <select data-val="true" asp-items="@Model.PointTypeList"></select>
+            <input type="submit" value="Gem" asp-page-handler="CmdSubmit" />
+            <br />
+
+            <select data-val="true" asp-items="@Model.AktivitetList" multiple style=" height: 400px; width: 250px"></select>
+            
+            <input type="submit" value="Slet" asp-page-handler="CmdDelete" />
         </form>
-    </div><br/>
-    <select data-val="true" asp-items="@Model.People" data-val-required="The Person field is required." id="Person" name="Person" multiple style=" height: 400px; width: 250px"> 
-    </select>
+    </div>

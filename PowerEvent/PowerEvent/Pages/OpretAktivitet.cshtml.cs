@@ -11,29 +11,56 @@ namespace PowerEvent.Pages
 {
     public class testModel : CustomPageBase
     {
-        [TempData]
+        [BindProperty]
         public string Aktivitet { get; set; }
         [BindProperty]
         public int[] SelectedTags { get; set; }
         public SelectList TagOptions { get; set; }
+        [BindProperty]
+        public List<SelectListItem> AktivitetList { get; set; }
 
-        public List<SelectListItem> People { get; set; }
+        public List<SelectListItem> TempAktivitetList { get; set; }
+        [BindProperty]
+        public List<SelectListItem> PointTypeList { get; set; }
+
+        public List<SelectListItem> TempPointTypeList { get; set; }
         public void OnGet()
         {
-            loadTempUsers();
-            if (People == null)
+            AktivitetList = new List<SelectListItem>();
+            TempAktivitetList = new List<SelectListItem>();
+            loadTempAktivitet();
+            if (TempAktivitetList.Count == 0)
             {
-                People = new List<SelectListItem>
-            {
+                AktivitetList = new List<SelectListItem>()
+                {
                 new SelectListItem { Value = "1", Text = "Tyr MaxSec" },
                 new SelectListItem { Value = "2", Text = "Bold MaxPoint" },
                 new SelectListItem { Value = "3", Text = "Race MaxPoin" },
                 new SelectListItem { Value = "4", Text = "Sumo MinSec" }
-            };
+                };
+                saveTempAktivitet();
             }
+            else
+            {
+                AktivitetList = TempAktivitetList;
+            }
+          
+                PointTypeList = new List<SelectListItem>()
+                {
+                new SelectListItem { Value = "1", Text = "MaxSec" },
+                new SelectListItem { Value = "2", Text = "MinSec" },
+                new SelectListItem { Value = "3", Text = "MaxPoint" },
+                new SelectListItem { Value = "4", Text = "MinPoint" }
+                };
+                
+          
         }
         
         public void OnPost()
+        {
+
+        }
+        public void OnPostCmdDelete()
         {
 
         }
@@ -41,26 +68,27 @@ namespace PowerEvent.Pages
         {
             string test;
             test = Aktivitet;
+
         }
 
-        private void saveTempUsers()
+        private void saveTempAktivitet()
         {
             int i = 0;
-            foreach (SelectListItem _sli in People)
+            foreach (SelectListItem _sli in AktivitetList)
             {
                 TempData.Set("Aktivitet" + i, _sli);
                 i++;
             }
         }
 
-        private void loadTempUsers()
+        private void loadTempAktivitet()
         {
             for (int i = 0; i != -1; i++)
             {
                 SelectListItem _sli = TempData.Get<SelectListItem>("Aktivitet" + i);
                 if (_sli != null)
                 {
-                   // TempUsers.Add(_sli);
+                    TempAktivitetList.Add(_sli);
                 }
                 else
                 {
@@ -68,6 +96,5 @@ namespace PowerEvent.Pages
                 }
             }
         }
-
     }
 }
