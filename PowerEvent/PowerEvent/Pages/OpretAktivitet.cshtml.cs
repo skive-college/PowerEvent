@@ -9,7 +9,7 @@ using PowerEvent.Models;
 
 namespace PowerEvent.Pages
 {
-    public class testModel : CustomPageBase
+    public class testModel : PageModel
     {
         [TempData]
         public string Aktivitet { get; set; }

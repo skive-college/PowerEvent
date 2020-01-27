@@ -10,7 +10,7 @@ using PowerEvent.Models;
 
 namespace PowerEvent.Pages
 {
-    public class IndexModel : CustomPageBase
+    public class IndexModel : PageModel
     {
         [BindProperty]
         public int SelectedInfoId { get; set; }
@@ -38,6 +38,7 @@ namespace PowerEvent.Pages
 
             };
             InfoSelectList = new SelectList(Liste, nameof(SelectList.DataValueField), nameof(SelectList.DataTextField), null, nameof(SelectList.DataGroupField));
+            TempData.Get<string>("key");
         }
 
     }
