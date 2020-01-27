@@ -10,7 +10,7 @@ using PowerEvent.Models;
 
 namespace PowerEvent.Pages
 {
-    public class IndexModel : CustomPageBase
+    public class IndexModel : PageModel
     {
         [BindProperty]
         public int SelectedInfoId { get; set; }

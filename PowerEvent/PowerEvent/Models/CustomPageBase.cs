@@ -8,11 +8,6 @@ using System.Threading.Tasks;
 
 namespace PowerEvent.Models
 {
-    public class CustomPageBase : PageModel
-    {
-        
-    }
-
     public static class TempDataExtensions
     {
         public static void Set<T>(this ITempDataDictionary tempData, string key, T value) where T : class
