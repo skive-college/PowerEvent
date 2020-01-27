@@ -28,14 +28,16 @@ namespace PowerEvent.Pages
         {
             AktivitetList = new List<SelectListItem>();
             TempAktivitetList = new List<SelectListItem>();
+            TempPointTypeList = new List<SelectListItem>();
             loadTempAktivitet();
+            loadTempTempPointTypeList();
             if (TempAktivitetList.Count == 0)
             {
                 AktivitetList = new List<SelectListItem>()
                 {
                 new SelectListItem { Value = "1", Text = "Tyr MaxSec" },
                 new SelectListItem { Value = "2", Text = "Bold MaxPoint" },
-                new SelectListItem { Value = "3", Text = "Race MaxPoin" },
+                new SelectListItem { Value = "3", Text = "Race MaxPoint" },
                 new SelectListItem { Value = "4", Text = "Sumo MinSec" }
                 };
                 saveTempAktivitet();
@@ -44,7 +46,9 @@ namespace PowerEvent.Pages
             {
                 AktivitetList = TempAktivitetList;
             }
-          
+
+            if (TempPointTypeList.Count == 0)
+            {
                 PointTypeList = new List<SelectListItem>()
                 {
                 new SelectListItem { Value = "1", Text = "MaxSec" },
@@ -52,8 +56,12 @@ namespace PowerEvent.Pages
                 new SelectListItem { Value = "3", Text = "MaxPoint" },
                 new SelectListItem { Value = "4", Text = "MinPoint" }
                 };
-                
-          
+                saveTempPointType();
+            }
+            else
+            {
+                PointTypeList = TempPointTypeList;
+            }
         }
         
         public void OnPost()
@@ -66,8 +74,13 @@ namespace PowerEvent.Pages
         }
         public void OnPostCmdSubmit()
         {
-            string test;
-            test = Aktivitet;
+            foreach (var item in TempPointTypeList)
+            {
+                if (item.Selected == true)
+                {
+
+                }
+            }
 
         }
 
@@ -85,10 +98,34 @@ namespace PowerEvent.Pages
         {
             for (int i = 0; i != -1; i++)
             {
-                SelectListItem _sli = TempData.Get<SelectListItem>("Aktivitet" + i);
+                SelectListItem _sli = TempData.Peek<SelectListItem>("Aktivitet" + i);
                 if (_sli != null)
                 {
                     TempAktivitetList.Add(_sli);
+                }
+                else
+                {
+                    i = -2;
+                }
+            }
+        }
+        private void saveTempPointType()
+        {
+            int i = 0;
+            foreach (SelectListItem _sli in PointTypeList)
+            {
+                TempData.Set("PointType" + i, _sli);
+                i++;
+            }
+        }
+        private void loadTempTempPointTypeList()
+        {
+            for (int i = 0; i != -1; i++)
+            {
+                SelectListItem _sli = TempData.Peek<SelectListItem>("PointType" + i);
+                if (_sli != null)
+                {
+                    TempPointTypeList.Add(_sli);
                 }
                 else
                 {
