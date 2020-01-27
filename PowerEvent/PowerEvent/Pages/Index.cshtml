@@ -12,16 +12,9 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-4">
-                <select data-val="true" asp-items="@Model.Placeholder" data-val-required="This field is required" multiple style=" height: 400px; width: 100%">
-                </select>
-            </div>
-            <div class="col-2">
-                <select data-val="true" asp-items="@Model.Placeholder" data-val-required="This field is required" multiple style=" height: 400px; width: 100%">
-                </select>
-            </div>
-            <div class="col-6">
-                <select data-val="true" asp-items="@Model.Placeholder" data-val-required="This field is required" multiple style=" height: 400px; width: 100%">
+            <div class="col">
+                <h3>Navn</h3>
+                <select data-val="true" asp-for="SelectedInfoId" asp-items="@Model.InfoSelectList" data-val-required="This field is required" multiple style=" height: 400px; width: 100%">
                 </select>
             </div>
         </div>
