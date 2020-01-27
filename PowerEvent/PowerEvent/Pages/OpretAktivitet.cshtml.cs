@@ -20,6 +20,7 @@ namespace PowerEvent.Pages
         public List<SelectListItem> People { get; set; }
         public void OnGet()
         {
+            loadTempUsers();
             if (People == null)
             {
                 People = new List<SelectListItem>
@@ -45,9 +46,9 @@ namespace PowerEvent.Pages
         private void saveTempUsers()
         {
             int i = 0;
-            foreach (User user in Users)
+            foreach (SelectListItem _sli in People)
             {
-                TempData.Set("user" + i, user);
+                TempData.Set("Aktivitet" + i, _sli);
                 i++;
             }
         }
@@ -56,10 +57,10 @@ namespace PowerEvent.Pages
         {
             for (int i = 0; i != -1; i++)
             {
-                User u = TempData.Get<User>("user" + i);
-                if (u != null)
+                SelectListItem _sli = TempData.Get<SelectListItem>("Aktivitet" + i);
+                if (_sli != null)
                 {
-                    TempUsers.Add(u);
+                   // TempUsers.Add(_sli);
                 }
                 else
                 {
