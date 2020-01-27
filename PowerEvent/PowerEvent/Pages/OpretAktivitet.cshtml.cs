@@ -98,7 +98,7 @@ namespace PowerEvent.Pages
         {
             for (int i = 0; i != -1; i++)
             {
-                SelectListItem _sli = TempData.Peek<SelectListItem>("Aktivitet" + i);
+                SelectListItem _sli = TempData.Get<SelectListItem>("Aktivitet" + i);
                 if (_sli != null)
                 {
                     TempAktivitetList.Add(_sli);
@@ -122,7 +122,7 @@ namespace PowerEvent.Pages
         {
             for (int i = 0; i != -1; i++)
             {
-                SelectListItem _sli = TempData.Peek<SelectListItem>("PointType" + i);
+                SelectListItem _sli = TempData.Get<SelectListItem>("PointType" + i);
                 if (_sli != null)
                 {
                     TempPointTypeList.Add(_sli);

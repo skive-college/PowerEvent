@@ -16,7 +16,7 @@ namespace PowerEvent.Models
         }
         public static T Peek<T>(this ITempDataDictionary tempData, string key) where T : class
         {
-            tempData.TryGetValue(key, out object o);
+            object o = tempData.Peek(key);
             return o == null ? null : JsonConvert.DeserializeObject<T>((string)o);
         }
 
