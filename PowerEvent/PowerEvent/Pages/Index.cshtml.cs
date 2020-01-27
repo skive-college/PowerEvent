@@ -38,7 +38,6 @@ namespace PowerEvent.Pages
 
             };
             InfoSelectList = new SelectList(Liste, nameof(SelectList.DataValueField), nameof(SelectList.DataTextField), null, nameof(SelectList.DataGroupField));
-            TempData.Get<string>("key");
         }
 
     }
