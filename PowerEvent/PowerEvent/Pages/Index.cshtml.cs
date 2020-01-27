@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using PowerEvent.Models;
 
@@ -11,7 +12,8 @@ namespace PowerEvent.Pages
 {
     public class IndexModel : CustomPageBase
     {
-        public List<string> placeholder { get; set; }
+        [BindProperty]
+        public List<SelectListItem> Placeholder { get; set; }
 
         private readonly ILogger<IndexModel> _logger;
 
@@ -22,7 +24,11 @@ namespace PowerEvent.Pages
 
         public void OnGet()
         {
+            Placeholder = new List<SelectListItem>() 
+            {
+                new SelectListItem { Value = "1", Text = "Test" },
 
+            };
         }
 
     }

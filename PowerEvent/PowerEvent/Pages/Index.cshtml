@@ -3,12 +3,28 @@
 @{
     ViewData["Title"] = "Home page";
 }
-<div class="container">
-    <div class="row">
-        <div class="col, text-center" style="width:100%;">
-            <div style="border: 2px solid black; border-radius:15px;">
-                <h1>Power Event<</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col, text-center" style="width:100%;">
+                <div style="border: 2px solid black; border-radius:15px;">
+                    <h1>Power Event<</h1>
+                </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-4">
+                <select data-val="true" asp-items="@Model.Placeholder" data-val-required="This field is required" multiple style=" height: 400px; width: 100%">
+                </select>
+            </div>
+            <div class="col-2">
+                <select data-val="true" asp-items="@Model.Placeholder" data-val-required="This field is required" multiple style=" height: 400px; width: 100%">
+                </select>
+            </div>
+            <div class="col-6">
+                <select data-val="true" asp-items="@Model.Placeholder" data-val-required="This field is required" multiple style=" height: 400px; width: 100%">
+                </select>
+            </div>
+        </div>
+        
     </div>
-</div>
+
