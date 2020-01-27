@@ -35,5 +35,10 @@ namespace PowerEvent.Pages
         {
 
         }
+        public void OnPostCmdSubmit()
+        {
+            string test;
+            test = Aktivitet;
+        }
     }
 }
