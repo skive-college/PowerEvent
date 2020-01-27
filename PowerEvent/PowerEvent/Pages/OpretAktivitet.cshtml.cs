@@ -28,9 +28,7 @@ namespace PowerEvent
         }
         public void OnPost()
         {
-            string test;
-            Aktivitet = txtAktivitet;
-            test = Aktivitet;
+
         }
         public void OnPostcmdSubmit()
         {
