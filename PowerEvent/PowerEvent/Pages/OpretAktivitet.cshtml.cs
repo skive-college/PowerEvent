@@ -24,9 +24,9 @@ namespace PowerEvent.Pages
                 People = new List<SelectListItem>
             {
                 new SelectListItem { Value = "1", Text = "Tyr MaxSec" },
-                new SelectListItem { Value = "2", Text = "Pete" },
-                new SelectListItem { Value = "3", Text = "Katy" },
-                new SelectListItem { Value = "4", Text = "Carl" }
+                new SelectListItem { Value = "2", Text = "Bold MaxPoint" },
+                new SelectListItem { Value = "3", Text = "Race MaxPoin" },
+                new SelectListItem { Value = "4", Text = "Sumo MinSec" }
             };
             }
         }
