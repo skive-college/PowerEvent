@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using PowerEvent.Models;
 
 namespace PowerEvent.Pages
 {
-    public class IndexModel : PageModel
+    public class IndexModel : CustomPageBase
     {
         public List<string> placeholder { get; set; }
 

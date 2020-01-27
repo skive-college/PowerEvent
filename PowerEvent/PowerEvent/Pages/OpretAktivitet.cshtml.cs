@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PowerEvent.Models;
 
 namespace PowerEvent.Pages
 {
-    public class testModel : PageModel
+    public class testModel : CustomPageBase
     {
         [TempData]
         public string Aktivitet { get; set; }
@@ -40,5 +41,32 @@ namespace PowerEvent.Pages
             string test;
             test = Aktivitet;
         }
+
+        private void saveTempUsers()
+        {
+            int i = 0;
+            foreach (User user in Users)
+            {
+                TempData.Set("user" + i, user);
+                i++;
+            }
+        }
+
+        private void loadTempUsers()
+        {
+            for (int i = 0; i != -1; i++)
+            {
+                User u = TempData.Get<User>("user" + i);
+                if (u != null)
+                {
+                    TempUsers.Add(u);
+                }
+                else
+                {
+                    i = -2;
+                }
+            }
+        }
+
     }
 }
