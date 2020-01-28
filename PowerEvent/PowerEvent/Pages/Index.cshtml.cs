@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using DatabaseClassLibrary;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using PowerEvent.Models;
+using PowerEvent.Helpers;
 
 namespace PowerEvent.Pages
 {
@@ -16,9 +18,9 @@ namespace PowerEvent.Pages
         [BindProperty]
         public int SelectedInfoId { get; set; }
 
+        [BindProperty]
         public List<SelectListItem> InfoList { get; set; }
 
-        public SelectList InfoSelectList { get; set; }
 
         private readonly ILogger<IndexModel> _logger;
 
@@ -29,12 +31,12 @@ namespace PowerEvent.Pages
 
         public void OnGet()
         {
-            List<object> liste = DBHandler.getEvent();
+            InfoList = new List<SelectListItem>();
             List<Event> eventList = new List<Event>();
-            foreach (object item in liste)
+            eventList = DBAdapter.getEvent();
+            foreach (var item in eventList)
             {
-                Event temp = new Event();
-                eventList.Add(temp);
+                InfoList.Add(new SelectListItem { Value = item.Id + "", Text = item.Navn });
             }
 
             //InfoList = new List<SelectListItem>()
@@ -44,8 +46,8 @@ namespace PowerEvent.Pages
             //    new SelectListItem { Value = "3", Text = "Test3" },
             //    new SelectListItem { Value = "4", Text = "Test4" },
             //};
-            SelectedInfoId = 0;
         }
+
 
     }
 }
