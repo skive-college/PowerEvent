@@ -12,6 +12,8 @@ namespace PowerEvent.Pages
     public class testModel : PageModel
     {
         [BindProperty]
+        public int SelectedInfoId { get; set; }
+        [BindProperty]
         public string Aktivitet { get; set; }
         [BindProperty]
         public int[] SelectedTags { get; set; }
@@ -62,6 +64,7 @@ namespace PowerEvent.Pages
             {
                 PointTypeList = TempPointTypeList;
             }
+            SelectedInfoId =0;
         }
         
         public void OnPost()
@@ -74,14 +77,8 @@ namespace PowerEvent.Pages
         }
         public void OnPostCmdSubmit()
         {
-            foreach (var item in TempPointTypeList)
-            {
-                if (item.Selected == true)
-                {
-
-                }
-            }
-
+            int test = 343;
+            test = SelectedInfoId;
         }
 
         private void saveTempAktivitet()
