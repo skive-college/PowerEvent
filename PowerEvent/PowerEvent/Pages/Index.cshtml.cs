@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DatabaseClassLibrary;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -28,13 +29,21 @@ namespace PowerEvent.Pages
 
         public void OnGet()
         {
-            InfoList = new List<SelectListItem>()
+            List<object> liste = DBHandler.getEvent();
+            List<Event> eventList = new List<Event>();
+            foreach (object item in liste)
             {
-                new SelectListItem { Value = "1", Text = "Test1" },
-                new SelectListItem { Value = "2", Text = "Test2" },
-                new SelectListItem { Value = "3", Text = "Test3" },
-                new SelectListItem { Value = "4", Text = "Test4" },
-            };
+                Event temp = new Event();
+                eventList.Add(temp);
+            }
+
+            //InfoList = new List<SelectListItem>()
+            //{
+            //    new SelectListItem { Value = "1", Text = "Test1" },
+            //    new SelectListItem { Value = "2", Text = "Test2" },
+            //    new SelectListItem { Value = "3", Text = "Test3" },
+            //    new SelectListItem { Value = "4", Text = "Test4" },
+            //};
             SelectedInfoId = 0;
         }
 

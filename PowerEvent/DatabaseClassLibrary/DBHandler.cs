@@ -7,9 +7,9 @@ namespace DatabaseClassLibrary
 {
     public class DBHandler
     {
-        private static readonly string connectionString = @"Data Source=planner.aspitweb.dk;Initial Catalog=PowerEvent;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        private static readonly string connectionString = @"Data Source=planner.aspitweb.dk;Initial Catalog=PowerEvent;User ID=aspitlab;Password=aspitlab;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
-        public static List<object> getUsers()
+        public static List<object> getEvent()
         {
             List<object> retur = new List<object>();
 
@@ -25,10 +25,8 @@ namespace DatabaseClassLibrary
                     retur.Add(
                         new { Id = int.Parse(reader["Id"].ToString()), Navn = reader["Navn"].ToString() }
                         );
-                    reader.Close();
                 }
-
-                
+                reader.Close();
             }
             return retur;
         }
