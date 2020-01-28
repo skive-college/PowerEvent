@@ -28,16 +28,14 @@ namespace PowerEvent.Pages
 
         public void OnGet()
         {
-            List<SelectListItem> Liste = new List<SelectListItem>();
-            Liste = new List<SelectListItem>()
+            InfoList = new List<SelectListItem>()
             {
-                new SelectListItem { Value = "1", Text = "Test1", Group = new SelectListGroup(){ Name = "dataGroup1" } },
-                new SelectListItem { Value = "2", Text = "Test2", Group = new SelectListGroup(){ Name = "dataGroup2" } },
-                new SelectListItem { Value = "3", Text = "Test3", Group = new SelectListGroup(){ Name = "dataGroup1" } },
-                new SelectListItem { Value = "4", Text = "Test4", Group = new SelectListGroup(){ Name = "dataGroup2" } },
-
+                new SelectListItem { Value = "1", Text = "Test1" },
+                new SelectListItem { Value = "2", Text = "Test2" },
+                new SelectListItem { Value = "3", Text = "Test3" },
+                new SelectListItem { Value = "4", Text = "Test4" },
             };
-            InfoSelectList = new SelectList(Liste, nameof(SelectList.DataValueField), nameof(SelectList.DataTextField), null, nameof(SelectList.DataGroupField));
+            SelectedInfoId = 0;
         }
 
     }
