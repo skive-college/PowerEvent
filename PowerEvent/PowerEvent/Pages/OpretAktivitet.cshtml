@@ -7,7 +7,16 @@
     <div container>
         <form method="Post">
             Opret aktivitet: <input type="text" asp-for="@Model.Aktivitet" placeholder="Aktivitet"/>
-            <select data-val="true" asp-for="SelectedInfoId" asp-items="@Model.PointTypeList"></select>
+            <select data-val="true" asp-for="SelectedInfoId">
+                @{
+                    int i = 0;
+                    foreach (var item in @Model.PointTypeList)
+                    {
+                        <option value="@i">@item.Text</option>
+                        i++;
+                    }
+                }
+            </select>
             <input type="submit" value="Gem" asp-page-handler="CmdSubmit" />
             <br />
 
