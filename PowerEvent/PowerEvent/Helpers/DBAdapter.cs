@@ -15,22 +15,22 @@ namespace PowerEvent.Helpers
             List<object> dbList = DBHandler.getEvent();
             List<Event> eventList = new List<Event>();
 
-            for (int i = 0; i < dbList.Count; i++)
+            foreach (object _object in dbList)
             {
-                Type type = dbList[i].GetType();
                 Event temp = new Event();
-                temp.Id = adapt<int>("Id", type, dbList[i]);
-                temp.Navn = adapt<string>("Navn", type, dbList[i]);
+                temp.Id = adapt<int>("Id", _object);
+                temp.Navn = adapt<string>("Navn", _object);
                 eventList.Add(temp);
             }
             return eventList;
         }
 
 
-        //trækker en "property" ud af det "object". <T> = f.eks "string" eller int. kræver "Type type = object.GetType()" som _type;
-        private static T adapt<T>(string _property, Type _type, object _object)
+        //trækker en "property" ud af det "object". <T> = f.eks "string" eller int;
+        private static T adapt<T>(string _property, object _object)
         {
-            return (T)_type.GetProperty(_property).GetValue(_object);
+            Type type = _object.GetType();
+            return (T)type.GetProperty(_property).GetValue(_object);
         }
 
 
