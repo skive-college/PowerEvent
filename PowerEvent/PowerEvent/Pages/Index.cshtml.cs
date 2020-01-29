@@ -21,6 +21,8 @@ namespace PowerEvent.Pages
         [BindProperty]
         public List<SelectListItem> InfoList { get; set; }
 
+        public List<Event> EventInfoList { get; set; }
+
 
         private readonly ILogger<IndexModel> _logger;
 
@@ -32,9 +34,9 @@ namespace PowerEvent.Pages
         public void OnGet()
         {
             InfoList = new List<SelectListItem>();
-            List<Event> eventList = new List<Event>();
-            eventList = DBAdapter.getEvent();
-            foreach (var item in eventList)
+            EventInfoList = new List<Event>();
+            EventInfoList = DBAdapter.getEvent();
+            foreach (var item in EventInfoList)
             {
                 InfoList.Add(new SelectListItem { Value = item.Id + "", Text = item.Navn });
             }
