@@ -25,6 +25,12 @@ namespace PowerEvent.Helpers
             return eventList;
         }
 
+        public static bool checkLogin(string _username, string _password)
+        {
+            return true;
+        }
+
+
 
         //trækker en "property" ud af det "object". <T> = f.eks "string" eller int;
         private static T adapt<T>(string _property, object _object)

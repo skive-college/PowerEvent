@@ -1,40 +1,8 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Index";
 }
-    <div class="container">
-        <div class="row">
-            <div class="col, text-center" style="width:100%;">
-                <div style="border: 2px solid black; border-radius:15px;">
-                    <h1>Power Event<</h1>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <br/>
-                <form method="post">
-                        <table style=" max-height: 400px; width: 100%;">
-                            <tr class="row" style="border: solid black; border-width: 1px 1px 0px 1px">
-                                <th class="col-4">Navn</th>
-                                <th class="col-2">Hold</th>
-                                <th class="col-6">Beskrivelse</th>
-                            </tr>
-                            @{
-                                foreach (var item in @Model.EventInfoList)
-                                {
-                                    <tr class="row" style="border: solid black; border-width: 1px 1px 0px 1px">
-                                        <td class="col-4">Navn</td>
-                                        <td class="col-2">Hold</td>
-                                        <td class="col-6">Beskrivelse</td>
-                                    </tr>
-                                }
-                            }
-                        </table>
-                </form>
-            </div>
-        </div>
-        
-    </div>
+
+<h1>Index</h1>
 
