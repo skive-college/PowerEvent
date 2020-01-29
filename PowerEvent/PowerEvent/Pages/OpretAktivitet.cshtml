@@ -1,5 +1,5 @@
 ﻿@page
-@model testModel
+@model opretAktivit
 @{
     ViewData["Title"] = "OpretAktivitet";
 }
@@ -7,7 +7,7 @@
     <div container>
         <form method="Post">
             Opret aktivitet: <input type="text" asp-for="@Model.Aktivitet" placeholder="Aktivitet"/>
-            <select data-val="true" asp-for="SelectedInfoId">
+            <select data-val="true">
                 @{
                     int i = 0;
                     foreach (var item in @Model.PointTypeList)

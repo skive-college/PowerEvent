@@ -9,14 +9,12 @@ using PowerEvent.Models;
 
 namespace PowerEvent.Pages
 {
-    public class testModel : PageModel
+    public class opretAktivit : PageModel
     {
-        [BindProperty]
         public int SelectedInfoId { get; set; }
         [BindProperty]
         public string Aktivitet { get; set; }
         [BindProperty]
-        public int[] SelectedTags { get; set; }
         public SelectList TagOptions { get; set; }
         [BindProperty]
         public List<SelectListItem> AktivitetList { get; set; }
@@ -77,8 +75,8 @@ namespace PowerEvent.Pages
         {
             int test;
             test = SelectedInfoId;
-            loadTemp();
-            saveTemp();
+            //loadTemp();
+            //saveTemp();
             Redirect("/OpretAktivitet");
         }
 
