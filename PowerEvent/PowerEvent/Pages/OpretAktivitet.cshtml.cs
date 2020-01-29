@@ -22,7 +22,6 @@ namespace PowerEvent.Pages
         public List<SelectListItem> AktivitetList { get; set; }
 
         public List<SelectListItem> TempAktivitetList { get; set; }
-        [BindProperty]
         public List<SelectListItem> PointTypeList { get; set; }
 
         public List<SelectListItem> TempPointTypeList { get; set; }
@@ -64,7 +63,6 @@ namespace PowerEvent.Pages
             {
                 PointTypeList = TempPointTypeList;
             }
-            SelectedInfoId =0;
         }
         
         public void OnPost()
@@ -77,9 +75,28 @@ namespace PowerEvent.Pages
         }
         public void OnPostCmdSubmit()
         {
-            int test = 343;
+            int test;
             test = SelectedInfoId;
+            loadTemp();
+            saveTemp();
+            Redirect("/OpretAktivitet");
         }
+
+        private void saveTemp()
+        {
+            saveTempAktivitet();
+            saveTempPointType();
+        }
+        private void loadTemp()
+        {
+            TempAktivitetList = new List<SelectListItem>();
+            TempPointTypeList = new List<SelectListItem>();
+            loadTempAktivitet();
+            loadTempTempPointTypeList();
+        }
+
+
+
 
         private void saveTempAktivitet()
         {
@@ -95,14 +112,14 @@ namespace PowerEvent.Pages
         {
             for (int i = 0; i != -1; i++)
             {
-                SelectListItem _sli = TempData.Peek<SelectListItem>("Aktivitet" + i);
+                SelectListItem _sli = TempData.Get<SelectListItem>("Aktivitet" + i);
                 if (_sli != null)
                 {
                     TempAktivitetList.Add(_sli);
                 }
                 else
                 {
-                    i = -2;
+                    break;
                 }
             }
         }
@@ -126,7 +143,7 @@ namespace PowerEvent.Pages
                 }
                 else
                 {
-                    i = -2;
+                    break;
                 }
             }
         }
