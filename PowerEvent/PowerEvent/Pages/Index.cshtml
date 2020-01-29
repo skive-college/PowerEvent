@@ -13,25 +13,25 @@
         </div>
         <div class="row">
             <div class="col">
-                <h3>Navn</h3>
+                <br/>
                 <form method="post">
-                    <table style=" height: 400px; width: 100%">
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                        @{
-                            foreach (var item in @Model.EventInfoList)
-                            {
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
+                        <table style=" max-height: 400px; width: 100%;">
+                            <tr class="row" style="border: solid black; border-width: 1px 1px 0px 1px">
+                                <th class="col-4">Navn</th>
+                                <th class="col-2">Hold</th>
+                                <th class="col-6">Beskrivelse</th>
+                            </tr>
+                            @{
+                                foreach (var item in @Model.EventInfoList)
+                                {
+                                    <tr class="row" style="border: solid black; border-width: 1px 1px 0px 1px">
+                                        <td class="col-4">Navn</td>
+                                        <td class="col-2">Hold</td>
+                                        <td class="col-6">Beskrivelse</td>
+                                    </tr>
+                                }
                             }
-                        }
-                    </table>
+                        </table>
                 </form>
             </div>
         </div>
