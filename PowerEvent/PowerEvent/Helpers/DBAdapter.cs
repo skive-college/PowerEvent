@@ -27,7 +27,7 @@ namespace PowerEvent.Helpers
         }
 
 
-        //trækker en "property" ud af det "object". kræver "Type type = object.GetType()" som _type;
+        //trækker en "property" ud af det "object". <T> = f.eks "string" eller int. kræver "Type type = object.GetType()" som _type;
         private static T adapt<T>(string _property, Type _type, object _object)
         {
             return (T)_type.GetProperty(_property).GetValue(_object);
