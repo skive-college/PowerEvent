@@ -15,12 +15,6 @@ namespace PowerEvent.Pages
 {
     public class IndexModel : PageModel
     {
-        [BindProperty]
-        public int SelectedInfoId { get; set; }
-
-        [BindProperty]
-        public List<SelectListItem> InfoList { get; set; }
-
         public List<Event> EventInfoList { get; set; }
 
 
@@ -33,23 +27,15 @@ namespace PowerEvent.Pages
 
         public void OnGet()
         {
-            InfoList = new List<SelectListItem>();
             EventInfoList = new List<Event>();
             EventInfoList = DBAdapter.getEvent();
-            foreach (var item in EventInfoList)
-            {
-                InfoList.Add(new SelectListItem { Value = item.Id + "", Text = item.Navn });
-            }
-
-            //InfoList = new List<SelectListItem>()
-            //{
-            //    new SelectListItem { Value = "1", Text = "Test1" },
-            //    new SelectListItem { Value = "2", Text = "Test2" },
-            //    new SelectListItem { Value = "3", Text = "Test3" },
-            //    new SelectListItem { Value = "4", Text = "Test4" },
-            //};
         }
 
+        public void OnPost()
+        {
+            EventInfoList = new List<Event>();
+            EventInfoList = DBAdapter.getEvent();
+        }
 
     }
 }
