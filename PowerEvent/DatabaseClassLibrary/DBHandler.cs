@@ -9,6 +9,7 @@ namespace DatabaseClassLibrary
     {
         private static readonly string connectionString = @"Data Source=planner.aspitweb.dk;Initial Catalog=PowerEvent;User ID=aspitlab;Password=aspitlab;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
+
         public static List<object> getEvent()
         {
             List<object> retur = new List<object>();
