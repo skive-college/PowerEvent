@@ -19,13 +19,19 @@ namespace PowerEvent.Helpers
             {
                 Type type = dbList[i].GetType();
                 Event temp = new Event();
-                temp.Id = (int)type.GetProperty("Id").GetValue(dbList[i]);
-                temp.Navn = (string)type.GetProperty("Navn").GetValue(dbList[i]);
+                temp.Id = adapt<int>("Id", type, dbList[i]);
+                temp.Navn = adapt<string>("Navn", type, dbList[i]);
                 eventList.Add(temp);
             }
             return eventList;
         }
 
+
+        //trækker en "property" ud af det "object". kræver "Type type = object.GetType()" som _type;
+        private static T adapt<T>(string _property, Type _type, object _object)
+        {
+            return (T)_type.GetProperty(_property).GetValue(_object);
+        }
 
 
 
