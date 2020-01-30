@@ -25,6 +25,29 @@ namespace PowerEvent.Helpers
             return eventList;
         }
 
+        public static List<Aktivitet> getAktivitet()
+        {
+            List<object> dbList = DBHandler.getAktivitet();
+            List<Aktivitet> AktivitetList = new List<Aktivitet>();
+
+            foreach (object _object in dbList)
+            {
+                Aktivitet temp = new Aktivitet();
+                temp.Id = adapt<int>("Id", _object);
+                temp.Navn = adapt<string>("Navn", _object);
+                temp.PointType = adapt<int>("PointType", _object);
+                AktivitetList.Add(temp);
+            }
+            return AktivitetList;
+        }
+
+
+
+
+
+
+
+
         public static List<Hold> getHold()
         {
             List<object> dbList = DBHandler.getHold();
@@ -53,9 +76,5 @@ namespace PowerEvent.Helpers
             Type type = _object.GetType();
             return (T)type.GetProperty(_property).GetValue(_object);
         }
-
-
-
-
     }
 }

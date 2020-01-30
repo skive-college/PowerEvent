@@ -7,7 +7,7 @@
     <div container>
         <form method="Post">
             Opret aktivitet: <input type="text" asp-for="@Model.Aktivitet" placeholder="Aktivitet"/>
-            <select data-val="true">
+            <select data-val="true" asp-for="@Model.SelectedPointType">
                 @{
                     int i = 0;
                     foreach (var item in @Model.PointTypeList)
@@ -20,7 +20,7 @@
             <input type="submit" value="Gem" asp-page-handler="CmdSubmit" />
             <br />
 
-            <select data-val="true" asp-items="@Model.AktivitetList" multiple style=" height: 400px; width: 250px"></select>
+            <select data-val="true" asp-for="@Model.SelectedAktivitetList" asp-items="@Model.AktivitetList" multiple style=" height: 400px; width: 250px"></select>
             
             <input type="submit" value="Slet" asp-page-handler="CmdDelete" />
         </form>
