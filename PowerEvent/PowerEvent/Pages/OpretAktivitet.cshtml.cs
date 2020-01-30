@@ -33,6 +33,7 @@ namespace PowerEvent.Pages
 
         public void OnGet()
         {
+            TempAktivitetList = new List<Aktivitet>();
             loadTempDataTempPointTypeList();
             if (TempAktivitetList == null || TempAktivitetList.Count == 0)
             {
@@ -78,7 +79,6 @@ namespace PowerEvent.Pages
 
         public void OnPostCmdSubmit()
         {
-
             //databaseSaveMetode(input)
             loadTempAktivitetList();
             setAktivitetList();
