@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PowerEvent.Helpers;
 using PowerEvent.Models;
 using System.Collections.Generic;
 
@@ -9,17 +10,22 @@ namespace PowerEvent.Pages
     public class opretAktivit : PageModel
     {
         [BindProperty]
-        public int SelectedInfoId { get; set; }
+        public int SelectedPointType { get; set; }
+
+        [BindProperty]
+        public int SelectedAktivitetList { get; set; }
+
+        public int TempSelectedInfoId { get; set; }
 
         [BindProperty]
         public string Aktivitet { get; set; }
 
-        public SelectList TagOptions { get; set; }
+        public string TempAktivitet { get; set; }
 
-        [BindProperty]
+        
         public List<SelectListItem> AktivitetList { get; set; }
 
-        public List<SelectListItem> TempAktivitetList { get; set; }
+        public List<Aktivitet> TempAktivitetList { get; set; }
 
         public List<SelectListItem> PointTypeList { get; set; }
 
@@ -28,34 +34,29 @@ namespace PowerEvent.Pages
         public void OnGet()
         {
             AktivitetList = new List<SelectListItem>();
-            TempAktivitetList = new List<SelectListItem>();
+            TempAktivitetList = new List<Aktivitet>();
             TempPointTypeList = new List<SelectListItem>();
             loadTempDataAktivitet();
             loadTempDataTempPointTypeList();
             if (TempAktivitetList.Count == 0)
             {
-                AktivitetList = new List<SelectListItem>()
-                {
-                new SelectListItem { Value = "1", Text = "Tyr MaxSec" },
-                new SelectListItem { Value = "2", Text = "Bold MaxPoint" },
-                new SelectListItem { Value = "3", Text = "Race MaxPoint" },
-                new SelectListItem { Value = "4", Text = "Sumo MinSec" }
-                };
+                loadTempAktivitetList();
+                setAktivitetList();
                 saveTempDataAktivitet();
             }
             else
             {
-                AktivitetList = TempAktivitetList;
+                setAktivitetList();
             }
 
             if (TempPointTypeList.Count == 0)
             {
                 PointTypeList = new List<SelectListItem>()
                 {
-                new SelectListItem { Value = "1", Text = "MaxSec" },
-                new SelectListItem { Value = "2", Text = "MinSec" },
-                new SelectListItem { Value = "3", Text = "MaxPoint" },
-                new SelectListItem { Value = "4", Text = "MinPoint" }
+                new SelectListItem { Value = "4", Text = "MaxSec" },
+                new SelectListItem { Value = "3", Text = "MinSec" },
+                new SelectListItem { Value = "2", Text = "MaxPoint" },
+                new SelectListItem { Value = "1", Text = "MinPoint" }
                 };
                 saveTempDataPointType();
             }
@@ -77,17 +78,57 @@ namespace PowerEvent.Pages
 
         public void OnPostCmdSubmit()
         {
-            int test;
-            test = SelectedInfoId;
+
             //databaseSaveMetode(input)
             //AktivitetList = databaseLoadMetode()
             //saveTempDataAktivitet();
-            loadTemp();
-            AktivitetList = TempAktivitetList;
+            loadTempAktivitetList();
+            setAktivitetList();
             PointTypeList = new List<SelectListItem>();
             PointTypeList = TempPointTypeList;
             Redirect("/OpretAktivitet");
         }
+
+        private void setAktivitetList()
+        {
+            List<SelectListItem> temp = new List<SelectListItem>();
+            int i = 0;
+            foreach (var item in TempAktivitetList)
+            {
+                string pointTxt = "";
+                if (item.PointType == 1)
+                {
+                    pointTxt = "MinPoint";
+                }
+                else if (item.PointType == 2)
+                {
+                    pointTxt = "MaxPoint";
+                }
+                else if (item.PointType == 3)
+                {
+                    pointTxt = "MinSec";
+                }
+                else if (item.PointType == 4)
+                {
+                    pointTxt = "MaxSec";
+                }
+                temp.Add(new SelectListItem { Value = i + "", Text = item.Navn + pointTxt });
+                i++;
+            }
+            AktivitetList = temp;
+        }
+
+        private void loadTempAktivitetList()
+        {
+            TempAktivitetList = DBAdapter.getAktivitet();
+        }
+
+
+
+
+
+
+
 
         private void saveTemp()
         {
@@ -97,14 +138,11 @@ namespace PowerEvent.Pages
 
         private void loadTemp()
         {
-            TempAktivitetList = new List<SelectListItem>();
+            TempAktivitetList = new List<Aktivitet>();
             TempPointTypeList = new List<SelectListItem>();
             loadTempDataAktivitet();
             loadTempDataTempPointTypeList();
         }
-
-
-
 
         private void saveTempDataAktivitet()
         {
@@ -120,10 +158,10 @@ namespace PowerEvent.Pages
         {
             for (int i = 0; i != -1; i++)
             {
-                SelectListItem _sli = TempData.Get<SelectListItem>("Aktivitet" + i);
-                if (_sli != null)
+                Aktivitet _a = TempData.Get<Aktivitet>("Aktivitet" + i);
+                if (_a != null)
                 {
-                    TempAktivitetList.Add(_sli);
+                    TempAktivitetList.Add(_a);
                 }
                 else
                 {
@@ -132,6 +170,7 @@ namespace PowerEvent.Pages
             }
         }
 
+        
         private void saveTempDataPointType()
         {
             int i = 0;
