@@ -33,16 +33,12 @@ namespace PowerEvent.Pages
 
         public void OnGet()
         {
-            AktivitetList = new List<SelectListItem>();
-            TempAktivitetList = new List<Aktivitet>();
-            TempPointTypeList = new List<SelectListItem>();
-            loadTempDataAktivitet();
-            loadTempDataTempPointTypeList();
+            loadTemp();
             if (TempAktivitetList.Count == 0)
             {
                 loadTempAktivitetList();
                 setAktivitetList();
-                saveTempDataAktivitet();
+                //saveTempDataAktivitet();
             }
             else
             {
@@ -84,6 +80,7 @@ namespace PowerEvent.Pages
             //saveTempDataAktivitet();
             loadTempAktivitetList();
             setAktivitetList();
+            loadTempDataTempPointTypeList();
             PointTypeList = new List<SelectListItem>();
             PointTypeList = TempPointTypeList;
             Redirect("/OpretAktivitet");
@@ -138,8 +135,6 @@ namespace PowerEvent.Pages
 
         private void loadTemp()
         {
-            TempAktivitetList = new List<Aktivitet>();
-            TempPointTypeList = new List<SelectListItem>();
             loadTempDataAktivitet();
             loadTempDataTempPointTypeList();
         }
@@ -156,6 +151,7 @@ namespace PowerEvent.Pages
 
         private void loadTempDataAktivitet()
         {
+            TempAktivitetList = new List<Aktivitet>();
             for (int i = 0; i != -1; i++)
             {
                 Aktivitet _a = TempData.Get<Aktivitet>("Aktivitet" + i);
@@ -183,6 +179,7 @@ namespace PowerEvent.Pages
 
         private void loadTempDataTempPointTypeList()
         {
+            TempPointTypeList = new List<SelectListItem>();
             for (int i = 0; i != -1; i++)
             {
                 SelectListItem _sli = TempData.Peek<SelectListItem>("PointType" + i);
