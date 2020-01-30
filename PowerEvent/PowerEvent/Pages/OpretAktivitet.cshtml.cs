@@ -33,12 +33,10 @@ namespace PowerEvent.Pages
 
         public void OnGet()
         {
+            TempAktivitetList = new List<Aktivitet>();
             loadTempDataTempPointTypeList();
-            if (TempAktivitetList.Count == 0)
-            {
-                loadTempAktivitetList();
-                setAktivitetList();
-            }
+            loadTempAktivitetList();
+            setAktivitetList();
             else
             {
                 setAktivitetList();
