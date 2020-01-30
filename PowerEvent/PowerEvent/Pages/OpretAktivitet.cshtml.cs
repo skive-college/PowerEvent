@@ -37,10 +37,6 @@ namespace PowerEvent.Pages
             loadTempDataTempPointTypeList();
             loadTempAktivitetList();
             setAktivitetList();
-            else
-            {
-                setAktivitetList();
-            }
 
             if (TempPointTypeList.Count == 0)
             {
