@@ -62,7 +62,11 @@ namespace PowerEvent.Pages
 
         public void OnPostCmdDelete()
         {
-
+            loadTempAktivitetList();
+            setAktivitetList();
+            loadTempDataTempPointTypeList();
+            PointTypeList = new List<SelectListItem>();
+            PointTypeList = TempPointTypeList;
         }
 
         public void OnPostCmdSubmit()
