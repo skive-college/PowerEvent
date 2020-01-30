@@ -69,10 +69,12 @@ namespace PowerEvent.Pages
         {
 
         }
+
         public void OnPostCmdDelete()
         {
 
         }
+
         public void OnPostCmdSubmit()
         {
             int test;
@@ -92,6 +94,7 @@ namespace PowerEvent.Pages
             saveTempDataAktivitet();
             saveTempDataPointType();
         }
+
         private void loadTemp()
         {
             TempAktivitetList = new List<SelectListItem>();
@@ -128,6 +131,7 @@ namespace PowerEvent.Pages
                 }
             }
         }
+
         private void saveTempDataPointType()
         {
             int i = 0;
@@ -137,6 +141,7 @@ namespace PowerEvent.Pages
                 i++;
             }
         }
+
         private void loadTempDataTempPointTypeList()
         {
             for (int i = 0; i != -1; i++)

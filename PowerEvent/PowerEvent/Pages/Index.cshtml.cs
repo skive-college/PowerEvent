@@ -13,5 +13,17 @@ namespace PowerEvent
         {
 
         }
+
+        public void OnPost()
+        {
+
+        }
+
+        public void OnPostCmdLogin()
+        {
+
+        }
+
+
     }
 }
