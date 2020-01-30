@@ -15,26 +15,32 @@
             <div class="col">
                 <br/>
                 <form method="post">
-                        <table style=" max-height: 400px; width: 100%;">
-                            <tr class="row" style="border: solid black; border-width: 1px 1px 0px 1px">
-                                <th class="col-4">Navn</th>
-                                <th class="col-2">Hold</th>
-                                <th class="col-6">Beskrivelse</th>
-                            </tr>
-                            @{
-                                foreach (var item in @Model.EventInfoList)
+                    <table style=" max-height: 400px; width: 100%;">
+                        <tr class="row" style="border: solid black; border-width: 1px 1px 0px 1px">
+                            <th class="col-4">Navn</th>
+                            <th class="col-2">Hold</th>
+                            <th class="col-6">Beskrivelse</th>
+                        </tr>
+                        @{
+                            //checker om "item" er den første item og sæætter en top border hvis den er
+                            bool firstItem = true;
+                            string topBorderWidth = "1px";
+                            foreach (var _item in @Model.EventInfoList)
+                            {
+                                <tr class="row" style="border: solid black; border-width: @topBorderWidth 1px 1px 1px">
+                                    <td class="col-4">Navn</td>
+                                    <td class="col-2">Hold</td>
+                                    <td class="col-6">Beskrivelse</td>
+                                </tr>
+                                if (firstItem)
                                 {
-                                    <tr class="row" style="border: solid black; border-width: 1px 1px 0px 1px">
-                                        <td class="col-4">Navn</td>
-                                        <td class="col-2">Hold</td>
-                                        <td class="col-6">Beskrivelse</td>
-                                    </tr>
+                                    topBorderWidth = "0px";
+                                    firstItem = false;
                                 }
                             }
-                        </table>
+                        }
+                    </table>
                 </form>
             </div>
         </div>
-        
     </div>
-

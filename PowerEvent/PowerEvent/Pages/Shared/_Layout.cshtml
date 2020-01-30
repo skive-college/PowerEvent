@@ -22,27 +22,30 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Forside">Forside</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/ScoreBoard">ScoreBoard</a>
-                        </li>
-
                         @{
-//if (TempData.get())
-//{
-
-//}
+                            UserLogin user = TempData.Peek<UserLogin>("UserLogin");
+                            if (true /*user != null*/)
+                            {
+                                //valider login!!!!!
+                                if (true)
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/Forside">Forside</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/ScoreBoard">ScoreBoard</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/OpretAktivitet">OpretAktivitet</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/ScoreBoard">ScoreBoard</a>
+                                    </li>
+                                }
+                            }
                         }
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/OpretAktivitet">OpretAktivitet</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/ScoreBoard">ScoreBoard</a>
-                        </li>
                     </ul>
                 </div>
             </div>
