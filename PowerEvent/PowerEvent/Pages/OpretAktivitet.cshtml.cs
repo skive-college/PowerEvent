@@ -49,10 +49,10 @@ namespace PowerEvent.Pages
             {
                 PointTypeList = new List<SelectListItem>()
                 {
-                new SelectListItem { Value = "4", Text = "MaxSec" },
-                new SelectListItem { Value = "3", Text = "MinSec" },
-                new SelectListItem { Value = "2", Text = "MaxPoint" },
-                new SelectListItem { Value = "1", Text = "MinPoint" }
+                new SelectListItem { Value = "3", Text = "MaxSec" },
+                new SelectListItem { Value = "2", Text = "MinSec" },
+                new SelectListItem { Value = "1", Text = "MaxPoint" },
+                new SelectListItem { Value = "0", Text = "MinPoint" }
                 };
                 saveTempDataPointType();
             }
@@ -69,7 +69,7 @@ namespace PowerEvent.Pages
 
         public void OnPostCmdDelete()
         {
-            //delete metode
+            DBAdapter.deleteAktivitet(SelectedAktivitetList);
             loadTempAktivitetList();
             setAktivitetList();
             loadTempDataTempPointTypeList();
@@ -79,7 +79,7 @@ namespace PowerEvent.Pages
 
         public void OnPostCmdSubmit()
         {
-            //databaseSaveMetode(input)
+            DBAdapter.addAktivitet(Aktivitet, SelectedPointType);
             loadTempAktivitetList();
             setAktivitetList();
             loadTempDataTempPointTypeList();
@@ -94,23 +94,23 @@ namespace PowerEvent.Pages
             foreach (var item in TempAktivitetList)
             {
                 string pointTxt = "";
-                if (item.PointType == 1)
+                if (item.PointType == 0)
                 {
-                    pointTxt = "MinPoint";
+                    pointTxt = " MinPoint";
+                }
+                else if (item.PointType == 1)
+                {
+                    pointTxt = " MaxPoint";
                 }
                 else if (item.PointType == 2)
                 {
-                    pointTxt = "MaxPoint";
+                    pointTxt = " MinSec";
                 }
                 else if (item.PointType == 3)
                 {
-                    pointTxt = "MinSec";
+                    pointTxt = " MaxSec";
                 }
-                else if (item.PointType == 4)
-                {
-                    pointTxt = "MaxSec";
-                }
-                temp.Add(new SelectListItem { Value = i + "", Text = item.Navn + pointTxt });
+                temp.Add(new SelectListItem { Value = item.Id + "", Text = item.Navn + pointTxt });
                 i++;
             }
             AktivitetList = temp;

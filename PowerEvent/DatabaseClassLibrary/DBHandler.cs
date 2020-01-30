@@ -54,43 +54,33 @@ namespace DatabaseClassLibrary
             return retur;
         }
 
-        //public static void add(User _u)
-        //{
-        //    using (SqlConnection con = new SqlConnection(connectionString))
-        //    {
-        //        string sql = "INSERT INTO[User] ";
-        //        if (_u.ENavn == null)
-        //        {
-        //            sql += "(FNavn) VALUES (@FNavn)";
-        //        }
-        //        else
-        //        {
-        //            sql += "VALUES (@FNavn, @ENavn)";
-        //        }
+        public static void addAktivitet(string _navn, int _pointType)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "INSERT INTO Aktivitet Values(@Navn, @PointType)";
+                
 
-        //        SqlCommand command = new SqlCommand(sql, con);
-        //        command.Parameters.AddWithValue("@FNavn", _u.FNavn);
-        //        if (_u.ENavn != null)
-        //        {
-        //            command.Parameters.AddWithValue("@ENavn", _u.ENavn);
-        //        }
-        //        con.Open();
-        //        command.ExecuteNonQuery();
-        //    }
-        //}
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Navn", _navn);
+                command.Parameters.AddWithValue("@PointType", _pointType);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
 
-        //public static void deleteUser(int _Id)
-        //{
-        //    using (SqlConnection con = new SqlConnection(connectionString))
-        //    {
-        //        string sql = "Delete From [User] WHERE Id = @Id";
+        public static void deleteAktivitet(int _Id)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "Delete From Aktivitet WHERE Id = @Id";
 
-        //        SqlCommand command = new SqlCommand(sql, con);
-        //        command.Parameters.AddWithValue("@Id", _Id);
-        //        con.Open();
-        //        command.ExecuteNonQuery();
-        //    }
-        //}
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Id", _Id);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
 
 
     }

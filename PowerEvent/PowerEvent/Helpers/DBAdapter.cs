@@ -41,7 +41,15 @@ namespace PowerEvent.Helpers
             return AktivitetList;
         }
 
-
+        public static void deleteAktivitet(int _id)
+        {
+            DBHandler.deleteAktivitet(_id);
+        }
+        
+        public static void addAktivitet(string _navn, int _pointType)
+        {
+            DBHandler.addAktivitet(_navn ,_pointType);
+        }
 
 
 
