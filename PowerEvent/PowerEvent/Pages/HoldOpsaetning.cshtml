@@ -1,0 +1,43 @@
+﻿@page
+@model PowerEvent.HoldOpsaetningModel
+@{
+    ViewData["Title"] = "HoldOpsaetning";
+}
+
+<h1>HoldOpsaetning</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-5">
+            <p>Spillers navn</p>
+            <!--<input />-->
+            <select data-val="true">
+                @{
+                    
+                }
+            </select>
+        </div>
+        <div class="col-2">
+            <div>
+                <button style="display: Block">Grøn</button>
+                <button style="display: Block">Blå</button>
+                <button style="display: Block">Lilla</button>
+                <button style="display: Block">Gul</button>
+                <button style="display: Block">Rød</button>
+                <button style="display: Block">Sort</button>
+                <button style="display: Block">Random</button>
+            </div>
+            
+        </div>
+        <div class="col-5">
+            <select>
+                @{
+                    foreach (var hold in Model.HoldList)
+                    {
+                        <option label="@hold.Navn" value="@hold.Id"></option>
+                    } 
+                }
+            </select>
+        </div>
+    </div>
+</div>

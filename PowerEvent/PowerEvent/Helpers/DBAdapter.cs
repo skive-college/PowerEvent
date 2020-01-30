@@ -56,6 +56,21 @@ namespace PowerEvent.Helpers
 
 
 
+        public static List<Hold> getHold()
+        {
+            List<object> dbList = DBHandler.getHold();
+            List<Hold> holdList = new List<Hold>();
+
+            foreach (object _object in dbList)
+            {
+                Hold temp = new Hold();
+                temp.Id = adapt<int>("Id", _object);
+                temp.Navn = adapt<string>("Navn", _object);
+                holdList.Add(temp);
+            }
+            return holdList;
+        }
+
         public static bool checkLogin(string _username, string _password)
         {
             return true;
