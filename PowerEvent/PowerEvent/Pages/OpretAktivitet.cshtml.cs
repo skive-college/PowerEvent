@@ -1,35 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PowerEvent.Models;
+using System.Collections.Generic;
 
 namespace PowerEvent.Pages
 {
     public class opretAktivit : PageModel
     {
+        [BindProperty]
         public int SelectedInfoId { get; set; }
+
         [BindProperty]
         public string Aktivitet { get; set; }
-        [BindProperty]
+
         public SelectList TagOptions { get; set; }
+
         [BindProperty]
         public List<SelectListItem> AktivitetList { get; set; }
 
         public List<SelectListItem> TempAktivitetList { get; set; }
+
         public List<SelectListItem> PointTypeList { get; set; }
 
         public List<SelectListItem> TempPointTypeList { get; set; }
+
         public void OnGet()
         {
             AktivitetList = new List<SelectListItem>();
             TempAktivitetList = new List<SelectListItem>();
             TempPointTypeList = new List<SelectListItem>();
-            loadTempAktivitet();
-            loadTempTempPointTypeList();
+            loadTempDataAktivitet();
+            loadTempDataTempPointTypeList();
             if (TempAktivitetList.Count == 0)
             {
                 AktivitetList = new List<SelectListItem>()
@@ -39,7 +41,7 @@ namespace PowerEvent.Pages
                 new SelectListItem { Value = "3", Text = "Race MaxPoint" },
                 new SelectListItem { Value = "4", Text = "Sumo MinSec" }
                 };
-                saveTempAktivitet();
+                saveTempDataAktivitet();
             }
             else
             {
@@ -55,7 +57,7 @@ namespace PowerEvent.Pages
                 new SelectListItem { Value = "3", Text = "MaxPoint" },
                 new SelectListItem { Value = "4", Text = "MinPoint" }
                 };
-                saveTempPointType();
+                saveTempDataPointType();
             }
             else
             {
@@ -75,28 +77,33 @@ namespace PowerEvent.Pages
         {
             int test;
             test = SelectedInfoId;
-            //loadTemp();
-            //saveTemp();
+            //databaseSaveMetode(input)
+            //AktivitetList = databaseLoadMetode()
+            //saveTempDataAktivitet();
+            loadTemp();
+            AktivitetList = TempAktivitetList;
+            PointTypeList = new List<SelectListItem>();
+            PointTypeList = TempPointTypeList;
             Redirect("/OpretAktivitet");
         }
 
         private void saveTemp()
         {
-            saveTempAktivitet();
-            saveTempPointType();
+            saveTempDataAktivitet();
+            saveTempDataPointType();
         }
         private void loadTemp()
         {
             TempAktivitetList = new List<SelectListItem>();
             TempPointTypeList = new List<SelectListItem>();
-            loadTempAktivitet();
-            loadTempTempPointTypeList();
+            loadTempDataAktivitet();
+            loadTempDataTempPointTypeList();
         }
 
 
 
 
-        private void saveTempAktivitet()
+        private void saveTempDataAktivitet()
         {
             int i = 0;
             foreach (SelectListItem _sli in AktivitetList)
@@ -106,7 +113,7 @@ namespace PowerEvent.Pages
             }
         }
 
-        private void loadTempAktivitet()
+        private void loadTempDataAktivitet()
         {
             for (int i = 0; i != -1; i++)
             {
@@ -121,7 +128,7 @@ namespace PowerEvent.Pages
                 }
             }
         }
-        private void saveTempPointType()
+        private void saveTempDataPointType()
         {
             int i = 0;
             foreach (SelectListItem _sli in PointTypeList)
@@ -130,7 +137,7 @@ namespace PowerEvent.Pages
                 i++;
             }
         }
-        private void loadTempTempPointTypeList()
+        private void loadTempDataTempPointTypeList()
         {
             for (int i = 0; i != -1; i++)
             {
