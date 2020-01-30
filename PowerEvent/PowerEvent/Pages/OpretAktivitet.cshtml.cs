@@ -34,7 +34,7 @@ namespace PowerEvent.Pages
         public void OnGet()
         {
             loadTempDataTempPointTypeList();
-            if (TempAktivitetList.Count == 0)
+            if (TempAktivitetList == null || TempAktivitetList.Count == 0)
             {
                 loadTempAktivitetList();
                 setAktivitetList();
@@ -68,15 +68,18 @@ namespace PowerEvent.Pages
 
         public void OnPostCmdDelete()
         {
-
+            //delete metode
+            loadTempAktivitetList();
+            setAktivitetList();
+            loadTempDataTempPointTypeList();
+            PointTypeList = new List<SelectListItem>();
+            PointTypeList = TempPointTypeList;
         }
 
         public void OnPostCmdSubmit()
         {
 
             //databaseSaveMetode(input)
-            //AktivitetList = databaseLoadMetode()
-            //saveTempDataAktivitet();
             loadTempAktivitetList();
             setAktivitetList();
             loadTempDataTempPointTypeList();
