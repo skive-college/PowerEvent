@@ -67,7 +67,6 @@ namespace PowerEvent.Pages
 
         public void OnPostCmdSubmit()
         {
-
             //databaseSaveMetode(input)
             //AktivitetList = databaseLoadMetode()
             //saveTempDataAktivitet();
