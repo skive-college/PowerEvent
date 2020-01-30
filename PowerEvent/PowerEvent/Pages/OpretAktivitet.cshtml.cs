@@ -33,12 +33,11 @@ namespace PowerEvent.Pages
 
         public void OnGet()
         {
-            loadTemp();
+            loadTempDataTempPointTypeList();
             if (TempAktivitetList.Count == 0)
             {
                 loadTempAktivitetList();
                 setAktivitetList();
-                //saveTempDataAktivitet();
             }
             else
             {
@@ -142,7 +141,7 @@ namespace PowerEvent.Pages
         private void saveTempDataAktivitet()
         {
             int i = 0;
-            foreach (SelectListItem _sli in AktivitetList)
+            foreach (Aktivitet _sli in TempAktivitetList)
             {
                 TempData.Set("Aktivitet" + i, _sli);
                 i++;
