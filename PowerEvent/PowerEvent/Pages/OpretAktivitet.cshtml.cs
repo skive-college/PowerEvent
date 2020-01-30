@@ -82,7 +82,6 @@ namespace PowerEvent.Pages
             loadTempDataTempPointTypeList();
             PointTypeList = new List<SelectListItem>();
             PointTypeList = TempPointTypeList;
-            Redirect("/OpretAktivitet");
         }
 
         private void setAktivitetList()
