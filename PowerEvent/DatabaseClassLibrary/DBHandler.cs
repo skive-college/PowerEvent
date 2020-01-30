@@ -32,9 +32,7 @@ namespace DatabaseClassLibrary
             return retur;
         }
 
-        public static List<object> getHold()
-        {
-            List<object> retur = new List<object>();
+
         public static List<object> getAktivitet()
         {
             List<object> retur = new List<object>();
@@ -95,7 +93,9 @@ namespace DatabaseClassLibrary
         //    }
         //}
 
-
+        public static List<object> getHold()
+        {
+            List<object> retur = new List<object>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 string sql = "SELECT * FROM Hold";
