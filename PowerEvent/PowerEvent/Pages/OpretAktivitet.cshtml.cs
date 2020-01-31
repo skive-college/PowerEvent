@@ -79,7 +79,7 @@ namespace PowerEvent.Pages
 
         public void OnPostCmdSubmit()
         {
-            DBAdapter.addAktivitet(Aktivitet, SelectedPointType - 1);
+            DBAdapter.addAktivitet(Aktivitet, SelectedPointType);
             loadTempAktivitetList();
             setAktivitetList();
             loadTempDataTempPointTypeList();
