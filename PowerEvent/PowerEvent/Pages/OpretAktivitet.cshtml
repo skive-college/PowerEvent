@@ -9,11 +9,9 @@
             Opret aktivitet: <input type="text" asp-for="@Model.Aktivitet" placeholder="Aktivitet"/>
             <select data-val="true" asp-for="@Model.SelectedPointType">
                 @{
-                    int i = 0;
                     foreach (var item in @Model.PointTypeList)
                     {
-                        <option value="@i">@item.Text</option>
-                        i++;
+                        <option value="@item.Value">@item.Text</option>
                     }
                 }
             </select>

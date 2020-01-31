@@ -12,5 +12,7 @@ namespace PowerEvent.Models
         public string Navn { get; set; }
 
         public int PointType { get; set; }
+
+        public int HoldSport { get; set; }
     }
 }

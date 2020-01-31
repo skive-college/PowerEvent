@@ -91,7 +91,7 @@ namespace PowerEvent.Pages
         {
             List<SelectListItem> temp = new List<SelectListItem>();
             int i = 0;
-            foreach (var item in TempAktivitetList)
+            foreach (Aktivitet item in TempAktivitetList)
             {
                 string pointTxt = "";
                 if (item.PointType == 0)
