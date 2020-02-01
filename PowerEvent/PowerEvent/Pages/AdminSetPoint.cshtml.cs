@@ -9,7 +9,17 @@ namespace PowerEvent
 {
     public class AdminSetPointModel : PageModel
     {
+        [BindProperty]
+        public int skift { get; set; }
+        public int TempSkift { get; set; }
         public void OnGet()
+        {
+        }
+        public void OnPost()
+        {
+
+        }
+        public void OnPostCmdSkift()
         {
 
         }

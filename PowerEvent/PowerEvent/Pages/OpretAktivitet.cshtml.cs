@@ -141,11 +141,11 @@ namespace PowerEvent.Pages
                     pointTxt = " MaxSec";
                 }
                 //----------------------------------------------
-                if (item.HoldSport == 1)
+                if (item.HoldSport == 0)
                 {
                     holdSportTxt = " Hold point";
                 }
-                else if (item.HoldSport == 0)
+                else if (item.HoldSport == 1)
                 {
                     holdSportTxt = " Deltager point";
 
