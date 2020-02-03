@@ -104,7 +104,10 @@ namespace PowerEvent.Pages
 
         public void OnPostCmdSubmit()
         {
-            DBAdapter.addAktivitet(Aktivitet, SelectedPointType, SelectedHoldSport);
+            if (Aktivitet != null && Aktivitet != "")
+            {
+                DBAdapter.addAktivitet(Aktivitet, SelectedPointType, SelectedHoldSport);
+            }
             loadTempAktivitetList();
             setAktivitetList();
             loadTempDataTempPointTypeList();
@@ -123,6 +126,7 @@ namespace PowerEvent.Pages
             {
                 string pointTxt = "";
                 string holdSportTxt = "";
+
                 if (item.PointType == 0)
                 {
                     pointTxt = " MinPoint";
@@ -130,7 +134,6 @@ namespace PowerEvent.Pages
                 else if (item.PointType == 1)
                 {
                     pointTxt = " MaxPoint";
-
                 }
                 else if (item.PointType == 2)
                 {
@@ -148,7 +151,6 @@ namespace PowerEvent.Pages
                 else if (item.HoldSport == 1)
                 {
                     holdSportTxt = " Deltager point";
-
                 }
                 temp.Add(new SelectListItem { Value = item.Id + "", Text = item.Navn + pointTxt + holdSportTxt});
                 i++;
