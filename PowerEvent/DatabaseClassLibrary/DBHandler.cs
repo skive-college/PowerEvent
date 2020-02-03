@@ -105,26 +105,37 @@ namespace DatabaseClassLibrary
             return retur;
         }
 
-        public static List<object> getDeltagere(int? _eventAktivtetsId = null)
+        public static List<object> getDeltagere(int? _eventAktivtetId = null)
         {
             List<object> retur = new List<object>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 string sql = "SELECT _ed.Id, _ed.Navn, _ed.HoldId, _ed.EventId";
 
-                if (_eventAktivtetsId != null)
+                if (_eventAktivtetId != null)
                 {
                     sql += ", _ead.Score";
                 }
-                sql += " FROM EventDeltager _ed, EventAktivitetDeltager _ead, EventAktivitet _ea WHERE _ead.EventAktivitetId = _ea.Id AND _ead.DeltagerId = _ed.Id";
+                sql += " FROM EventDeltager _ed";
+                if (_eventAktivtetId != null)
+                {
+                    sql += ", EventAktivitetDeltager _ead, EventAktivitet _ea WHERE _ead.EventAktivitetId = _ea.Id AND _ead.DeltagerId = _ed.Id AND ea.AktivitetId = @eventAktivitetId";
+                }
 
                 con.Open();
                 SqlCommand cmd = new SqlCommand(sql, con);
+
+                if (_eventAktivtetId != null)
+                {
+                    cmd.Parameters.AddWithValue("@eventAktivitetId", _eventAktivtetId);
+                }
+                
+
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    if (_eventAktivtetsId != null)
+                    if (_eventAktivtetId != null)
                     {
                         retur.Add(
                             new { Id = int.Parse(reader["Id"].ToString()), Navn = reader["Navn"].ToString(), HoldId = int.Parse(reader["HoldId"].ToString()), EventId = int.Parse(reader["EventId"].ToString()) }
