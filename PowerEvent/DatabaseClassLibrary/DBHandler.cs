@@ -47,7 +47,7 @@ namespace DatabaseClassLibrary
                 while (reader.Read())
                 {
                     retur.Add(
-                        new { Id = int.Parse(reader["Id"].ToString()), Navn = reader["Navn"].ToString(), PointType = int.Parse(reader["PointType"].ToString()) }
+                        new { Id = int.Parse(reader["Id"].ToString()), Navn = reader["Navn"].ToString(), PointType = int.Parse(reader["PointType"].ToString()), HoldSport = int.Parse(reader["HoldSport"].ToString()) }
                         );
                 }
                 reader.Close();

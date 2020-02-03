@@ -12,7 +12,7 @@ using PowerEvent.Helpers;
 
 namespace PowerEvent.Pages
 {
-    public class ForsideModel : PageModel
+    public class Oversigt : PageModel
     {
         public List<Event> EventInfoList { get; set; }
 

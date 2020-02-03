@@ -36,7 +36,7 @@ namespace PowerEvent.Helpers
                 temp.Id = adapt<int>("Id", _object);
                 temp.Navn = adapt<string>("Navn", _object);
                 temp.PointType = adapt<int>("PointType", _object);
-                //temp.HoldSport = adapt<int>("HoldSport", _object); FEJLER !!!!!!!!
+                temp.HoldSport = adapt<int>("HoldSport", _object);
                 AktivitetList.Add(temp);
             }
             return AktivitetList;
