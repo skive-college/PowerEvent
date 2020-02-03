@@ -52,7 +52,7 @@ namespace PowerEvent.Pages
             {
                 setAktivitetList();
             }
-
+            //---------------------------------------------------------
             if (TempPointTypeList.Count == 0)
             {
                 PointTypeList = new List<SelectListItem>()
@@ -68,7 +68,7 @@ namespace PowerEvent.Pages
             {
                 PointTypeList = TempPointTypeList;
             }
-
+            //-----------------------------------------------------------
             if (TempHoldSportList.Count == 0)
             {
                 HoldSportList = new List<SelectListItem>()

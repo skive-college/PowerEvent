@@ -6,7 +6,7 @@
 
 
 <form method="post">
-    <select asp-for="@Model.skift">
+    <select asp-for="@Model.Skift">
         <option value="1">Hold sport</option>
         <option value="2">Deltager sport</option>
     </select>
@@ -17,51 +17,59 @@
         <option value="2">Runde4</option>
         <option value="2">Runde5</option>
     </select>
-    <input type="submit" value="Gem" asp-page-handler="CmdSkift" />
+    <input type="submit" value="Vælg" asp-page-handler="CmdSkift" />
+
+
+    @if (Model.Skift == 0 || Model.Skift == 1)
+    {
+        <h1>Hold Sport</h1>
+        <div class="container">
+            <div class="row">
+                <div class="col-4">
+                    <p>Vælg et hold</p>
+                    <select asp-for="@Model.SelectedHoldList" multiple style=" height: 350px; width: 300px">
+                        @{
+                            int i = 0;
+                            foreach (var item in @Model.HoldList)
+                            {
+                                <option value="@i">@item.Navn</option>
+                            }
+                        }
+                    </select>
+                    <input type="submit" value="Slet" asp-page-handler="CmdRemoveHold" />
+                </div>
+                <div class="col-4">
+                    <p>Holdets points</p>
+                    <select multiple style=" height: 350px; width: 300px"></select>
+                    <input type="text" placeholder="Giv point" />
+                    <input type="submit" value="Gem" asp-page-handler="CmdAddHoldPoint" />
+                    <input type="submit" value="Slet" asp-page-handler="CmdDeleteDHoldPoint" />
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <h1>Deltager Sport</h1>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <p>Vælg et hold</p>
+                    <select asp-for="@Model.SelectedHoldList" multiple style=" height: 350px; width: 300px"></select>
+                    <input type="submit" value="Slet" asp-page-handler="CmdRemoveHold" />
+                </div>
+                <div class="col-sm-4">
+                    <p>Vælg et navn</p>
+                    <select multiple style=" height: 350px; width: 300px"></select>
+                </div>
+                <div class="col-sm-4">
+                    <p>navnets points</p>
+                    <select multiple style=" height: 350px; width: 300px"></select>
+                    <input type="text" placeholder="Giv point" />
+                    <input type="submit" value="Gem" asp-page-handler="CmdAddDeltagerPoint" />
+                    <input type="submit" value="Slet" asp-page-handler="CmdDeleteDeltagerPoint" />
+                </div>
+            </div>
+        </div>
+    }
 </form>
-
-@if (Model.skift == 0)
-{
-    <h1>Hold Sport</h1>
-    <div class="container">
-        <div class="row">
-            <div class="col-4">
-                <p>Vælg et hold</p>
-                <select multiple style=" height: 350px; width: 300px"></select>
-                <input type="submit" value="Slet" asp-page-handler="CmdDeleteDeltagerPoint" />
-            </div>
-            <div class="col-4">
-                <p>Holdets points</p>
-                <select multiple style=" height: 350px; width: 300px"></select>
-                <input type="text" placeholder="Giv point" />
-                <input type="submit" value="Gem" asp-page-handler="CmdAddDeltagerPoint" />
-                <input type="submit" value="Slet" asp-page-handler="CmdDeleteDeltagerPoint" />
-            </div>
-        </div>
-    </div>
-}
-else
-{
-    <h1>Deltager Sport</h1>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-4">
-                <p>Vælg et hold</p>
-                <select multiple style=" height: 350px; width: 300px"></select>
-                <input type="submit" value="Slet" asp-page-handler="CmdDeleteDeltagerPoint" />
-            </div>
-            <div class="col-sm-4">
-                <p>Vælg et navn</p>
-                <select multiple style=" height: 350px; width: 300px"></select>
-            </div>
-            <div class="col-sm-4">
-                <p>navnets points</p>
-                <select multiple style=" height: 350px; width: 300px"></select>
-                <input type="text" placeholder="Giv point" />
-                <input type="submit" value="Gem" asp-page-handler="CmdAddDeltagerPoint" />
-                <input type="submit" value="Slet" asp-page-handler="CmdDeleteDeltagerPoint" />
-            </div>
-        </div>
-    </div>
-}
-
