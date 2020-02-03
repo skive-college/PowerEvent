@@ -52,11 +52,6 @@ namespace PowerEvent.Helpers
             DBHandler.addAktivitet(_navn ,_pointType, _holdSport);
         }
 
-
-
-
-
-
         public static List<Hold> getHold()
         {
             List<object> dbList = DBHandler.getHold();
@@ -72,10 +67,30 @@ namespace PowerEvent.Helpers
             return holdList;
         }
 
-        public static bool checkLogin(string _username, string _password)
+        public static List<Deltager> getDeltagere(int? _aktivtetsId = null)
         {
-            return true;
+            List<object> DbList = DBHandler.getDeltagere(_aktivtetsId);
+            List<Deltager> retur = new List<Deltager>();
+
+            foreach (object _object in DbList)
+            {
+                Deltager temp = new Deltager();
+                temp.Id = adapt<int>("Id", _object);
+                temp.Navn = adapt<string>("Navn", _object);
+                temp.HoldId = adapt<int>("HoldId", _object);
+                temp.EventId = adapt<int>("EventId", _object);
+                if (_aktivtetsId != null)
+                {
+                    temp.Score = adapt<int>("Score", _object);
+                }
+                retur.Add(temp);
+            }
+
+            return retur;
         }
+
+
+
 
 
 

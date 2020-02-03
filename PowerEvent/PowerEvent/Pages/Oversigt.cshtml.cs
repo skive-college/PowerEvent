@@ -14,18 +14,28 @@ namespace PowerEvent.Pages
 {
     public class Oversigt : PageModel
     {
-        public List<Event> EventInfoList { get; set; }
+        [BindProperty]
+        public int SelectedEvent { get; set; }
+
+        public List<Event> EventList { get; set; }
+
+        public List<Hold> HoldListe { get; set; }
 
         public void OnGet()
         {
-            EventInfoList = new List<Event>();
-            EventInfoList = DBAdapter.getEvent();
+            EventList = new List<Event>();
+            EventList = DBAdapter.getEvent();
         }
 
         public void OnPost()
         {
-            EventInfoList = new List<Event>();
-            EventInfoList = DBAdapter.getEvent();
+            EventList = new List<Event>();
+            EventList = DBAdapter.getEvent();
+        }
+
+        public void OnPostCmdEvent()
+        {
+
         }
 
     }
