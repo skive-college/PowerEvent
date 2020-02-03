@@ -15,7 +15,7 @@ namespace PowerEvent.Models
 
         public int EventId { get; set; }
 
-        public int Score { get; set; }
+        public int? Score { get; set; }
 
     }
 }
