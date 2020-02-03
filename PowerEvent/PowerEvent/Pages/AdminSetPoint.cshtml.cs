@@ -10,6 +10,9 @@ namespace PowerEvent
     public class AdminSetPointModel : PageModel
     {
         [BindProperty]
+        public bool IsChecked { get; set; }
+
+        [BindProperty]
         public int skift { get; set; }
         public int TempSkift { get; set; }
         public void OnGet()
@@ -21,7 +24,7 @@ namespace PowerEvent
         }
         public void OnPostCmdSkift()
         {
-
+            _ = IsChecked == true;
         }
     }
 }
