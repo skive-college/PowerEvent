@@ -6,14 +6,20 @@
 
 <h1>HoldOpsaetning</h1>
 
+<p>Event:</p>
+<select></select>
+
 <div class="container">
     <div class="row">
         <div class="col-sm-5">
             <p>Spillers navn</p>
             <!--<input />-->
-            <select data-val="true" multiple>
+            <select multiple>
                 @{
-                    
+                    foreach (var deltager in Model.DeltagerList)
+                    {
+                        <option label="@deltager.Navn"></option>
+                    }
                 }
             </select>
         </div>
@@ -21,7 +27,7 @@
             <div>
                 <select >
                     @{ 
-
+                        <option value="-1" label="Tilføj hold"></option>
                     }
                 </select>
                 <button name="Random"></button>

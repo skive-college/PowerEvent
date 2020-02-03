@@ -12,12 +12,12 @@ namespace PowerEvent
     public class HoldOpsaetningModel : PageModel
     {
 
-        public List<Hold> HoldList { get; set; }
+        public List<Deltager> DeltagerList { get; set; }
 
 
         public void OnGet()
         {
-            HoldList = DBAdapter.getHold();
+            DeltagerList = DBAdapter.getDeltagere();
         }
 
         public void OnPost()
