@@ -1,0 +1,57 @@
+﻿@page
+@model PowerEvent.AdminSetPointModel
+@{
+    ViewData["Title"] = "AdminSetPoint";
+}
+
+
+<form method="post">
+    <select asp-for="@Model.skift">
+        <option value="1">Hold sport</option>
+        <option value="2">Deltager sport</option>
+    </select>
+    <input type="submit" value="Gem" asp-page-handler="CmdSkift" />
+</form>
+@if (Model.skift == 1)
+{
+    <h1>Hold Sport</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <p>Vælg et hold</p>
+                <select multiple style=" height: 350px; width: 300px"></select>
+            </div>
+            <div class="col-4">
+                <p>Holdets points</p>
+                <select multiple style=" height: 350px; width: 300px"></select>
+                <input type="text" placeholder="Giv point" />
+                <input type="submit" value="Gem" asp-page-handler="CmdAddDeltagerPoint" />
+                <input type="submit" value="Slet" asp-page-handler="CmdDeleteDeltagerPoint" />
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <h1>Deltager Sport</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <p>Vælg et hold</p>
+                <select multiple style=" height: 350px; width: 300px"></select>
+            </div>
+            <div class="col-4">
+                <p>Vælg et navn</p>
+                <select multiple style=" height: 350px; width: 300px"></select>
+            </div>
+            <div class="col-4">
+                <p>navnets points</p>
+                <select multiple style=" height: 350px; width: 300px"></select>
+                <input type="text" placeholder="Giv point" />
+                <input type="submit" value="Gem" asp-page-handler="CmdAddDeltagerPoint" />
+                <input type="submit" value="Slet" asp-page-handler="CmdDeleteDeltagerPoint" />
+            </div>
+        </div>
+    </div>
+}
+

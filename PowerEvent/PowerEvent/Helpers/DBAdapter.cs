@@ -36,6 +36,7 @@ namespace PowerEvent.Helpers
                 temp.Id = adapt<int>("Id", _object);
                 temp.Navn = adapt<string>("Navn", _object);
                 temp.PointType = adapt<int>("PointType", _object);
+                temp.HoldSport = adapt<int>("HoldSport", _object);
                 AktivitetList.Add(temp);
             }
             return AktivitetList;
@@ -46,9 +47,9 @@ namespace PowerEvent.Helpers
             DBHandler.deleteAktivitet(_id);
         }
         
-        public static void addAktivitet(string _navn, int _pointType)
+        public static void addAktivitet(string _navn, int _pointType, int _holdSport)
         {
-            DBHandler.addAktivitet(_navn ,_pointType);
+            DBHandler.addAktivitet(_navn ,_pointType, _holdSport);
         }
 
 

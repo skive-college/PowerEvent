@@ -47,7 +47,7 @@ namespace DatabaseClassLibrary
                 while (reader.Read())
                 {
                     retur.Add(
-                        new { Id = int.Parse(reader["Id"].ToString()), Navn = reader["Navn"].ToString(), PointType = int.Parse(reader["PointType"].ToString()) }
+                        new { Id = int.Parse(reader["Id"].ToString()), Navn = reader["Navn"].ToString(), PointType = int.Parse(reader["PointType"].ToString()), HoldSport = int.Parse(reader["HoldSport"].ToString()) }
                         );
                 }
                 reader.Close();
@@ -55,16 +55,17 @@ namespace DatabaseClassLibrary
             return retur;
         }
 
-        public static void addAktivitet(string _navn, int _pointType)
+        public static void addAktivitet(string _navn, int _pointType, int _holdSport)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = "INSERT INTO Aktivitet Values(@Navn, @PointType)";
+                string sql = "INSERT INTO Aktivitet Values(@Navn, @PointType, @HoldSport)";
                 
 
                 SqlCommand command = new SqlCommand(sql, con);
                 command.Parameters.AddWithValue("@Navn", _navn);
                 command.Parameters.AddWithValue("@PointType", _pointType);
+                command.Parameters.AddWithValue("@HoldSport", _holdSport);
                 con.Open();
                 command.ExecuteNonQuery();
             }

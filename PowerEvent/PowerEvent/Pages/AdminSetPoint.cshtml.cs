@@ -4,34 +4,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 
 namespace PowerEvent
 {
-    public class IndexModel : PageModel
+    public class AdminSetPointModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
-
-        public IndexModel(ILogger<IndexModel> logger)
-        {
-            _logger = logger;
-        }
-
+        [BindProperty]
+        public int skift { get; set; }
+        public int TempSkift { get; set; }
         public void OnGet()
         {
-
         }
-
         public void OnPost()
         {
 
         }
-
-        public void OnPostCmdLogin()
+        public void OnPostCmdSkift()
         {
 
         }
-
-
     }
 }

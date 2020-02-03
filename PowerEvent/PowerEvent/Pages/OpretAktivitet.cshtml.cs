@@ -11,6 +11,9 @@ namespace PowerEvent.Pages
     {
         [BindProperty]
         public int SelectedPointType { get; set; }
+        
+        [BindProperty]
+        public int SelectedHoldSport { get; set; }
 
         [BindProperty]
         public int SelectedAktivitetList { get; set; }
@@ -31,10 +34,15 @@ namespace PowerEvent.Pages
 
         public List<SelectListItem> TempPointTypeList { get; set; }
 
+        public List<SelectListItem> HoldSportList { get; set; }
+
+        public List<SelectListItem> TempHoldSportList { get; set; }
+
         public void OnGet()
         {
             TempAktivitetList = new List<Aktivitet>();
             loadTempDataTempPointTypeList();
+            loadTempDataTempHoldSportList();
             if (TempAktivitetList == null || TempAktivitetList.Count == 0)
             {
                 loadTempAktivitetList();
@@ -60,6 +68,20 @@ namespace PowerEvent.Pages
             {
                 PointTypeList = TempPointTypeList;
             }
+
+            if (TempHoldSportList.Count == 0)
+            {
+                HoldSportList = new List<SelectListItem>()
+                {
+                new SelectListItem { Value = "0", Text = "Hold point" },
+                new SelectListItem { Value = "1", Text = "Deltager point" },
+                };
+                saveTempDataHoldSport();
+            }
+            else
+            {
+                HoldSportList = TempHoldSportList;
+            }
         }
         
         public void OnPost()
@@ -73,27 +95,38 @@ namespace PowerEvent.Pages
             loadTempAktivitetList();
             setAktivitetList();
             loadTempDataTempPointTypeList();
+            loadTempDataTempHoldSportList();
             PointTypeList = new List<SelectListItem>();
             PointTypeList = TempPointTypeList;
+            HoldSportList = new List<SelectListItem>();
+            HoldSportList = TempHoldSportList;
         }
 
         public void OnPostCmdSubmit()
         {
-            DBAdapter.addAktivitet(Aktivitet, SelectedPointType);
+            if (Aktivitet != null && Aktivitet != "")
+            {
+                DBAdapter.addAktivitet(Aktivitet, SelectedPointType, SelectedHoldSport);
+            }
             loadTempAktivitetList();
             setAktivitetList();
             loadTempDataTempPointTypeList();
+            loadTempDataTempHoldSportList();
             PointTypeList = new List<SelectListItem>();
             PointTypeList = TempPointTypeList;
+            HoldSportList = new List<SelectListItem>();
+            HoldSportList = TempHoldSportList;
         }
 
         private void setAktivitetList()
         {
             List<SelectListItem> temp = new List<SelectListItem>();
             int i = 0;
-            foreach (var item in TempAktivitetList)
+            foreach (Aktivitet item in TempAktivitetList)
             {
                 string pointTxt = "";
+                string holdSportTxt = "";
+
                 if (item.PointType == 0)
                 {
                     pointTxt = " MinPoint";
@@ -110,7 +143,16 @@ namespace PowerEvent.Pages
                 {
                     pointTxt = " MaxSec";
                 }
-                temp.Add(new SelectListItem { Value = item.Id + "", Text = item.Navn + pointTxt });
+                //----------------------------------------------
+                if (item.HoldSport == 0)
+                {
+                    holdSportTxt = " Hold point";
+                }
+                else if (item.HoldSport == 1)
+                {
+                    holdSportTxt = " Deltager point";
+                }
+                temp.Add(new SelectListItem { Value = item.Id + "", Text = item.Navn + pointTxt + holdSportTxt});
                 i++;
             }
             AktivitetList = temp;
@@ -187,6 +229,33 @@ namespace PowerEvent.Pages
                 if (_sli != null)
                 {
                     TempPointTypeList.Add(_sli);
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+
+        private void saveTempDataHoldSport()
+        {
+            int i = 0;
+            foreach (SelectListItem _sli in HoldSportList)
+            {
+                TempData.Set("HoldSport" + i, _sli);
+                i++;
+            }
+        }
+
+        private void loadTempDataTempHoldSportList()
+        {
+            TempHoldSportList = new List<SelectListItem>();
+            for (int i = 0; i != -1; i++)
+            {
+                SelectListItem _sli = TempData.Peek<SelectListItem>("HoldSport" + i);
+                if (_sli != null)
+                {
+                    TempHoldSportList.Add(_sli);
                 }
                 else
                 {
