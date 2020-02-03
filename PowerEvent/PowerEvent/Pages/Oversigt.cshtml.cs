@@ -21,16 +21,23 @@ namespace PowerEvent.Pages
 
         public List<Hold> HoldListe { get; set; }
 
+        public List<Deltager> DeltagerList { get; set; }
+
+
         public void OnGet()
         {
             EventList = new List<Event>();
+            DeltagerList = new List<Deltager>();
             EventList = DBAdapter.getEvent();
+            DeltagerList = DBAdapter.getDeltagere();
         }
 
         public void OnPost()
         {
             EventList = new List<Event>();
+            DeltagerList = new List<Deltager>();
             EventList = DBAdapter.getEvent();
+            DeltagerList = DBAdapter.getDeltagere();
         }
 
         public void OnPostCmdEvent()

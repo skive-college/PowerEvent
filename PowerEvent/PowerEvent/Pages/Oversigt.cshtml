@@ -25,8 +25,8 @@
         </div>
         <div class="row">
             @{
-                @*foreach (var _item in )
-                {
+//foreach (var _item in )
+//{
                     <div class="col">
                         <br />
                         <form method="post">
@@ -39,10 +39,14 @@
                                     bool firstItem = true;
                                     string topBorderWidth = "1px";
 
-                                    foreach (var _item in )
+                                    foreach (var _item in @Model.DeltagerList)
                                     {
                                         <tr class="row" style="border: solid black; border-width: @topBorderWidth 1px 1px 1px">
-                                            <td class="col-4">Navn</td>
+                                            <td class="col">@_item.Id</td>
+                                            <td class="col">@_item.Navn</td>
+                                            <td class="col">@_item.EventId</td>
+                                            <td class="col">@_item.HoldId</td>
+                                            <td class="col">@_item.Score</td>
                                         </tr>
                                         if (firstItem)
                                         {
@@ -54,7 +58,7 @@
                             </table>
                         </form>
                     </div>
-                }*@
+                                    //}
             }
         </div>
     </div>

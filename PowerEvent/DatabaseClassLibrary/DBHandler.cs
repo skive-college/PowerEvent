@@ -71,14 +71,14 @@ namespace DatabaseClassLibrary
             }
         }
 
-        public static void deleteAktivitet(int _Id)
+        public static void deleteAktivitet(int _id)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 string sql = "Delete From Aktivitet WHERE Id = @Id";
 
                 SqlCommand command = new SqlCommand(sql, con);
-                command.Parameters.AddWithValue("@Id", _Id);
+                command.Parameters.AddWithValue("@Id", _id);
                 con.Open();
                 command.ExecuteNonQuery();
             }
@@ -105,21 +105,39 @@ namespace DatabaseClassLibrary
             return retur;
         }
 
-        public static List<object> getDeltagere(int? _aktivtetsId = null)
+        public static List<object> getDeltagere(int? _eventAktivtetsId = null)
         {
             List<object> retur = new List<object>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = "SELECT * FROM EventDeltager ed Where";
+                string sql = "SELECT _ed.Id, _ed.Navn, _ed.HoldId, _ed.EventId";
+
+                if (_eventAktivtetsId != null)
+                {
+                    sql += ", _ead.Score";
+                }
+                sql += " FROM EventDeltager _ed, EventAktivitetDeltager _ead, EventAktivitet _ea WHERE _ead.EventAktivitetId = _ea.Id AND _ead.DeltagerId = _ed.Id";
+
                 con.Open();
                 SqlCommand cmd = new SqlCommand(sql, con);
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    retur.Add(
-                        new { Id = int.Parse(reader["Id"].ToString()), Navn = reader["Navn"].ToString(), HoldId = int.Parse(reader["HoldId"].ToString()), EventId = int.Parse(reader["EventId"].ToString()) }
+                    if (_eventAktivtetsId != null)
+                    {
+                        retur.Add(
+                            new { Id = int.Parse(reader["Id"].ToString()), Navn = reader["Navn"].ToString(), HoldId = int.Parse(reader["HoldId"].ToString()), EventId = int.Parse(reader["EventId"].ToString()) }
                         );
+
+                    }
+                    else
+                    {
+                        retur.Add(
+                            new { Id = int.Parse(reader["Id"].ToString()), Navn = reader["Navn"].ToString(), HoldId = int.Parse(reader["HoldId"].ToString()), EventId = int.Parse(reader["EventId"].ToString()), Score = int.Parse(reader["EventId"].ToString()) }
+                        );
+
+                    }
                 }
                 reader.Close();
             }
