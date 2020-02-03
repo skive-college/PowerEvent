@@ -11,9 +11,17 @@
                 </div>
             </div>
         </div>
+        <select data-val="true" asp-for="@Model.SelectedPointType">
+            @{
+                foreach (var item in @Model.PointTypeList)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            }
+        </select>
         <div class="row">
             <div class="col">
-                <br/>
+                <br />
                 <form method="post">
                     <table style=" max-height: 400px; width: 100%;">
                         <tr class="row" style="border: solid black; border-width: 1px 1px 0px 1px">
