@@ -10,9 +10,17 @@
         <option value="1">Hold sport</option>
         <option value="2">Deltager sport</option>
     </select>
+    <select>
+        <option value="1">Runde 1</option>
+        <option value="2">Runde2</option>
+        <option value="2">Runde3</option>
+        <option value="2">Runde4</option>
+        <option value="2">Runde5</option>
+    </select>
     <input type="submit" value="Gem" asp-page-handler="CmdSkift" />
 </form>
-@if (Model.skift == 1)
+
+@if (Model.skift == 0)
 {
     <h1>Hold Sport</h1>
     <div class="container">
@@ -20,6 +28,7 @@
             <div class="col-4">
                 <p>Vælg et hold</p>
                 <select multiple style=" height: 350px; width: 300px"></select>
+                <input type="submit" value="Slet" asp-page-handler="CmdDeleteDeltagerPoint" />
             </div>
             <div class="col-4">
                 <p>Holdets points</p>
@@ -36,15 +45,16 @@ else
     <h1>Deltager Sport</h1>
     <div class="container">
         <div class="row">
-            <div class="col-4">
+            <div class="col-sm-4">
                 <p>Vælg et hold</p>
                 <select multiple style=" height: 350px; width: 300px"></select>
+                <input type="submit" value="Slet" asp-page-handler="CmdDeleteDeltagerPoint" />
             </div>
-            <div class="col-4">
+            <div class="col-sm-4">
                 <p>Vælg et navn</p>
                 <select multiple style=" height: 350px; width: 300px"></select>
             </div>
-            <div class="col-4">
+            <div class="col-sm-4">
                 <p>navnets points</p>
                 <select multiple style=" height: 350px; width: 300px"></select>
                 <input type="text" placeholder="Giv point" />
