@@ -74,23 +74,24 @@ namespace PowerEvent.Helpers
 
             foreach (object _object in DbList)
             {
-                Deltager temp = new Deltager();
-                temp.Id = adapt<int>("Id", _object);
-                temp.Navn = adapt<string>("Navn", _object);
-                temp.HoldId = adapt<int>("HoldId", _object);
-                temp.EventId = adapt<int>("EventId", _object);
+                Deltager tempdeltager = new Deltager();
+                tempdeltager.ScoreList = new List<DeltagerScore>();
+                tempdeltager.Id = adapt<int>("Id", _object);
+                tempdeltager.Navn = adapt<string>("Navn", _object);
+                tempdeltager.HoldId = adapt<int>("HoldId", _object);
+                tempdeltager.EventId = adapt<int>("EventId", _object);
                 if (_eventAktivtetId != null)
                 {
-                    List<object> scoreList = adapt<List<object>>("ScoreList", _object);
-                    foreach (object _score in scoreList)
+                    List<object> o = adapt<List<object>>("ScoreList", _object);
+                    foreach (object _score in o)
                     {
                         DeltagerScore ds = new DeltagerScore();
                         ds.Id = adapt<int>("Id", _score);
                         ds.Score = adapt<int>("Score", _score);
-                        temp.ScoreList.Add(ds);
+                        tempdeltager.ScoreList.Add(ds);
                     }
                 }
-                retur.Add(temp);
+                retur.Add(tempdeltager);
             }
 
             return retur;

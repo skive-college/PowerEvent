@@ -94,7 +94,7 @@ namespace DatabaseClassLibrary
         }
 
         //LAV MULIGHED FOR AT INDTASTE ET EVENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        public static List<object> getHold(/*int? _eventId = null*/)
+        public static List<object> getHold(/* int? _eventId = null */)
         {
             List<object> retur = new List<object>();
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -116,7 +116,7 @@ namespace DatabaseClassLibrary
         }
 
 
-        //returnerer alle deltagere fra et event med "_eventId". hvis "_eventAktivitetId" er angivet returnere den også deres "Score" fra den angivne aktivitet i eventet
+        //returnerer alle deltagere fra et event med "_eventId". hvis "_eventAktivitetId" er angivet returnere den også deres "Score" fra den angivne aktivitet i eventet.
         public static List<object> getDeltagere(int _eventId ,int? _eventAktivtetId = null, int? _holdId = null)
         {
             List<object> retur = new List<object>();
@@ -132,7 +132,7 @@ namespace DatabaseClassLibrary
                 sql += " WHERE";
                 if (_eventAktivtetId != null)
                 {
-                    sql += " _ead.EventAktivitetId = _ea.Id AND _ead.DeltagerId = _ed.Id AND _ea.AktivitetId = @eventAktivitetId AND";
+                    sql += " _ead.EventAktivitetId = _ea.Id AND _ead.DeltagerId = _ed.Id AND _ea.Id = @eventAktivitetId AND";
                 }
                 sql += " _ed.EventId = @EventId";
 
@@ -150,12 +150,9 @@ namespace DatabaseClassLibrary
 
                 while (reader.Read())
                 {
-                    if (_eventAktivtetId == null)
-                    {
-                        deltagerList.Add(
-                            new Deltager{ Id = int.Parse(reader["Id"].ToString()), Navn = reader["Navn"].ToString(), HoldId = int.Parse(reader["HoldId"].ToString()), EventId = int.Parse(reader["EventId"].ToString()) }
-                        );
-                    }
+                    deltagerList.Add(
+                        new Deltager{ Id = int.Parse(reader["Id"].ToString()), Navn = reader["Navn"].ToString(), HoldId = int.Parse(reader["HoldId"].ToString()), EventId = int.Parse(reader["EventId"].ToString()) }
+                    );
                 }
                 reader.Close();
             }
@@ -169,21 +166,38 @@ namespace DatabaseClassLibrary
                     {
                         if (_deltager.Id == _score.DeltagerId)
                         {
+                            if (_deltager.ScoreList == null)
+                            {
+                                _deltager.ScoreList = new List<DBDeltagerScore>();
+                            }
                             _deltager.ScoreList.Add(_score);
-                            scoreList.Remove(_score);
                         }
+                    }
+                    foreach (DBDeltagerScore _dBDeltagerScore in _deltager.ScoreList)
+                    {
+                        scoreList.Remove(_dBDeltagerScore);
                     }
                 }
             }
 
             foreach (Deltager _deltager in deltagerList)
             {
-                retur.Add(_deltager);
+                List<object> dScoreList = new List<object>();
+                if (_eventAktivtetId != null)
+                {
+                    foreach (DBDeltagerScore _dScore in _deltager.ScoreList)
+                    {
+                        object o = new { _dScore.Id, _dScore.Score };
+                        dScoreList.Add(o);
+                    }
+                }
+                retur.Add( new { Id = _deltager.Id, Navn = _deltager.Navn, HoldId = _deltager.HoldId, EventId = _deltager.EventId, ScoreList = dScoreList}
+                    );
             }
             return retur;
         }
 
-
+        //returnere scores til "getDeltagere()"
         public static List<DBDeltagerScore> getDeltagerScores(int? _eventAktivtetId = null)
         {
             List<DBDeltagerScore> retur = new List<DBDeltagerScore>();
@@ -212,6 +226,7 @@ namespace DatabaseClassLibrary
             }
             return retur;
         }
+
 
         public static void addDeltager(string _navn, int _eventId)
         {
