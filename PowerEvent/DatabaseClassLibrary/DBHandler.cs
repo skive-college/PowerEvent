@@ -189,7 +189,7 @@ namespace DatabaseClassLibrary
             List<DBDeltagerScore> retur = new List<DBDeltagerScore>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = "SELECT _ead. FROM EventAktivitetDeltager _ead WHERE _ead.EventAktivitetId = @_EventAktivitetId";
+                string sql = "SELECT * FROM EventAktivitetDeltager _ead WHERE _ead.EventAktivitetId = @_EventAktivitetId";
 
                 con.Open();
                 SqlCommand cmd = new SqlCommand(sql, con);
@@ -204,7 +204,7 @@ namespace DatabaseClassLibrary
                     if (_eventAktivtetId != null)
                     {
                         retur.Add(
-                            new DBDeltagerScore{ Id = int.Parse(reader["Id"].ToString()), DeltagerId = int.Parse(reader["Score"].ToString()), EventAktivitetId = int.Parse(reader["Score"].ToString()), Score = int.Parse(reader["Score"].ToString()) }
+                            new DBDeltagerScore{ Id = int.Parse(reader["Id"].ToString()), DeltagerId = int.Parse(reader["DeltagerId"].ToString()), EventAktivitetId = int.Parse(reader["EventAktivitetId"].ToString()), Score = int.Parse(reader["Score"].ToString()) }
                         );
                     }
                 }
