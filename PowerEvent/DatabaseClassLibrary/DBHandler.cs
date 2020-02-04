@@ -154,7 +154,7 @@ namespace DatabaseClassLibrary
                     else
                     {
                         retur.Add(
-                            new { Id = int.Parse(reader["Id"].ToString()), Navn = reader["Navn"].ToString(), HoldId = int.Parse(reader["HoldId"].ToString()), EventId = int.Parse(reader["EventId"].ToString()), Score = int.Parse(reader["EventId"].ToString()) }
+                            new { Id = int.Parse(reader["Id"].ToString()), Navn = reader["Navn"].ToString(), HoldId = int.Parse(reader["HoldId"].ToString()), EventId = int.Parse(reader["EventId"].ToString()), Score = int.Parse(reader["Score"].ToString()) }
                         );
 
                     }
