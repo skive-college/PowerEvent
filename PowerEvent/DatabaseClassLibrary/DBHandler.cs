@@ -84,7 +84,8 @@ namespace DatabaseClassLibrary
             }
         }
 
-        public static List<object> getHold()
+        //LAV MULIGHED FOR AT INDTASTE ET EVENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        public static List<object> getHold(/*int? _eventId = null*/)
         {
             List<object> retur = new List<object>();
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -105,6 +106,8 @@ namespace DatabaseClassLibrary
             return retur;
         }
 
+
+        //returnerer alle deltagere fra et event med "_eventId". hvis "_eventAktivitetId" er angivet returnere den også deres "Score" fra den angivne aktivitet i eventet
         public static List<object> getDeltagere(int _eventId ,int? _eventAktivtetId = null)
         {
             List<object> retur = new List<object>();
@@ -131,11 +134,11 @@ namespace DatabaseClassLibrary
                 SqlCommand cmd = new SqlCommand(sql, con);
 
                 cmd.Parameters.AddWithValue("@EventId", _eventId);
+
                 if (_eventAktivtetId != null)
                 {
                     cmd.Parameters.AddWithValue("@eventAktivitetId", _eventAktivtetId);
                 }
-                
 
                 SqlDataReader reader = cmd.ExecuteReader();
 

@@ -28,19 +28,20 @@ namespace PowerEvent.Pages
         {
             DeltagerList = new List<Deltager>();
             EventList = DBAdapter.getEvent();
-            checkEventList();
+            checkListScript();
 
         }
 
         public void OnPost()
         {
             EventList = DBAdapter.getEvent();
-            checkEventList();
+            checkListScript();
         }
 
 
 
-        private void checkEventList()
+
+        private void checkListScript()
         {
             //on click for select element script. navn = select elementets "id"
             string navn = Request.Query["navn"];
@@ -63,6 +64,7 @@ namespace PowerEvent.Pages
                 {
                     EventList = DBAdapter.getEvent();
                 }
+                SelectedEvent = i;
             }
         }
 

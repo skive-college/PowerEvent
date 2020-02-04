@@ -14,8 +14,14 @@
     <br/>
     <div class="row">
         <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="listChanged('EventList')" style="width: auto">
-            <option value="-1">Vælg et event</option>
+
+
             @{
+                if (@Model.SelectedEvent == 0)
+                {
+                    <option id="PlaceholderOption" value="-1">Vælg et event</option>
+                }
+
                 foreach (var item in @Model.EventList)
                 {
                     <option value="@item.Id">@item.Navn</option>
@@ -66,6 +72,15 @@
             url.searchParams.set("id", valgt);
             url.searchParams.set("navn", listen);
             location.href = url;
+        }
+    </script>
+
+    <script>
+        function placeholderOptionCheck()
+        {
+            let valgtListe = document.getElementById(listen);
+            let valgt = valgtListe.options[valgtListe.selectedIndex].value;
+            return valgt;
         }
     </script>
 }
