@@ -181,10 +181,11 @@ namespace DatabaseClassLibrary
                 }
             }
 
-            //konverterer deltageren samt deltagerens "ScoreList" til annonyme objecter
+            //konverterer deltageren til et annonymt object
             foreach (Deltager _deltager in deltagerList)
             {
                 List<object> dScoreList = new List<object>();
+                //konverterer List<DBDeltagerScore> til List<object>
                 if (_eventAktivtetId != null)
                 {
                     foreach (DBDeltagerScore _dScore in _deltager.ScoreList)
