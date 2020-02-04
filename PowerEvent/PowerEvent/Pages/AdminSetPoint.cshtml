@@ -27,12 +27,11 @@
             <div class="row">
                 <div class="col-4">
                     <p>Vælg et hold</p>
-                    <select asp-for="@Model.SelectedHoldList" multiple style=" height: 350px; width: 300px">
+                    <select id="Holdliste" onchange="listChanged('Holdliste')" asp-for="@Model.SelectedHoldList" multiple style=" height: 350px; width: 300px">
                         @{
-                            int i = 0;
                             foreach (var item in @Model.HoldList)
                             {
-                                <option value="@i">@item.Navn</option>
+                                <option value="@item.Id">@item.Navn</option>
                             }
                         }
                     </select>
@@ -55,7 +54,7 @@
             <div class="row">
                 <div class="col-sm-4">
                     <p>Vælg et hold</p>
-                    <select asp-for="@Model.SelectedHoldList" multiple style=" height: 350px; width: 300px"></select>
+                    <select id="Holdliste2" onchange="listChanged('Holdliste2')" asp-for="@Model.SelectedHoldList" multiple style=" height: 350px; width: 300px"></select>
                     <input type="submit" value="Slet" asp-page-handler="CmdRemoveHold" />
                 </div>
                 <div class="col-sm-4">
@@ -73,3 +72,22 @@
         </div>
     }
 </form>
+
+
+
+
+<select id="Listen" onchange="listChanged('Listen')"></select>
+
+@section Scripts
+{
+    <script>
+        function listChanged(Holdliste, Holdliste2)
+        {
+            let valgtliste = document.getElementById(Holdliste, Holdliste2);
+            let valgt = valgtliste.options[valgtliste.selectedIndex].value;
+            let url = new URL(location.href);
+            url.searchParams.set("id", valgt);
+            location.href = url;
+        }
+    </script>
+}
