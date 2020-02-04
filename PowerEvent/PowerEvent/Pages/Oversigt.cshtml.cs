@@ -42,24 +42,30 @@ namespace PowerEvent.Pages
 
         private void checkEventList()
         {
-            //on click for dropdown event liste script
-            int i = -1;
-            try
+            //on click for select element script. navn = select elementets "id"
+            string navn = Request.Query["navn"];
+            if (navn == "EventList")
             {
-                i = int.Parse(Request.Query["id"]);
-            }
-            catch
-            {
+                int i = -1;
+                try
+                {
+                    i = int.Parse(Request.Query["id"]);
+                }
+                catch
+                {
 
+                }
+                if (i != -1)
+                {
+                    DeltagerList = DBAdapter.getDeltagere(i);
+                }
+                else
+                {
+                    EventList = DBAdapter.getEvent();
+                }
             }
-            if (i != -1)
-            {
-                DeltagerList = DBAdapter.getDeltagere(i);
-            }
-            else
-            {
-                EventList = DBAdapter.getEvent();
-            }
+
+            
         }
 
 

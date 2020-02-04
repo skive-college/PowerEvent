@@ -11,8 +11,9 @@
             </div>
         </div>
     </div>
+    <br/>
     <div class="row">
-        <select id="Listen" data-val="true" asp-for="@Model.SelectedEvent" onchange="listChanged('Listen')" style="width: auto">
+        <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="listChanged('EventList')" style="width: auto">
             <option value="-1">Vælg et event</option>
             @{
                 foreach (var item in @Model.EventList)
@@ -29,29 +30,20 @@
             <div class="col-md-3">
                 <br />
                 <form method="post">
-                    <table style=" max-height: 400px; width: 100%;">
-                        <tr class="row" style="border: solid black; border-width: 1px 1px 0px 1px">
+                    <table style=" height: auto; width: 100%;">
+                        <tr class="row" style="border: solid black; border-width: 1px 1px 1px 1px">
                             <th class="col">Hold Navn</th>
                         </tr>
                         @{
-                            //checker om "item" er den første item og sæætter en top border hvis den er
-                            bool firstItem = true;
-                            string topBorderWidth = "1px";
-
                             foreach (var _item in @Model.DeltagerList)
                             {
-                                <tr class="row" style="border: solid black; border-width: @topBorderWidth 1px 1px 1px">
+                                <tr class="row" style="border: solid black; border-width: 0px 1px 1px 1px">
                                     <td class="col">@_item.Id</td>
                                     <td class="col">@_item.Navn</td>
                                     <td class="col">@_item.EventId</td>
                                     <td class="col">@_item.HoldId</td>
                                     <td class="col">@_item.Score</td>
                                 </tr>
-                                if (firstItem)
-                                {
-                                    topBorderWidth = "0px";
-                                    firstItem = false;
-                                }
                             }
                         }
                     </table>
@@ -62,6 +54,7 @@
     </div>
 </div>
 
+
 @section Scripts
 {
     <script>
@@ -71,6 +64,7 @@
             let valgt = valgtListe.options[valgtListe.selectedIndex].value;
             let url = new URL(location.href);
             url.searchParams.set("id", valgt);
+            url.searchParams.set("navn", listen);
             location.href = url;
         }
     </script>
