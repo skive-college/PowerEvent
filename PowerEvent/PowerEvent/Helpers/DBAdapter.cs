@@ -89,6 +89,11 @@ namespace PowerEvent.Helpers
             return retur;
         }
 
+        public static void addDeltager(string _navn, int _eventId)
+        {
+            DBHandler.addDeltager(_navn, _eventId);
+        }
+
 
 
 

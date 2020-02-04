@@ -155,7 +155,19 @@ namespace DatabaseClassLibrary
             return retur;
         }
 
+        public static void addDeltager(string _navn, int _eventId)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "INSERT INTO EventDeltager (Name, EventId) VALUES @Navn, @EventId";
 
+                SqlCommand cmd = new SqlCommand(sql, con);
+                cmd.Parameters.AddWithValue("@Navn", _navn);
+                cmd.Parameters.AddWithValue("@EventId", _eventId);
+
+                cmd.ExecuteNonQuery();
+            }
+        }
 
 
 

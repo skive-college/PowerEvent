@@ -14,15 +14,19 @@ namespace PowerEvent
 
         public List<Deltager> DeltagerList { get; set; }
 
+        public List<Hold> HoldList { get; set; }
+
 
         public void OnGet()
         {
             DeltagerList = DBAdapter.getDeltagere();
+            HoldList = DBAdapter.getHold();
         }
 
-        public void OnPost()
+        public void OnPostCmdSubmitNavn()
         {
 
+            OnGet();
         }
     }
 }

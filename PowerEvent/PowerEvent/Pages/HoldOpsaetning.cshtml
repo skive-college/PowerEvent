@@ -11,10 +11,13 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-sm-5">
-            <p>Spillers navn</p>
-            <!--<input />-->
-            <select multiple>
+        <div class="col-sm-5">            
+            <form method="post">
+                <p>Spillers navn</p>
+                <input type="text" name="Navn"/>
+                <input type="submit" value="Opret" asp-page-handler="CmdSubmitNavn"/>
+            </form>
+            <select id="deltagerselect" multiple>
                 @{
                     foreach (var deltager in Model.DeltagerList)
                     {
@@ -25,20 +28,23 @@
         </div>
         <div class="col-sm-2">
             <div>
-                <select >
+                <select id="holdselect">
                     @{ 
-                        <option value="-1" label="Tilføj hold"></option>
+                        foreach (var hold in Model.HoldList)
+                        {
+                            <option label="@hold.Navn" value="@hold.Id"></option>
+                        }
                     }
                 </select>
-                <button name="Random"></button>
-                <button name="Tilføj"></button>
+                <button name="Random" onclick=""></button>
+                <button name="Tilføj" onclick=""></button>
             </div>
             
         </div>
         <div class="col-sm-5">
             <select disabled multiple>
                 @{
-
+                    
                 }
             </select>
         </div>
