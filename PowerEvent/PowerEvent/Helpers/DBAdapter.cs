@@ -25,7 +25,7 @@ namespace PowerEvent.Helpers
             return eventList;
         }
 
-        public static List<Aktivitet> getAktivitet()
+        public static List<Aktivitet> getAktivitet(int? _eventId = null)
         {
             List<object> dbList = DBHandler.getAktivitet();
             List<Aktivitet> AktivitetList = new List<Aktivitet>();

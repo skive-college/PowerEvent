@@ -33,15 +33,24 @@ namespace DatabaseClassLibrary
         }
 
 
-        public static List<object> getAktivitet()
+        public static List<object> getAktivitet(int? _eventId = null)
         {
             List<object> retur = new List<object>();
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = "SELECT * FROM Aktivitet";
+                string sql = "SELECT _a.Id, _a.Navn, _a.PointType ,_a.HoldSport FROM Aktivitet _a";
+
+                if (_eventId != null)
+                {
+                    sql += ", EventAktivitet _ea WHERE _a.Id = _ea.AktivitetId AND _ea.EventId = @EventId";
+                }
                 con.Open();
                 SqlCommand cmd = new SqlCommand(sql, con);
+                if (_eventId != null)
+                {
+                    cmd.Parameters.AddWithValue("@EventId", _eventId);
+                }
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -60,7 +69,6 @@ namespace DatabaseClassLibrary
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 string sql = "INSERT INTO Aktivitet Values(@Navn, @PointType, @HoldSport)";
-                
 
                 SqlCommand command = new SqlCommand(sql, con);
                 command.Parameters.AddWithValue("@Navn", _navn);

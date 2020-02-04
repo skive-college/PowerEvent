@@ -14,21 +14,28 @@ namespace PowerEvent
     {
         [BindProperty]
         public int Skift { get; set; }
+        
+        [BindProperty]
+        public int SelectedEvent { get; set; }
 
         [BindProperty]
         public int SelectedHoldList { get; set; }
 
         public List<Hold> HoldList { get; set; }
 
+        public List<Deltager> DeltagerList { get; set; }
+
+        public List<Event> EventList { get; set; }
+        
+        public List<Aktivitet> AktivitetList { get; set; }
+
         public void OnGet()
         {
-            int.TryParse(Request.Query["id"], out int i);
-
-            if (i != 0)
-            {
-                ;
-            }
-
+            AktivitetList = new List<Aktivitet>();
+            HoldList = new List<Hold>();
+            DeltagerList = new List<Deltager>();
+            EventList = DBAdapter.getEvent();
+            checkListScript();
         }
         public void OnPost()
         {
@@ -36,99 +43,114 @@ namespace PowerEvent
         }
         public void OnPostCmdSkift()
         {
-            loadTempDataHoldList();
-            saveTempDataHoldList();
+            //AktivitetList = DBAdapter.getAktivitet();
+            //EventList = DBAdapter.getEvent();
+            //HoldList = DBAdapter.getHold();
         }
         public void OnPostCmdRemoveHold()
         {
-            loadTempDataHoldList();
-            saveTempDataHoldList();
+
         }
         public void OnPostCmdAddHoldPoint()
         {
-            loadTempDataHoldList();
-            saveTempDataHoldList();
+
         }
         public void OnPostCmdDeleteDHoldPoint()
         {
-            loadTempDataHoldList();
-            saveTempDataHoldList();
+
         }
         public void OnPostCmdAddDeltagerPoint()
         {
-            loadTempDataHoldList();
-            saveTempDataHoldList();
+
         }
         public void OnPostCmdDeleteDeltagerPoint()
         {
-            loadTempDataHoldList();
-            saveTempDataHoldList();
+
         }
 
 
         private void loadHoldList()
         {
+            HoldList = new List<Hold>();
             HoldList = DBAdapter.getHold();
         }
 
-        //private void setHoldList()
-        //{
-        //    List<SelectListItem> temp = new List<SelectListItem>();
-        //    int i = 0;
-        //    foreach (Hold item in h)
-        //    {              
-        //        temp.Add(new SelectListItem { Value = item.Id + "", Text = item.Navn});
-        //        i++;
-        //    }
-        //    //HoldList = temp;
-        //}
 
-        private void saveTempDataHoldList()
+        private void checkListScript()
         {
-            int i = 0;
-            foreach (Hold _sli in HoldList)
+            //on click for select element script. navn = select elementets "id"
+            string navn = Request.Query["navn"];
+            if (navn == "EventList")
             {
-                TempData.Set("Hold" + i, _sli);
-                i++;
-            }
-        }
-        private void loadTempDataHoldList()
-        {
-            HoldList = new List<Hold>();
-            for (int i = 0; i != -1; i++)
-            {
-                Hold _a = TempData.Get<Hold>("Hold" + i);
-                if (_a != null)
+                int i = -1;
+                try
                 {
-                    HoldList.Add(_a);
+                    i = int.Parse(Request.Query["id"]);
+                }
+                catch
+                {
+                }
+                if (i != -1)
+                {
+                    AktivitetList = DBAdapter.getAktivitet(i);
                 }
                 else
                 {
-                    break;
+                    EventList = DBAdapter.getEvent();
                 }
+                SelectedEvent = i;
             }
-        }private void saveTempDataHoldpScoreList()
-        {
-            int i = 0;
-            foreach (Hold _sli in HoldList)
+            else if (navn == "AktivitetList")
             {
-                TempData.Set("Hold" + i, _sli);
-                i++;
-            }
-        }
-        private void loadTempDataHoldScoreList()
-        {
-            HoldList = new List<Hold>();
-            for (int i = 0; i != -1; i++)
-            {
-                Hold _a = TempData.Get<Hold>("Hold" + i);
-                if (_a != null)
+                int i = -1;
+                try
                 {
-                    HoldList.Add(_a);
+                    i = int.Parse(Request.Query["id"]);
+                }
+                catch
+                {
+                }
+                if (i != -1)
+                {
                 }
                 else
                 {
-                    break;
+                }
+            }
+            else if (navn == "HoldListe2")
+            {
+                int i = -1;
+                try
+                {
+                    i = int.Parse(Request.Query["id"]);
+                }
+                catch
+                {   
+                }
+                if (i != -1)
+                {
+                    //DeltagerList = DBAdapter.getDeltagere();
+                }
+                else
+                {
+                }
+            }
+            else if (navn == "HoldListe")
+            {
+                int i = -1;
+                try
+                {
+                    i = int.Parse(Request.Query["id"]);
+                }
+                catch
+                {   
+                }
+                if (i != -1)
+                {
+                    //DeltagerList = DBAdapter.getDeltagere();
+                }
+                else
+                {
                 }
             }
         }
