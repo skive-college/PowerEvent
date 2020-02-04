@@ -26,24 +26,48 @@ namespace PowerEvent.Pages
 
         public void OnGet()
         {
-            EventList = new List<Event>();
             DeltagerList = new List<Deltager>();
             EventList = DBAdapter.getEvent();
-            DeltagerList = DBAdapter.getDeltagere();
+            checkListScript();
+
         }
 
         public void OnPost()
         {
-            EventList = new List<Event>();
-            DeltagerList = new List<Deltager>();
             EventList = DBAdapter.getEvent();
-            DeltagerList = DBAdapter.getDeltagere();
+            checkListScript();
         }
 
-        public void OnPostCmdEvent()
+
+
+
+        private void checkListScript()
         {
+            //on click for select element script. navn = select elementets "id"
+            string navn = Request.Query["navn"];
+            if (navn == "EventList")
+            {
+                int i = -1;
+                try
+                {
+                    i = int.Parse(Request.Query["id"]);
+                }
+                catch
+                {
 
+                }
+                if (i != -1)
+                {
+                    DeltagerList = DBAdapter.getDeltagere(i);
+                }
+                else
+                {
+                    EventList = DBAdapter.getEvent();
+                }
+                SelectedEvent = i;
+            }
         }
+
 
     }
 }
