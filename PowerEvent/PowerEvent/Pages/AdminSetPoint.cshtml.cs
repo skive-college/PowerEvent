@@ -22,9 +22,13 @@ namespace PowerEvent
 
         public void OnGet()
         {
-            HoldList = new List<Hold>();
-            HoldList = DBAdapter.getHold();
-            saveTempDataHoldList();
+            int.TryParse(Request.Query["id"], out int i);
+
+            if (i != 0)
+            {
+                ;
+            }
+
         }
         public void OnPost()
         {
