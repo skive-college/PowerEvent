@@ -157,6 +157,7 @@ namespace DatabaseClassLibrary
                 reader.Close();
             }
 
+            //får alle scores for deltagere i den angivne "EventAktivitet" og tilføjer dem til de relevante deltagere
             if (_eventAktivtetId != null)
             {
                 List<DBDeltagerScore> scoreList = getDeltagerScores(_eventAktivtetId);
@@ -180,6 +181,7 @@ namespace DatabaseClassLibrary
                 }
             }
 
+            //konverterer deltageren samt deltagerens "ScoreList" til annonyme objecter
             foreach (Deltager _deltager in deltagerList)
             {
                 List<object> dScoreList = new List<object>();
