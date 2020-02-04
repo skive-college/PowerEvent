@@ -64,8 +64,6 @@ namespace PowerEvent.Pages
                     EventList = DBAdapter.getEvent();
                 }
             }
-
-            
         }
 
 
