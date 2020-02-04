@@ -17,7 +17,7 @@ namespace PowerEvent
 
         public void OnGet()
         {
-            DeltagerList = DBAdapter.getDeltagere();
+            //DeltagerList = DBAdapter.getDeltagere();
         }
 
         public void OnPost()

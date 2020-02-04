@@ -105,7 +105,7 @@ namespace DatabaseClassLibrary
             return retur;
         }
 
-        public static List<object> getDeltagere(int? _eventAktivtetId = null)
+        public static List<object> getDeltagere(int _eventId ,int? _eventAktivtetId = null)
         {
             List<object> retur = new List<object>();
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -119,12 +119,18 @@ namespace DatabaseClassLibrary
                 sql += " FROM EventDeltager _ed";
                 if (_eventAktivtetId != null)
                 {
-                    sql += ", EventAktivitetDeltager _ead, EventAktivitet _ea WHERE _ead.EventAktivitetId = _ea.Id AND _ead.DeltagerId = _ed.Id AND ea.AktivitetId = @eventAktivitetId";
+                    sql += ", EventAktivitetDeltager _ead, EventAktivitet _ea WHERE _ead.EventAktivitetId = _ea.Id AND _ead.DeltagerId = _ed.Id AND _ea.AktivitetId = @eventAktivitetId AND";
                 }
+                else
+                {
+                    sql += " WHERE";
+                }
+                sql += " _ed.EventId = @EventId";
 
                 con.Open();
                 SqlCommand cmd = new SqlCommand(sql, con);
 
+                cmd.Parameters.AddWithValue("@EventId", _eventId);
                 if (_eventAktivtetId != null)
                 {
                     cmd.Parameters.AddWithValue("@eventAktivitetId", _eventAktivtetId);
