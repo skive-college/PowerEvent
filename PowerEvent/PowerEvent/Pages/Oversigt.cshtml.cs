@@ -58,7 +58,7 @@ namespace PowerEvent.Pages
                 }
                 if (i != -1)
                 {
-                    DeltagerList = DBAdapter.getDeltagere(i);
+                    DeltagerList = DBAdapter.getDeltagere(i, 1);
                 }
                 else
                 {

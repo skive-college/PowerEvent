@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace PowerEvent.Models
+namespace DatabaseClassLibrary.Models
 {
     public class Deltager
     {
@@ -15,12 +14,12 @@ namespace PowerEvent.Models
 
         public int EventId { get; set; }
 
-        public List<DeltagerScore> ScoreList { get; set; }
+        public List<DBDeltagerScore> ScoreList { get; set; }
 
 
-        public int AvgScore 
+        public int AvgScore
         {
-            get 
+            get
             {
                 int retur = 0;
                 for (int i = 0; i < ScoreList.Count; i++)
@@ -32,7 +31,7 @@ namespace PowerEvent.Models
                 }
                 retur /= ScoreList.Count;
                 return retur;
-            } 
+            }
         }
 
     }
