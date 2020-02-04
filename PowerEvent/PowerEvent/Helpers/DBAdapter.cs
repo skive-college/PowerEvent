@@ -67,9 +67,9 @@ namespace PowerEvent.Helpers
             return holdList;
         }
 
-        public static List<Deltager> getDeltagere(int? _aktivtetId = null)
+        public static List<Deltager> getDeltagere(int _eventId, int? _aktivtetId = null)
         {
-            List<object> DbList = DBHandler.getDeltagere(_aktivtetId);
+            List<object> DbList = DBHandler.getDeltagere(_eventId, _aktivtetId);
             List<Deltager> retur = new List<Deltager>();
 
             foreach (object _object in DbList)
