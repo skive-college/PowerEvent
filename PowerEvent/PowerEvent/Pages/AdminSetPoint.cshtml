@@ -102,11 +102,15 @@
     <script>
         function listChanged(listen)
         {
+            let EventList = document.getElementById('EventList');
+            let EventListValgt = valgtliste.options[EventList.selectedIndex].value;
+
             let valgtliste = document.getElementById(listen);
             let valgt = valgtliste.options[valgtliste.selectedIndex].value;
+
             let url = new URL(location.href);
-            url.searchParams.set("id", valgt);
             url.searchParams.set("navn", listen);
+            url.searchParams.set("EventList", EventListValgt);
             location.href = url;
         }
     </script>
