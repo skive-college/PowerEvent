@@ -28,8 +28,26 @@ namespace PowerEvent.Pages
         {
             SelectedEvent = -1;
             DeltagerList = new List<Deltager>();
+            HoldListe = new List<Hold>();
             EventList = DBAdapter.getEvent();
             checkListScript();
+            foreach (var _deltager in DeltagerList)
+            {
+                bool exists = false;
+                foreach (var _hold in HoldListe)
+                {
+                    if (_deltager.HoldId == _hold.Id)
+                    {
+                        exists = true;
+                    }
+                }
+                if (exists == false)
+                {
+                    Hold h = new Hold();
+                    h.Id = _deltager.Id;
+                    HoldListe.Add(h);
+                }
+            }
         }
 
         public void OnPost()
