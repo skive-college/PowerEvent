@@ -116,7 +116,7 @@ namespace DatabaseClassLibrary
         }
 
 
-        //returnerer alle deltagere fra et event med "_eventId". hvis "_eventAktivitetId" er angivet returnere den også deres "Score" fra den angivne aktivitet i eventet.
+        //returnerer alle deltagere fra et event med "_eventId". hvis "_eventAktivitetId" er angivet returnere den også deres "Score" fra den angivne aktivitet i eventet. du kan også søge på hold med "HoldId".
         public static List<object> getDeltagere(int _eventId ,int? _eventAktivtetId = null, int? _holdId = null)
         {
             List<object> retur = new List<object>();
