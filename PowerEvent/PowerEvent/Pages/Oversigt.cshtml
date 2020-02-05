@@ -17,7 +17,7 @@
 
 
             @{
-                if (@Model.SelectedEvent == 0)
+                if (@Model.SelectedEvent == -1)
                 {
                     <option value="-1">Vælg et event</option>
                 }
@@ -43,12 +43,10 @@
                         @{
                             foreach (var _item in @Model.DeltagerList)
                             {
-                                <tr class="row" style="border: solid black; border-width: 0px 1px 1px 1px">
-                                    <td class="col">@_item.Id</td>
-                                    <td class="col">@_item.Navn</td>
-                                    <td class="col">@_item.EventId</td>
-                                    <td class="col">@_item.HoldId</td>
-                                </tr>
+                                    <tr class="row" style="border: solid black; border-width: 0px 1px 1px 1px">
+                                        <td class="col">@_item.Navn</td>
+                                        <td class="col">@_item.HoldId</td>
+                                    </tr>
                             }
                         }
                     </table>
@@ -65,10 +63,14 @@
     <script>
         function listChanged(listen)
         {
-            let valgtListe = document.getElementById(listen);
-            let valgt = valgtListe.options[valgtListe.selectedIndex].value;
             let url = new URL(location.href);
-            url.searchParams.set("id", valgt);
+
+
+            let EventList = document.getElementById('EventList');
+            let EventListValgt = EventList.options[EventList.selectedIndex].value;
+            url.searchParams.set("EventList", EventListValgt);
+            
+
             url.searchParams.set("navn", listen);
             location.href = url;
         }

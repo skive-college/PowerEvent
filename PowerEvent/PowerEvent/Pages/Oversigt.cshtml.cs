@@ -26,10 +26,10 @@ namespace PowerEvent.Pages
 
         public void OnGet()
         {
+            SelectedEvent = -1;
             DeltagerList = new List<Deltager>();
             EventList = DBAdapter.getEvent();
             checkListScript();
-
         }
 
         public void OnPost()
@@ -44,27 +44,26 @@ namespace PowerEvent.Pages
         private void checkListScript()
         {
             //on click for select element script. navn = select elementets "id"
+            try 
+            {
+                SelectedEvent = int.Parse(Request.Query["EventList"]);
+            }
+            catch
+            {
+
+            }
+
             string navn = Request.Query["navn"];
             if (navn == "EventList")
             {
-                int i = -1;
-                try
+                if (SelectedEvent != -1)
                 {
-                    i = int.Parse(Request.Query["id"]);
-                }
-                catch
-                {
-
-                }
-                if (i != -1)
-                {
-                    DeltagerList = DBAdapter.getDeltagere(i);
+                    DeltagerList = DBAdapter.getDeltagere(SelectedEvent);
                 }
                 else
                 {
                     EventList = DBAdapter.getEvent();
                 }
-                SelectedEvent = i;
             }
         }
 

@@ -67,9 +67,9 @@ namespace PowerEvent.Helpers
             return holdList;
         }
 
-        public static List<Deltager> getDeltagere(int _eventId, int? _eventAktivtetId = null, int? _holdId = null)
+        public static List<Deltager> getDeltagere(int _eventId, int? _aktivtetId = null, int? _holdId = null)
         {
-            List<object> DbList = DBHandler.getDeltagere(_eventId, _eventAktivtetId, _holdId);
+            List<object> DbList = DBHandler.getDeltagere(_eventId, _aktivtetId, _holdId);
             List<Deltager> retur = new List<Deltager>();
 
             foreach (object _object in DbList)
@@ -80,7 +80,7 @@ namespace PowerEvent.Helpers
                 tempdeltager.Navn = adapt<string>("Navn", _object);
                 tempdeltager.HoldId = adapt<int>("HoldId", _object);
                 tempdeltager.EventId = adapt<int>("EventId", _object);
-                if (_eventAktivtetId != null)
+                if (_aktivtetId != null)
                 {
                     List<object> o = adapt<List<object>>("ScoreList", _object);
                     foreach (object _score in o)
