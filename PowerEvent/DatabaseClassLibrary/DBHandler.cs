@@ -136,6 +136,11 @@ namespace DatabaseClassLibrary
                 }
                 sql += " _ed.EventId = @EventId";
 
+                if (_holdId != null)
+                {
+                    sql += " AND _ed.HoldId = @HoldId";
+                }
+
                 con.Open();
                 SqlCommand cmd = new SqlCommand(sql, con);
 
@@ -145,6 +150,12 @@ namespace DatabaseClassLibrary
                 {
                     cmd.Parameters.AddWithValue("@eventAktivitetId", _eventAktivtetId);
                 }
+
+                if (_holdId != null)
+                {
+                    cmd.Parameters.AddWithValue("@HoldId", _holdId);
+                }
+
 
                 SqlDataReader reader = cmd.ExecuteReader();
 
@@ -201,7 +212,7 @@ namespace DatabaseClassLibrary
         }
 
         //returnere scores til "getDeltagere()"
-        public static List<DBDeltagerScore> getDeltagerScores(int? _eventAktivtetId = null)
+        private static List<DBDeltagerScore> getDeltagerScores(int? _eventAktivtetId = null)
         {
             List<DBDeltagerScore> retur = new List<DBDeltagerScore>();
             using (SqlConnection con = new SqlConnection(connectionString))
