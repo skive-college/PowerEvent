@@ -9,9 +9,14 @@ namespace PowerEvent
 {
     public class ScoreBoardModel : PageModel
     {
+        public string EventName { get; set; }
+        public string TeamEt { get; set; }
+        public string TeamTo { get; set; }
         public void OnGet()
         {
-
+            EventName = "test";
+            TeamEt = "teamet";
+            TeamTo = "teamto";
         }
     }
 }
