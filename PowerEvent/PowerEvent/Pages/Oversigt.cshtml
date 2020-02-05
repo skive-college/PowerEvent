@@ -43,10 +43,16 @@
                         @{
                             foreach (var _item in @Model.DeltagerList)
                             {
-                                    <tr class="row" style="border: solid black; border-width: 0px 1px 1px 1px">
-                                        <td class="col">@_item.Navn</td>
-                                        <td class="col">@_item.HoldId</td>
-                                    </tr>
+                                <tr class="row" style="border: solid black; border-width: 0px 1px 1px 1px">
+                                    <td class="col">@_item.Navn</td>
+                                    <td class="col">@_item.HoldId</td>
+                                    @*@{
+                                        foreach (var _score in _item.ScoreList)
+                                        {
+                                            <td class="col">@_score.Score</td>
+                                        }
+                                    }*@
+                                </tr>
                             }
                         }
                     </table>
