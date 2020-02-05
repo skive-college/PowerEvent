@@ -8,7 +8,7 @@
     <form method="post">
         <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="listChanged('EventList')" style="width: auto">
             @{
-                if (@Model.SelectedEvent == 0)
+                if (@Model.SelectedEvent == -1)
                 {
                     <option value="-1">Vælg et event</option>
                 }
@@ -19,12 +19,19 @@
                 }
             }
         </select>
-        <select id="AktivitetList" onchange="listChanged('AktivitetList')" asp-for="@Model.Skift">
+        <select id="AktivitetList" onchange="listChanged('AktivitetList')" asp-for="@Model.SelectedAktivitet">
             @{
-            foreach (var item in @Model.AktivitetList)
-            {
-            <option value="@item.HoldSport">@item.Navn</option>
-            }
+                if (@Model.SelectedEvent != -1)
+                {
+                    if (@Model.SelectedAktivitet == -1)
+                    {
+                        <option value="-1">Vælg en aktivitet</option>
+                    }
+                    foreach (var item in @Model.AktivitetList)
+                    {
+                        <option value="@item.HoldSport">@item.Navn</option>
+                    }
+                }
             }
         </select>
         <select>
@@ -33,67 +40,73 @@
             <option value="2">Runde3</option>
             <option value="2">Runde4</option>
             <option value="2">Runde5</option>
+        </select><br />
+        <select>
         </select>
         <input type="submit" value="Vælg" asp-page-handler="CmdSkift" />
 
-
-        @if (Model.Skift == 0)
-        {
-            <h1>Hold Sport</h1>
-            <div class="container">
-                <div class="row">
-                    <div class="col-4">
-                        <p>Vælg et hold</p>
-                        <select id="HoldListe" onchange="listChanged('HoldListe')" asp-for="@Model.SelectedHoldList" multiple style=" height: 350px; width: 300px">
-                            @{
-                                foreach (var item in @Model.HoldList)
-                                {
-                                    <option value="@item.Id">@item.Navn</option>
-                                }
-                            }
-                        </select>
-                        <input type="submit" value="Slet" asp-page-handler="CmdRemoveHold" />
+        @{
+            if (@Model.SelectedAktivitet != -1)
+            {
+                if (Model.SelectedAktivitet == 0)
+                {
+                    <h1>Hold Sport</h1>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-4">
+                                <p>Vælg et hold</p>
+                                <select id="HoldListe" onchange="listChanged('HoldListe')" asp-for="@Model.SelectedHoldList" multiple style=" height: 350px; width: 300px">
+                                    @{
+                                        foreach (var item in @Model.HoldList)
+                                        {
+                                            <option value="@item.Id">@item.Navn</option>
+                                        }
+                                    }
+                                </select>
+                                <input type="submit" value="Slet" asp-page-handler="CmdRemoveHold" />
+                            </div>
+                            <div class="col-4">
+                                <p>Holdets points</p>
+                                <select multiple style=" height: 350px; width: 300px"></select>
+                                <input type="text" placeholder="Giv point" />
+                                <input type="submit" value="Gem" asp-page-handler="CmdAddHoldPoint" />
+                                <input type="submit" value="Slet" asp-page-handler="CmdDeleteDHoldPoint" />
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-4">
-                        <p>Holdets points</p>
-                        <select multiple style=" height: 350px; width: 300px"></select>
-                        <input type="text" placeholder="Giv point" />
-                        <input type="submit" value="Gem" asp-page-handler="CmdAddHoldPoint" />
-                        <input type="submit" value="Slet" asp-page-handler="CmdDeleteDHoldPoint" />
+                }
+                else if (Model.Skift == 0)
+                {
+                    <h1>Deltager Sport</h1>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <p>Vælg et hold</p>
+                                <select id="HoldListe2" onchange="listChanged('HoldListe2')" asp-for="@Model.SelectedHoldList" multiple style=" height: 350px; width: 300px">
+                                    @{
+                                        foreach (var item in @Model.HoldList)
+                                        {
+                                            <option value="@item.Id">@item.Navn</option>
+                                        }
+                                    }
+                                </select>
+                                <input type="submit" value="Slet" asp-page-handler="CmdRemoveHold" />
+                            </div>
+                            <div class="col-sm-4">
+                                <p>Vælg et navn</p>
+                                <select multiple style=" height: 350px; width: 300px"></select>
+                            </div>
+                            <div class="col-sm-4">
+                                <p>navnets points</p>
+                                <select multiple style=" height: 350px; width: 300px"></select>
+                                <input type="text" placeholder="Giv point" />
+                                <input type="submit" value="Gem" asp-page-handler="CmdAddDeltagerPoint" />
+                                <input type="submit" value="Slet" asp-page-handler="CmdDeleteDeltagerPoint" />
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        }
-        else if (Model.Skift == 1)
-        {
-            <h1>Deltager Sport</h1>
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <p>Vælg et hold</p>
-                        <select id="HoldListe2" onchange="listChanged('HoldListe2')" asp-for="@Model.SelectedHoldList" multiple style=" height: 350px; width: 300px">
-                            @{
-                                foreach (var item in @Model.HoldList)
-                                {
-                                    <option value="@item.Id">@item.Navn</option>
-                                }
-                            }
-                        </select>
-                        <input type="submit" value="Slet" asp-page-handler="CmdRemoveHold" />
-                    </div>
-                    <div class="col-sm-4">
-                        <p>Vælg et navn</p>
-                        <select multiple style=" height: 350px; width: 300px"></select>
-                    </div>
-                    <div class="col-sm-4">
-                        <p>navnets points</p>
-                        <select multiple style=" height: 350px; width: 300px"></select>
-                        <input type="text" placeholder="Giv point" />
-                        <input type="submit" value="Gem" asp-page-handler="CmdAddDeltagerPoint" />
-                        <input type="submit" value="Slet" asp-page-handler="CmdDeleteDeltagerPoint" />
-                    </div>
-                </div>
-            </div>
+                }
+            }
         }
     </form>
 
@@ -102,15 +115,21 @@
     <script>
         function listChanged(listen)
         {
-            let EventList = document.getElementById('EventList');
-            let EventListValgt = valgtliste.options[EventList.selectedIndex].value;
-
-            let valgtliste = document.getElementById(listen);
-            let valgt = valgtliste.options[valgtliste.selectedIndex].value;
-
             let url = new URL(location.href);
-            url.searchParams.set("navn", listen);
+
+            let EventList = document.getElementById('EventList');
+            let EventListValgt = EventList.options[EventList.selectedIndex].value;
             url.searchParams.set("EventList", EventListValgt);
+
+            let HoldListe = document.getElementById('HoldListe');
+            let HoldListeValgt = HoldListe.options[HoldListe.selectedIndex].value;
+            url.searchParams.set("HoldListe", HoldListeValgt);
+
+            let HoldListe2 = document.getElementById('HoldListe2');
+            let HoldListe2Valgt = HoldListe2.options[HoldListe2.selectedIndex].value;
+            url.searchParams.set("HoldListe2", HoldListe2Valgt);
+
+            url.searchParams.set("navn", listen);            
             location.href = url;
         }
     </script>
