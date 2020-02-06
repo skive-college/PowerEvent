@@ -14,6 +14,7 @@ namespace PowerEvent.Pages
 {
     public class Oversigt : PageModel
     {
+        //value på det valgte element i "select" list i GUI. skal være en "BindProperty".
         [BindProperty]
         public int SelectedEvent { get; set; }
 
@@ -45,10 +46,9 @@ namespace PowerEvent.Pages
 
 
 
-
+        //on click for select element script. navn = select elementets "id"
         private void checkListScript()
         {
-            //on click for select element script. navn = select elementets "id"
             try 
             {
                 SelectedEvent = int.Parse(Request.Query["EventList"]);
