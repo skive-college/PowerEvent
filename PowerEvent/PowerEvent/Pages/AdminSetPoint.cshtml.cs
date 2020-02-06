@@ -93,7 +93,6 @@ namespace PowerEvent
             }
             catch
             {
-
             }
             if (navn == "EventList")
             {
@@ -101,22 +100,10 @@ namespace PowerEvent
                 {
                     AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
                 }
-                else
-                {
-                    EventList = DBAdapter.getEvent();
-                }
             }
             else if (navn == "AktivitetList")
             {
-                int i = -1;
-                try
-                {
-                    i = int.Parse(Request.Query["id"]);
-                }
-                catch
-                {
-                }
-                if (i != -1)
+                if (SelectedAktivitet != -1)
                 {
                 }
                 else

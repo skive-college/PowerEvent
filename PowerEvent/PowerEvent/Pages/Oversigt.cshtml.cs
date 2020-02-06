@@ -31,22 +31,9 @@ namespace PowerEvent.Pages
             HoldListe = new List<Hold>();
             EventList = DBAdapter.getEvent();
             checkListScript();
-            foreach (var _deltager in DeltagerList)
+            if (DeltagerList.Count != 0)
             {
-                bool exists = false;
-                foreach (var _hold in HoldListe)
-                {
-                    if (_deltager.HoldId == _hold.Id)
-                    {
-                        exists = true;
-                    }
-                }
-                if (exists == false)
-                {
-                    Hold h = new Hold();
-                    h.Id = _deltager.HoldId;
-                    HoldListe.Add(h);
-                }
+                HoldListe = DBAdapter.getHold(SelectedEvent);
             }
         }
 
@@ -77,10 +64,6 @@ namespace PowerEvent.Pages
                 if (SelectedEvent != -1)
                 {
                     DeltagerList = DBAdapter.getDeltagere(SelectedEvent);
-                }
-                else
-                {
-                    EventList = DBAdapter.getEvent();
                 }
             }
         }

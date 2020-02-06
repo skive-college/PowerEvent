@@ -32,21 +32,20 @@
         @{
             foreach (var _hold in Model.HoldListe)
             {
-                <div class="col-md-2">
+                <div class="col-6 col-md-3 col-lg-2">
                     <br />
                     <form method="post">
                         <table style=" height: auto; width: 100%;">
-                            <tr class="row" style="border: solid black; border-width: 1px 1px 1px 1px">
-                                <th class="col">@_hold.Id</th>
+                            <tr class="row">
+                                <th class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em;">@_hold.Navn</th>
                             </tr>
                             @{
                                 foreach (var _deltager in @Model.DeltagerList)
                                 {
                                     if (_deltager.HoldId == _hold.Id)
                                     {
-                                        <tr class="row" style="border: solid black; border-width: 0px 1px 1px 1px">
-                                            <td class="col">@_deltager.Navn</td>
-                                            <td class="col">@_deltager.HoldId</td>
+                                        <tr class="row">
+                                            <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center">@_deltager.Navn</td>
                                             @*@{
                                     foreach (var _score in _item.ScoreList)
                                     {
