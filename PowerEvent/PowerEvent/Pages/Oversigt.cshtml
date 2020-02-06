@@ -15,8 +15,6 @@
     <br/>
     <div class="row">
         <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="listChanged('EventList')" style="width: auto">
-
-
             @{
                 if (@Model.SelectedEvent == -1)
                 {
@@ -34,35 +32,33 @@
         @{
             foreach (var _hold in Model.HoldListe)
             {
-                <div class="row">
-                    <div class="col-md-2">
-                        <br />
-                        <form method="post">
-                            <table style=" height: auto; width: 100%;">
-                                <tr class="row" style="border: solid black; border-width: 1px 1px 1px 1px">
-                                    <th class="col">@_hold.Id</th>
-                                </tr>
-                                @{
-                                    foreach (var _deltager in @Model.DeltagerList)
+                <div class="col-md-2">
+                    <br />
+                    <form method="post">
+                        <table style=" height: auto; width: 100%;">
+                            <tr class="row" style="border: solid black; border-width: 1px 1px 1px 1px">
+                                <th class="col">@_hold.Id</th>
+                            </tr>
+                            @{
+                                foreach (var _deltager in @Model.DeltagerList)
+                                {
+                                    if (_deltager.HoldId == _hold.Id)
                                     {
-                                        if (_deltager.HoldId == _hold.Id)
-                                        {
-                                            <tr class="row" style="border: solid black; border-width: 0px 1px 1px 1px">
-                                                <td class="col">@_deltager.Navn</td>
-                                                <td class="col">@_deltager.HoldId</td>
-                                                @*@{
-                                        foreach (var _score in _item.ScoreList)
-                                        {
-                                            <td class="col">@_score.Score</td>
-                                        }
-                                    }*@
-                                            </tr>
-                                        }
+                                        <tr class="row" style="border: solid black; border-width: 0px 1px 1px 1px">
+                                            <td class="col">@_deltager.Navn</td>
+                                            <td class="col">@_deltager.HoldId</td>
+                                            @*@{
+                                    foreach (var _score in _item.ScoreList)
+                                    {
+                                        <td class="col">@_score.Score</td>
+                                    }
+                                }*@
+                                        </tr>
                                     }
                                 }
-                            </table>
-                        </form>
-                    </div>
+                            }
+                        </table>
+                    </form>
                 </div>
             }
         }

@@ -44,7 +44,7 @@ namespace PowerEvent.Pages
                 if (exists == false)
                 {
                     Hold h = new Hold();
-                    h.Id = _deltager.Id;
+                    h.Id = _deltager.HoldId;
                     HoldListe.Add(h);
                 }
             }

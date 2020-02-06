@@ -99,9 +99,17 @@ namespace DatabaseClassLibrary
             List<object> retur = new List<object>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = "SELECT * FROM Hold";
+                string sql = "SELECT distinct _h.Id, _h.Navn FROM Hold _h";
+                if (_eventId != null)
+                {
+                    sql += ", EventDeltager _ed WHERE _h.Id = _ed.HoldId AND _ed.EventId = @EventId";
+                }
                 con.Open();
                 SqlCommand cmd = new SqlCommand(sql, con);
+                if (_eventId != null)
+                {
+                    cmd.Parameters.AddWithValue("@EventId", _eventId);
+                }
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
