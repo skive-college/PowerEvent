@@ -13,12 +13,14 @@
     </div>
     <br />
     <div class="row">
+        <style> #EventList { width: 120px; } #EventList:focus { min-width: 120px; width: auto; } </style>
         <!-- {asp-for="Model.SelectedEvent"} laver SelectedEvent int om til "value" property på det valgte element -->
-        <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="listChanged('EventList')" style="width: auto">
+        <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="listChanged('EventList')">
             @{
+                //find ud af om man kan få options til at gå ud over select list width så select menu er lille men dropdown del er stor!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 if (@Model.SelectedEvent == -1)
                 {
-                    <option value="-1">Vælg et event</option>
+                    <option value="-1" style="width:300px;">Vælg et event</option>
                 }
 
                 foreach (var item in @Model.EventList)
