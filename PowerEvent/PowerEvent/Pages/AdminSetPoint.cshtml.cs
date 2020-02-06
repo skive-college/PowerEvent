@@ -13,16 +13,21 @@ namespace PowerEvent
     public class AdminSetPointModel : PageModel
     {
         [BindProperty]
-        public int Skift { get; set; }
-        
-        [BindProperty]
         public int SelectedEvent { get; set; }
 
         [BindProperty]
-        public int SelectedHoldList { get; set; }
+        public int SelectedHold { get; set; }
         
         [BindProperty]
         public int SelectedAktivitet { get; set; }
+
+        [BindProperty]
+        public int SelectedDeltager { get; set; }
+
+        [BindProperty]
+        public int SelectedOrder { get; set; }
+        [BindProperty]
+        public int SelectedPoint { get; set; }
 
         public List<Hold> HoldList { get; set; }
 
@@ -35,13 +40,20 @@ namespace PowerEvent
         public void OnGet()
         {
             SelectedEvent = -1;
-            SelectedHoldList = -1;
             SelectedAktivitet = -1;
+            SelectedOrder = -1;
+            SelectedHold = -1;
+            SelectedDeltager = -1;
+            SelectedPoint = -1;
             AktivitetList = new List<Aktivitet>();
             HoldList = new List<Hold>();
             DeltagerList = new List<Deltager>();
             EventList = DBAdapter.getEvent();
             checkListScript();
+            if (SelectedAktivitet != -1)
+            {
+                AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+            }
         }
         public void OnPost()
         {
@@ -94,6 +106,36 @@ namespace PowerEvent
             catch
             {
             }
+            try
+            {
+                SelectedAktivitet = int.Parse(Request.Query["AktivitetList"]);
+            }
+            catch
+            {
+            }
+            try
+            {
+                SelectedOrder = int.Parse(Request.Query["OrderList"]);
+            }
+            catch
+            {
+            }
+            try
+            {
+                SelectedHold = int.Parse(Request.Query["HoldList"]);
+            }
+            catch
+            {
+            }
+            try
+            {
+                SelectedDeltager = int.Parse(Request.Query["DeltagerList"]);
+            }
+            catch
+            {
+            }
+
+
             if (navn == "EventList")
             {
                 if (SelectedEvent != -1)
@@ -105,14 +147,25 @@ namespace PowerEvent
             {
                 if (SelectedAktivitet != -1)
                 {
+
                 }
                 else
                 {
                 }
             }
-            else if (navn == "HoldListe2")
+            else if (navn == "OrderList")
             {
-                if (SelectedHoldList != -1)
+                if (SelectedDeltager != -1)
+                {
+                    DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedAktivitet, SelectedHold);
+                }
+                else
+                {
+                }
+            }
+            else if (navn == "HoldList")
+            {
+                if (SelectedHold != -1)
                 {
                     //DeltagerList = DBAdapter.getDeltagere();
                 }
@@ -120,11 +173,21 @@ namespace PowerEvent
                 {
                 }
             }
-            else if (navn == "HoldListe")
+            else if (navn == "DeltagerList")
             {
-                if (SelectedHoldList != -1)
+                if (SelectedDeltager != -1)
                 {
-                    //DeltagerList = DBAdapter.getDeltagere();
+                    DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedAktivitet, SelectedHold);
+                }
+                else
+                {
+                }
+            }
+            else if (navn == "DeltagerList")
+            {
+                if (SelectedDeltager != -1)
+                {
+                    DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedAktivitet, SelectedHold);
                 }
                 else
                 {
