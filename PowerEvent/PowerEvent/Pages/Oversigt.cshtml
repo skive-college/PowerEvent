@@ -42,6 +42,7 @@
                                 <th class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em;">@_hold.Navn</th>
                             </tr>
                             @{
+                                //opretter deltagerne af hver hold
                                 foreach (var _deltager in @Model.DeltagerList)
                                 {
                                     if (_deltager.HoldId == _hold.Id)
