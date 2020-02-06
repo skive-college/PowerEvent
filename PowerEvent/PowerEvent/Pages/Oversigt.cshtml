@@ -1,5 +1,6 @@
 ﻿@page
 @model Oversigt
+@using PowerEvent.Models;
 @{
     ViewData["Title"] = "Home page";
 }
@@ -14,8 +15,6 @@
     <br/>
     <div class="row">
         <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="listChanged('EventList')" style="width: auto">
-
-
             @{
                 if (@Model.SelectedEvent == -1)
                 {
@@ -31,34 +30,30 @@
     </div>
     <div class="row">
         @{
-            //foreach (var _item in )
-            //{
-            <div class="col-md-3">
-                <br />
-                <form method="post">
-                    <table style=" height: auto; width: 100%;">
-                        <tr class="row" style="border: solid black; border-width: 1px 1px 1px 1px">
-                            <th class="col">Hold Navn</th>
-                        </tr>
-                        @{
-                            foreach (var _item in @Model.DeltagerList)
-                            {
-                                <tr class="row" style="border: solid black; border-width: 0px 1px 1px 1px">
-                                    <td class="col">@_item.Navn</td>
-                                    <td class="col">@_item.HoldId</td>
-                                    @*@{
-                                        foreach (var _score in _item.ScoreList)
-                                        {
-                                            <td class="col">@_score.Score</td>
-                                        }
-                                    }*@
-                                </tr>
+            foreach (var _hold in Model.HoldListe)
+            {
+                <div class="col-6 col-md-3 col-lg-2">
+                    <br />
+                    <form method="post">
+                        <table style=" height: auto; width: 100%;">
+                            <tr class="row">
+                                <th class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em;">@_hold.Navn</th>
+                            </tr>
+                            @{
+                                foreach (var _deltager in @Model.DeltagerList)
+                                {
+                                    if (_deltager.HoldId == _hold.Id)
+                                    {
+                                        <tr class="row">
+                                            <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center">@_deltager.Navn</td>
+                                        </tr>
+                                    }
+                                }
                             }
-                        }
-                    </table>
-                </form>
-            </div>
-            //}
+                        </table>
+                    </form>
+                </div>
+            }
         }
     </div>
 </div>

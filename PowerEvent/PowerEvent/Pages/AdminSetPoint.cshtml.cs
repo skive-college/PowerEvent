@@ -20,6 +20,9 @@ namespace PowerEvent
 
         [BindProperty]
         public int SelectedHoldList { get; set; }
+        
+        [BindProperty]
+        public int SelectedAktivitet { get; set; }
 
         public List<Hold> HoldList { get; set; }
 
@@ -31,6 +34,9 @@ namespace PowerEvent
 
         public void OnGet()
         {
+            SelectedEvent = -1;
+            SelectedHoldList = -1;
+            SelectedAktivitet = -1;
             AktivitetList = new List<Aktivitet>();
             HoldList = new List<Hold>();
             DeltagerList = new List<Deltager>();
@@ -80,37 +86,24 @@ namespace PowerEvent
         {
             //on click for select element script. navn = select elementets "id"
             string navn = Request.Query["navn"];
+
+            try
+            {
+                SelectedEvent = int.Parse(Request.Query["EventList"]);
+            }
+            catch
+            {
+            }
             if (navn == "EventList")
             {
-                int i = -1;
-                try
+                if (SelectedEvent != -1)
                 {
-                    i = int.Parse(Request.Query["id"]);
+                    AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
                 }
-                catch
-                {
-                }
-                if (i != -1)
-                {
-                    AktivitetList = DBAdapter.getAktivitet(i);
-                }
-                else
-                {
-                    EventList = DBAdapter.getEvent();
-                }
-                SelectedEvent = i;
             }
             else if (navn == "AktivitetList")
             {
-                int i = -1;
-                try
-                {
-                    i = int.Parse(Request.Query["id"]);
-                }
-                catch
-                {
-                }
-                if (i != -1)
+                if (SelectedAktivitet != -1)
                 {
                 }
                 else
@@ -119,15 +112,7 @@ namespace PowerEvent
             }
             else if (navn == "HoldListe2")
             {
-                int i = -1;
-                try
-                {
-                    i = int.Parse(Request.Query["id"]);
-                }
-                catch
-                {   
-                }
-                if (i != -1)
+                if (SelectedHoldList != -1)
                 {
                     //DeltagerList = DBAdapter.getDeltagere();
                 }
@@ -137,15 +122,7 @@ namespace PowerEvent
             }
             else if (navn == "HoldListe")
             {
-                int i = -1;
-                try
-                {
-                    i = int.Parse(Request.Query["id"]);
-                }
-                catch
-                {   
-                }
-                if (i != -1)
+                if (SelectedHoldList != -1)
                 {
                     //DeltagerList = DBAdapter.getDeltagere();
                 }
@@ -154,5 +131,6 @@ namespace PowerEvent
                 }
             }
         }
+
     }
 }

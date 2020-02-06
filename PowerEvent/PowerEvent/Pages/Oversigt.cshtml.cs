@@ -28,8 +28,13 @@ namespace PowerEvent.Pages
         {
             SelectedEvent = -1;
             DeltagerList = new List<Deltager>();
+            HoldListe = new List<Hold>();
             EventList = DBAdapter.getEvent();
             checkListScript();
+            if (DeltagerList.Count != 0)
+            {
+                HoldListe = DBAdapter.getHold(SelectedEvent);
+            }
         }
 
         public void OnPost()
@@ -59,10 +64,6 @@ namespace PowerEvent.Pages
                 if (SelectedEvent != -1)
                 {
                     DeltagerList = DBAdapter.getDeltagere(SelectedEvent);
-                }
-                else
-                {
-                    EventList = DBAdapter.getEvent();
                 }
             }
         }

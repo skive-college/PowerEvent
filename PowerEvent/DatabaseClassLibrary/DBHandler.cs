@@ -93,15 +93,23 @@ namespace DatabaseClassLibrary
             }
         }
 
-        //LAV MULIGHED FOR AT INDTASTE ET EVENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //returnerer alle hold. hvis "_eventID" er indtastet så returnerer den alle hold fra et event
         public static List<object> getHold(int? _eventId = null)
         {
             List<object> retur = new List<object>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = "SELECT * FROM Hold";
+                string sql = "SELECT distinct _h.Id, _h.Navn FROM Hold _h";
+                if (_eventId != null)
+                {
+                    sql += ", EventDeltager _ed WHERE _h.Id = _ed.HoldId AND _ed.EventId = @EventId";
+                }
                 con.Open();
                 SqlCommand cmd = new SqlCommand(sql, con);
+                if (_eventId != null)
+                {
+                    cmd.Parameters.AddWithValue("@EventId", _eventId);
+                }
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -245,14 +253,15 @@ namespace DatabaseClassLibrary
         }
 
 
-        public static void addDeltager(string _navn, int _eventId)
+        public static void addDeltager(string _navn, int _holdId, int _eventId)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = "INSERT INTO EventDeltager (Name, EventId) VALUES @Navn, @EventId";
+                string sql = "INSERT INTO EventDeltager (Navn, HoldId, EventId) VALUES (@Navn, @HoldId, @EventId)";
 
                 SqlCommand cmd = new SqlCommand(sql, con);
                 cmd.Parameters.AddWithValue("@Navn", _navn);
+                cmd.Parameters.AddWithValue("@HoldId", _holdId);
                 cmd.Parameters.AddWithValue("@EventId", _eventId);
 
                 cmd.ExecuteNonQuery();
