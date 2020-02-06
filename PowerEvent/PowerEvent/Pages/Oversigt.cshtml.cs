@@ -55,7 +55,6 @@ namespace PowerEvent.Pages
             }
             catch
             {
-
             }
 
             string navn = Request.Query["navn"];
