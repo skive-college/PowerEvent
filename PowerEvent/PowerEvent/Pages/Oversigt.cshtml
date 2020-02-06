@@ -1,6 +1,5 @@
 ﻿@page
 @model Oversigt
-@using PowerEvent.Models;
 @{
     ViewData["Title"] = "Home page";
 }
@@ -8,12 +7,13 @@
     <div class="row">
         <div class="col, text-center" style="width:100%;">
             <div style="border: 2px solid black; border-radius:15px;">
-                <h1>Power Event<</h1>
+                <h1>Power Event</h1>
             </div>
         </div>
     </div>
-    <br/>
+    <br />
     <div class="row">
+        <!-- {asp-for="Model.SelectedEvent"} laver SelectedEvent int om til "value" property på det valgte element -->
         <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="listChanged('EventList')" style="width: auto">
             @{
                 if (@Model.SelectedEvent == -1)
@@ -30,6 +30,7 @@
     </div>
     <div class="row">
         @{
+            //laver dynamisk et "table" til hvert hold der indeholde holdets deltagere
             foreach (var _hold in Model.HoldListe)
             {
                 <div class="col-6 col-md-3 col-lg-2">
@@ -40,6 +41,7 @@
                                 <th class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em;">@_hold.Navn</th>
                             </tr>
                             @{
+                                //opretter deltagerne af hver hold
                                 foreach (var _deltager in @Model.DeltagerList)
                                 {
                                     if (_deltager.HoldId == _hold.Id)
@@ -59,18 +61,18 @@
 </div>
 
 
+<!-- javascript der fungerer som et "onClick" for "select" lister. kræver at "select" elementet har et "Id" og at det har: {onchange="listChanged('SelectListensId')"} -->
 @section Scripts
 {
     <script>
-        function listChanged(listen)
-        {
+        function listChanged(listen) {
             let url = new URL(location.href);
 
-
+            //lav nedenstående 3 linjer for hver "select" liste
             let EventList = document.getElementById('EventList');
             let EventListValgt = EventList.options[EventList.selectedIndex].value;
             url.searchParams.set("EventList", EventListValgt);
-            
+
 
             url.searchParams.set("navn", listen);
             location.href = url;
