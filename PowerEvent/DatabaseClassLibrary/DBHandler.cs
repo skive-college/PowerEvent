@@ -93,7 +93,7 @@ namespace DatabaseClassLibrary
             }
         }
 
-        //LAV MULIGHED FOR AT INDTASTE ET EVENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //returnerer alle hold. hvis "_eventID" er indtastet så returnerer den alle hold fra et event
         public static List<object> getHold(int? _eventId = null)
         {
             List<object> retur = new List<object>();
