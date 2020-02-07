@@ -6,16 +6,7 @@
 
 
     <form method="post">
-        <style>
-            #EventList {
-                width: 120px;
-            }
-
-                #EventList:focus {
-                    min-width: 120px;
-                    width: auto;
-                }
-        </style>
+        <style> #EventList {width: 120px; } #EventList:focus { min-width: 120px; width: auto; } </style>
         <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="listChanged('EventList')">
             @{
                 if (@Model.SelectedEvent == -1)
@@ -29,16 +20,7 @@
                 }
             }
         </select>
-        <style>
-            #AktivitetList {
-                width: 120px;
-            }
-
-                #AktivitetList:focus {
-                    min-width: 120px;
-                    width: auto;
-                }
-        </style>
+        <style> #AktivitetList { width: 120px; } #AktivitetList:focus { min-width: 120px; width: auto; } </style>
         <select id="AktivitetList" asp-for="@Model.SelectedAktivitet" onchange="listChanged('AktivitetList')">
             @{
                 if (@Model.SelectedEvent == -1)
