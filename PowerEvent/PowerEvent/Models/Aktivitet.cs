@@ -13,6 +13,7 @@ namespace PowerEvent.Models
 
         public int PointType { get; set; }
 
+        // 0 = holdsport, 1 = deltagersport
         public int HoldSport { get; set; }
     }
 }

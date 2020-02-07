@@ -113,7 +113,7 @@
                                     <option value="@item.Id">@item.Score</option>
                                 }
                             }
-
+                            
                         }
 
                     </select>
@@ -130,6 +130,57 @@
 {
     <script>
         function listChanged(listen)
+        {
+            let url = new URL(location.href);
+
+            let EventList = document.getElementById('EventList');
+            let EventListValgt = EventList.options[EventList.selectedIndex].value;
+            url.searchParams.set("EventList", EventListValgt);
+
+            let AktivitetList = document.getElementById('AktivitetList');
+            let AktivitetListValgt = AktivitetList.options[AktivitetList.selectedIndex].value;
+            url.searchParams.set("AktivitetList", AktivitetListValgt);
+
+            let OrderList = document.getElementById('OrderList');
+            let OrderListValgt = OrderList.options[OrderList.selectedIndex].value;
+            url.searchParams.set("OrderList", OrderListValgt);
+
+            @{ 
+                if (@Model.SelectedAktivitet != -1 && Model.SelectedOrder != -1)
+                {
+                    @: let HoldList = document.getElementById('HoldList');
+                    @: let HoldListValgt = HoldList.options[HoldList.selectedIndex].value;
+                    @: url.searchParams.set("HoldList", HoldListValgt);
+
+                    if (false)
+                    {
+                        @: let DeltagerList = document.getElementById('DeltagerList');
+                        @: let DeltagerListValgt = DeltagerList.options[DeltagerList.selectedIndex].value;
+                        @: url.searchParams.set("DeltagerList", DeltagerListValgt);
+                    }
+                    if (Model.SelectedHold != -1 && )
+                    {
+
+                    }
+                }
+            }
+
+            
+
+            
+
+            let PointList = document.getElementById('PointList');
+            let PointListValgt = PointList.options[PointList.selectedIndex].value;
+            url.searchParams.set("PointList", PointListValgt);
+
+            
+
+            url.searchParams.set("navn", listen);            
+            location.href = url;
+            
+        }
+
+        function listChangedHoldList(listen)
         {
             let url = new URL(location.href);
 

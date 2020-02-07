@@ -26,8 +26,11 @@ namespace PowerEvent
 
         [BindProperty]
         public int SelectedOrder { get; set; }
+
         [BindProperty]
         public int SelectedPoint { get; set; }
+
+        public Aktivitet valgtAktivitet { get; set; }
 
         public List<Hold> HoldList { get; set; }
 
@@ -147,10 +150,12 @@ namespace PowerEvent
             {
                 if (SelectedAktivitet != -1)
                 {
-
-                }
-                else
-                {
+                    Aktivitet tempAktivitet = new Aktivitet();
+                    tempAktivitet = AktivitetList.Where(i => i.Id == SelectedAktivitet).FirstOrDefault();
+                    if (tempAktivitet != null)
+                    {
+                        valgtAktivitet = tempAktivitet;
+                    }
                 }
             }
             else if (navn == "OrderList")
@@ -159,9 +164,6 @@ namespace PowerEvent
                 {
                     DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedAktivitet, SelectedHold);
                 }
-                else
-                {
-                }
             }
             else if (navn == "HoldList")
             {
@@ -169,9 +171,6 @@ namespace PowerEvent
                 {
                     //DeltagerList = DBAdapter.getDeltagere();
                 }
-                else
-                {
-                }
             }
             else if (navn == "DeltagerList")
             {
@@ -179,18 +178,12 @@ namespace PowerEvent
                 {
                     DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedAktivitet, SelectedHold);
                 }
-                else
-                {
-                }
             }
             else if (navn == "DeltagerList")
             {
                 if (SelectedDeltager != -1)
                 {
                     DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedAktivitet, SelectedHold);
-                }
-                else
-                {
                 }
             }
         }
