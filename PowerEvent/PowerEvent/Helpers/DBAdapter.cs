@@ -52,7 +52,7 @@ namespace PowerEvent.Helpers
             DBHandler.addAktivitet(_navn ,_pointType, _holdSport);
         }
 
-        public static List<Hold> getHold(int? _eventId = null)
+        public static List<Hold> getHold(int? _eventId = null, int? _holdOrder = null)
         {
             List<object> dbList = DBHandler.getHold(_eventId);
             List<Hold> holdList = new List<Hold>();

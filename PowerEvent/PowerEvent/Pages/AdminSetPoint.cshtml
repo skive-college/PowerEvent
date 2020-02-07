@@ -42,14 +42,21 @@
         </select>
         <select id="OrderList" asp-for="@Model.SelectedOrder" onchange="listChanged('OrderList')">
             @{
+                if (Model.SelectedEvent == -1 || Model.SelectedAktivitet == -1)
+                {
+                    <option value="-1" hidden></option>
+                }
                 if (@Model.SelectedEvent != -1 && Model.SelectedAktivitet != -1)
                 {
-                    <option value="-1">Vælg en runde</option>
+                    if (Model.SelectedOrder == -1)
+                    {
+                        <option value="-1">Vælg en runde</option>
+                    }
                     <option value="1">Runde1</option>
                     <option value="2">Runde2</option>
-                    <option value="2">Runde3</option>
-                    <option value="2">Runde4</option>
-                    <option value="2">Runde5</option>
+                    <option value="3">Runde3</option>
+                    <option value="4">Runde4</option>
+                    <option value="5">Runde5</option>
                 }
             }
 

@@ -94,7 +94,7 @@ namespace DatabaseClassLibrary
         }
 
         //returnerer alle hold. hvis "_eventID" er indtastet så returnerer den alle hold fra et event
-        public static List<object> getHold(int? _eventId = null)
+        public static List<object> getHold(int? _eventId = null, int? _holdOrder = null)
         {
             List<object> retur = new List<object>();
             using (SqlConnection con = new SqlConnection(connectionString))

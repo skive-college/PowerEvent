@@ -30,7 +30,19 @@ namespace PowerEvent
         [BindProperty]
         public int SelectedPoint { get; set; }
 
-        public Aktivitet valgtAktivitet { get; set; }
+        public Aktivitet valgtAktivitet { 
+            get 
+            {
+                AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+                Aktivitet tempAktivitet = new Aktivitet();
+                tempAktivitet = AktivitetList.Where(i => i.Id == SelectedAktivitet).FirstOrDefault();
+                return tempAktivitet;
+            } 
+            set 
+            {
+                valgtAktivitet = value; 
+            } 
+        }
 
         public List<Hold> HoldList { get; set; }
 
@@ -139,10 +151,22 @@ namespace PowerEvent
             }
 
 
+            if (SelectedEvent == -1)
+            {
+                loadTempDataEvent();
+                if (SelectedEvent != -1)
+                {
+                    AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+                    loadTempDataAktivitet();
+                }
+            }
+
+
             if (navn == "EventList")
             {
                 if (SelectedEvent != -1)
                 {
+                    saveTempDataEvent();
                     AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
                 }
             }
@@ -150,41 +174,72 @@ namespace PowerEvent
             {
                 if (SelectedAktivitet != -1)
                 {
-                    Aktivitet tempAktivitet = new Aktivitet();
-                    tempAktivitet = AktivitetList.Where(i => i.Id == SelectedAktivitet).FirstOrDefault();
-                    if (tempAktivitet != null)
-                    {
-                        valgtAktivitet = tempAktivitet;
-                    }
+                    //getOrderList
                 }
             }
             else if (navn == "OrderList")
             {
-                if (SelectedDeltager != -1)
+                if (SelectedOrder != -1)
                 {
-                    DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedAktivitet, SelectedHold);
+                    HoldList = DBAdapter.getHold(SelectedEvent);
                 }
             }
             else if (navn == "HoldList")
             {
                 if (SelectedHold != -1)
                 {
-                    //DeltagerList = DBAdapter.getDeltagere();
+                    if (valgtAktivitet.HoldSport == 1)
+                    {
+                        DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedAktivitet, SelectedHold);
+                    }
+                    else
+                    {
+                        //getHoldPoint
+                    }
                 }
             }
             else if (navn == "DeltagerList")
             {
                 if (SelectedDeltager != -1)
                 {
-                    DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedAktivitet, SelectedHold);
+                    //getDeltagerPoint
                 }
             }
-            else if (navn == "DeltagerList")
+            else if (navn == "PointList")
             {
                 if (SelectedDeltager != -1)
                 {
-                    DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedAktivitet, SelectedHold);
+                    
                 }
+            }
+        }
+
+        private void saveTempDataEvent()
+        {
+            List<int> tempEventList = new List<int>();
+            tempEventList.Add(SelectedEvent);
+            TempData.Set("SelectedEventId", tempEventList);
+        }
+
+        private void loadTempDataEvent()
+        {
+            List<int> tempEventList = TempData.Peek<List<int>>("SelectedEventId");
+            if (tempEventList != null)
+            {
+                SelectedEvent = tempEventList[0];
+            }
+        }
+        private void saveTempDataAktivitet()
+        {
+            TempData.Set("ValgtAktivitet", valgtAktivitet);
+        }
+
+        private void loadTempDataAktivitet()
+        {
+            Aktivitet tempAktivitet = TempData.Get<Aktivitet>("ValgtAktivitet");
+            if (tempAktivitet != null)
+            {
+                valgtAktivitet = tempAktivitet;
             }
         }
 

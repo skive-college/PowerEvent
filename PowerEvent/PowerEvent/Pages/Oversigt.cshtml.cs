@@ -57,13 +57,39 @@ namespace PowerEvent.Pages
             {
             }
 
+            if (SelectedEvent == -1)
+            {
+                loadTempDataEvent();
+                if (SelectedEvent != -1)
+                {
+                    DeltagerList = DBAdapter.getDeltagere(SelectedEvent);
+                }
+            }
+
             string navn = Request.Query["navn"];
             if (navn == "EventList")
             {
                 if (SelectedEvent != -1)
                 {
+                    saveTempDataEvent();
                     DeltagerList = DBAdapter.getDeltagere(SelectedEvent);
                 }
+            }
+        }
+
+        private void saveTempDataEvent()
+        {
+            List<int> tempEventList = new List<int>();
+            tempEventList.Add(SelectedEvent);
+            TempData.Set("SelectedEventId", tempEventList);
+        }
+
+        private void loadTempDataEvent()
+        {
+            List<int> tempEventList = TempData.Peek<List<int>>("SelectedEventId");
+            if (tempEventList != null)
+            {
+                SelectedEvent = tempEventList[0];
             }
         }
 
