@@ -126,16 +126,12 @@ namespace PowerEvent
         {
 
         }
-        public void OnPostCmdSkift()
-        {
-            //AktivitetList = DBAdapter.getAktivitet();
-            //EventList = DBAdapter.getEvent();
-            //HoldList = DBAdapter.getHold();
-        }
+
         public void OnPostCmdRemoveHold()
         {
 
         }
+
         public void OnPostCmdAddPoint()
         {
             if (ValgtAktivitet.HoldSport == 0)
@@ -147,6 +143,7 @@ namespace PowerEvent
 
             }
         }
+
         public void OnPostCmdDeletePoint()
         {
             if (ValgtAktivitet.HoldSport == 0)
@@ -157,13 +154,6 @@ namespace PowerEvent
             {
 
             }
-        }
-
-
-        private void loadHoldList()
-        {
-            HoldList = new List<Hold>();
-            HoldList = DBAdapter.getHold();
         }
 
 
