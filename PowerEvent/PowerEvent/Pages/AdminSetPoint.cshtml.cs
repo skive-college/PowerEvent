@@ -30,18 +30,49 @@ namespace PowerEvent
         [BindProperty]
         public int SelectedPoint { get; set; }
 
-        public Aktivitet valgtAktivitet { 
+
+        private Aktivitet valgtAktivitet;
+
+        public Aktivitet ValgtAktivitet
+        {
             get 
             {
-                AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
-                Aktivitet tempAktivitet = new Aktivitet();
-                tempAktivitet = AktivitetList.Where(i => i.Id == SelectedAktivitet).FirstOrDefault();
-                return tempAktivitet;
-            } 
+                if (valgtAktivitet == null)
+                {
+                    if (AktivitetList.Count == 0)
+                    {
+                        AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+                    }
+                    valgtAktivitet = AktivitetList.Where(i => i.Id == SelectedAktivitet).FirstOrDefault();
+                }
+                return valgtAktivitet;
+            }
             set 
-            {
+            { 
                 valgtAktivitet = value; 
-            } 
+            }
+        }
+
+        private Deltager valgtDeltager;
+
+        public Deltager ValgtDeltager
+        {
+            get
+            {
+                if (valgtDeltager == null)
+                {
+                    if (DeltagerList.Count == 0)
+                    {
+                        DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedAktivitet, SelectedHold);
+                    }
+                    valgtDeltager = DeltagerList.Where(i => i.Id == SelectedDeltager).FirstOrDefault();
+                }
+                return valgtDeltager;
+            }
+            set
+            {
+                valgtDeltager = value;
+            }
         }
 
         public List<Hold> HoldList { get; set; }
@@ -64,12 +95,33 @@ namespace PowerEvent
             HoldList = new List<Hold>();
             DeltagerList = new List<Deltager>();
             EventList = DBAdapter.getEvent();
+
+
             checkListScript();
-            if (SelectedAktivitet != -1)
+            if (SelectedEvent != -1)
             {
-                AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+                if (AktivitetList.Count == 0)
+                {
+                    AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+                    //if (SelectedAktivitet != -1)
+                    //{
+                    //    if (valgtAktivitet == null)
+                    //    {
+                    //        ValgtAktivitet = ValgtAktivitet;
+                    //    }
+                    //}
+                }
+                if (SelectedOrder != -1 && SelectedAktivitet != -1)
+                {
+                    HoldList = DBAdapter.getHold(SelectedEvent);
+                }
+                if (SelectedDeltager != -1)
+                {
+                    DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedAktivitet, SelectedHold);
+                }
             }
         }
+
         public void OnPost()
         {
 
@@ -84,21 +136,27 @@ namespace PowerEvent
         {
 
         }
-        public void OnPostCmdAddHoldPoint()
+        public void OnPostCmdAddPoint()
         {
+            if (ValgtAktivitet.HoldSport == 0)
+            {
 
+            }
+            else if (ValgtAktivitet.HoldSport == 1)
+            {
+
+            }
         }
-        public void OnPostCmdDeleteDHoldPoint()
+        public void OnPostCmdDeletePoint()
         {
+            if (ValgtAktivitet.HoldSport == 0)
+            {
 
-        }
-        public void OnPostCmdAddDeltagerPoint()
-        {
+            }
+            else if (ValgtAktivitet.HoldSport == 1)
+            {
 
-        }
-        public void OnPostCmdDeleteDeltagerPoint()
-        {
-
+            }
         }
 
 
@@ -149,6 +207,13 @@ namespace PowerEvent
             catch
             {
             }
+            try
+            {
+                SelectedPoint = int.Parse(Request.Query["PointList"]);
+            }
+            catch
+            {
+            }
 
 
             if (SelectedEvent == -1)
@@ -172,23 +237,23 @@ namespace PowerEvent
             }
             else if (navn == "AktivitetList")
             {
-                if (SelectedAktivitet != -1)
+                if (SelectedAktivitet != -1 && SelectedEvent != -1)
                 {
                     //getOrderList
                 }
             }
             else if (navn == "OrderList")
             {
-                if (SelectedOrder != -1)
+                if (SelectedOrder != -1 && SelectedAktivitet != -1 && SelectedEvent != -1)
                 {
-                    HoldList = DBAdapter.getHold(SelectedEvent);
+                    
                 }
             }
             else if (navn == "HoldList")
             {
-                if (SelectedHold != -1)
+                if (SelectedHold != -1 && SelectedOrder != -1 && SelectedAktivitet != -1 && SelectedEvent != -1)
                 {
-                    if (valgtAktivitet.HoldSport == 1)
+                    if (ValgtAktivitet.HoldSport == 1)
                     {
                         DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedAktivitet, SelectedHold);
                     }
@@ -202,7 +267,7 @@ namespace PowerEvent
             {
                 if (SelectedDeltager != -1)
                 {
-                    //getDeltagerPoint
+
                 }
             }
             else if (navn == "PointList")
@@ -231,7 +296,7 @@ namespace PowerEvent
         }
         private void saveTempDataAktivitet()
         {
-            TempData.Set("ValgtAktivitet", valgtAktivitet);
+            TempData.Set("ValgtAktivitet", ValgtAktivitet);
         }
 
         private void loadTempDataAktivitet()
@@ -239,7 +304,7 @@ namespace PowerEvent
             Aktivitet tempAktivitet = TempData.Get<Aktivitet>("ValgtAktivitet");
             if (tempAktivitet != null)
             {
-                valgtAktivitet = tempAktivitet;
+                ValgtAktivitet = tempAktivitet;
             }
         }
 
