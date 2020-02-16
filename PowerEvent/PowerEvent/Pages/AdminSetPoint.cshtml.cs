@@ -94,9 +94,7 @@ namespace PowerEvent
             SelectedEvent = -1;
             SelectedAktivitet = -1;
             SelectedOrder = -1;
-            SelectedHold = -1;
-            SelectedDeltager = -1;
-            SelectedPoint = -1;
+            guiSelectedListReset();
             AktivitetList = new List<Aktivitet>();
             HoldList = new List<Hold>();
             DeltagerList = new List<Deltager>();
@@ -109,17 +107,14 @@ namespace PowerEvent
                 if (AktivitetList.Count == 0)
                 {
                     AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
-                    //if (SelectedAktivitet != -1)
-                    //{
-                    //    if (valgtAktivitet == null)
-                    //    {
-                    //        ValgtAktivitet = ValgtAktivitet;
-                    //    }
-                    //}
                 }
                 if (SelectedOrder != -1 && SelectedAktivitet != -1)
                 {
                     HoldList = DBAdapter.getHold(SelectedEvent);
+                    if (ValgtAktivitet.HoldSport == 0)
+                    {
+                        SelectedDeltager = -1;
+                    }
                 }
                 if (SelectedDeltager != -1)
                 {
@@ -227,6 +222,7 @@ namespace PowerEvent
             {
                 if (SelectedEvent != -1)
                 {
+                    guiSelectedListReset();
                     saveTempDataEvent();
                     AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
                 }
@@ -235,6 +231,7 @@ namespace PowerEvent
             {
                 if (SelectedAktivitet != -1 && SelectedEvent != -1)
                 {
+                    guiSelectedListReset();
                     //getOrderList!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 }
             }
@@ -242,7 +239,7 @@ namespace PowerEvent
             {
                 if (SelectedOrder != -1 && SelectedAktivitet != -1 && SelectedEvent != -1)
                 {
-                    
+                    guiSelectedListReset();
                 }
             }
             else if (navn == "HoldList")
@@ -257,13 +254,15 @@ namespace PowerEvent
                     {
                         //getHoldPoint!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     }
+                    SelectedDeltager = -1;
+                    SelectedPoint = -1;
                 }
             }
             else if (navn == "DeltagerList")
             {
                 if (SelectedDeltager != -1)
                 {
-
+                    SelectedPoint = -1;
                 }
             }
             else if (navn == "PointList")
@@ -274,6 +273,14 @@ namespace PowerEvent
                 }
             }
         }
+
+        private void guiSelectedListReset()
+        {
+            SelectedHold = -1;
+            SelectedDeltager = -1;
+            SelectedPoint = -1;
+        }
+
 
         private void saveTempDataEvent()
         {
