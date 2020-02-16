@@ -25,9 +25,9 @@ namespace PowerEvent.Helpers
             return eventList;
         }
 
-        public static List<Aktivitet> getAktivitet(int? _eventId = null)
+        public static List<Aktivitet> getAktivitet(int? _eventId = null, int? _aktivitetId = null)
         {
-            List<object> dbList = DBHandler.getAktivitet();
+            List<object> dbList = DBHandler.getAktivitet(_eventId, _aktivitetId);
             List<Aktivitet> AktivitetList = new List<Aktivitet>();
 
             foreach (object _object in dbList)
@@ -52,9 +52,10 @@ namespace PowerEvent.Helpers
             DBHandler.addAktivitet(_navn ,_pointType, _holdSport);
         }
 
-        public static List<Hold> getHold(int? _eventId = null, int? _holdOrder = null)
+        public static List<Hold> getHold(int? _eventId = null, int? _holdOrder = null, int? _aktivitetId = null)
         {
-            List<object> dbList = DBHandler.getHold(_eventId);
+            Aktivitet tempAktivitet = getAktivitet(_eventId, _aktivitetId)[0];
+            List<object> dbList = DBHandler.getHold(_eventId, _holdOrder, _aktivitetId);
             List<Hold> holdList = new List<Hold>();
 
             foreach (object _object in dbList)
@@ -67,9 +68,9 @@ namespace PowerEvent.Helpers
             return holdList;
         }
 
-        public static List<Deltager> getDeltagere(int _eventId, int? _aktivtetId = null, int? _holdId = null)
+        public static List<Deltager> getDeltagere(int _eventId, int? _aktivtetId = null, int? _holdId = null, int? _deltagerId = null)
         {
-            List<object> DbList = DBHandler.getDeltagere(_eventId, _aktivtetId, _holdId);
+            List<object> DbList = DBHandler.getDeltagere(_eventId, _aktivtetId, _holdId, _deltagerId);
             List<Deltager> retur = new List<Deltager>();
 
             foreach (object _object in DbList)

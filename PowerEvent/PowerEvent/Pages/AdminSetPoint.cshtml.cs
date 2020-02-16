@@ -41,9 +41,12 @@ namespace PowerEvent
                 {
                     if (AktivitetList.Count == 0)
                     {
-                        AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+                        valgtAktivitet = DBAdapter.getAktivitet(SelectedEvent, SelectedAktivitet)[0];
                     }
-                    valgtAktivitet = AktivitetList.Where(i => i.Id == SelectedAktivitet).FirstOrDefault();
+                    else
+                    {
+                        valgtAktivitet = AktivitetList.Where(i => i.Id == SelectedAktivitet).FirstOrDefault();
+                    }
                 }
                 return valgtAktivitet;
             }
@@ -63,9 +66,12 @@ namespace PowerEvent
                 {
                     if (DeltagerList.Count == 0)
                     {
-                        DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedAktivitet, SelectedHold);
+                        valgtDeltager = DBAdapter.getDeltagere(SelectedEvent, SelectedAktivitet, SelectedHold, SelectedDeltager)[0];
                     }
-                    valgtDeltager = DeltagerList.Where(i => i.Id == SelectedDeltager).FirstOrDefault();
+                    else
+                    {
+                        valgtDeltager = DeltagerList.Where(i => i.Id == SelectedDeltager).FirstOrDefault();
+                    }
                 }
                 return valgtDeltager;
             }
@@ -229,7 +235,7 @@ namespace PowerEvent
             {
                 if (SelectedAktivitet != -1 && SelectedEvent != -1)
                 {
-                    //getOrderList
+                    //getOrderList!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 }
             }
             else if (navn == "OrderList")
@@ -249,7 +255,7 @@ namespace PowerEvent
                     }
                     else
                     {
-                        //getHoldPoint
+                        //getHoldPoint!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     }
                 }
             }
