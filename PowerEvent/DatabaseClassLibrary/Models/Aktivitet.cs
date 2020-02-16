@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PowerEvent.Models
+namespace DatabaseClassLibrary.Models
 {
-    public class Hold
+    public class Aktivitet
     {
         public int Id { get; set; }
 
         public string Navn { get; set; }
 
-        public List<EventAktivitetHold> HoldAktiviteter { get; set; }
+        public int PointType { get; set; }
+
+        // 0 = holdsport, 1 = deltagersport
+        public int HoldSport { get; set; }
     }
 }
