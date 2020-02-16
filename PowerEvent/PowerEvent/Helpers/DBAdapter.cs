@@ -54,23 +54,45 @@ namespace PowerEvent.Helpers
 
         public static List<Hold> getHold(int? _eventId = null, int? _holdOrder = null, int? _aktivitetId = null)
         {
-            Aktivitet tempAktivitet = getAktivitet(_eventId, _aktivitetId)[0];
             List<object> dbList = DBHandler.getHold(_eventId, _holdOrder, _aktivitetId);
             List<Hold> holdList = new List<Hold>();
 
             foreach (object _object in dbList)
             {
-                Hold temp = new Hold();
-                temp.Id = adapt<int>("Id", _object);
-                temp.Navn = adapt<string>("Navn", _object);
-                holdList.Add(temp);
+                Hold tempHold = new Hold();
+                tempHold.HoldAktiviteter = new List<EventAktivitetHold>();
+                tempHold.Id = adapt<int>("Id", _object);
+                tempHold.Navn = adapt<string>("Navn", _object);
+                if (_holdOrder != null || _aktivitetId != null)
+                {
+                    List<object> tempAktivitetHoldList = adapt<List<object>>("HoldAktiviteter", _object);
+                    foreach (object _aktivitetHold in tempAktivitetHoldList)
+                    {
+                        EventAktivitetHold eah = new EventAktivitetHold();
+                        eah.HoldScores = new List<EventAktivitetHoldScore>();
+                        eah.Id = adapt<int>("Id", _aktivitetHold);
+                        eah.Point = adapt<int>("Point", _aktivitetHold);
+                        eah.HoldOrder = adapt<int>("HoldOrder", _aktivitetHold);
+
+                        List<object> scores = adapt<List<object>>("HoldScores", _aktivitetHold);
+                        foreach (object _score in scores)
+                        {
+                            EventAktivitetHoldScore tempHoldScores = new EventAktivitetHoldScore();
+                            tempHoldScores.Id = adapt<int>("Id", _score);
+                            tempHoldScores.HoldScore = adapt<int>("HoldScore", _score);
+                            eah.HoldScores.Add(tempHoldScores);
+                        }
+                        tempHold.HoldAktiviteter.Add(eah);
+                    }
+                }
+                holdList.Add(tempHold);
             }
             return holdList;
         }
 
-        public static List<Deltager> getDeltagere(int _eventId, int? _aktivtetId = null, int? _holdId = null, int? _deltagerId = null)
+        public static List<Deltager> getDeltagere(int _eventId, int? _aktivitetId = null, int? _holdId = null, int? _deltagerId = null)
         {
-            List<object> DbList = DBHandler.getDeltagere(_eventId, _aktivtetId, _holdId, _deltagerId);
+            List<object> DbList = DBHandler.getDeltagere(_eventId, _aktivitetId, _holdId, _deltagerId);
             List<Deltager> retur = new List<Deltager>();
 
             foreach (object _object in DbList)
@@ -81,7 +103,7 @@ namespace PowerEvent.Helpers
                 tempdeltager.Navn = adapt<string>("Navn", _object);
                 tempdeltager.HoldId = adapt<int>("HoldId", _object);
                 tempdeltager.EventId = adapt<int>("EventId", _object);
-                if (_aktivtetId != null)
+                if (_aktivitetId != null)
                 {
                     List<object> o = adapt<List<object>>("ScoreList", _object);
                     foreach (object _score in o)

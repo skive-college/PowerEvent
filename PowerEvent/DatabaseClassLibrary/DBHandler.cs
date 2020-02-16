@@ -112,7 +112,7 @@ namespace DatabaseClassLibrary
             }
         }
 
-        //returnerer alle hold. hvis "_eventID" er indtastet så returnerer den alle hold fra et event.
+        //returnerer alle hold. hvis "_eventID" er indtastet så returnerer den alle hold fra et event.    færdigør metode!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         public static List<object> getHold(int? _eventId = null, int? _holdOrder = null, int? _aktivitetId = null)
         {
             List<object> retur = new List<object>();
@@ -191,7 +191,7 @@ namespace DatabaseClassLibrary
             }
             return retur;
         }
-
+        //lav SQL sætning!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         private static List<EventAktivitetHold> getHoldAktivitet(int? _eventId = null, int? _holdOrder = null, int? _aktivitetId = null)
         {
             List<EventAktivitetHold> retur = new List<EventAktivitetHold>();
@@ -222,7 +222,7 @@ namespace DatabaseClassLibrary
             }
             return retur;
         }
-
+        //lav SQL sætning!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         private static List<EventAktivitetHoldScore> getHoldAktivitetScores(int? _eventId = null, int? _holdOrder = null, int? _aktivitetId = null)
         {
             List<EventAktivitetHoldScore> retur = new List<EventAktivitetHoldScore>();
