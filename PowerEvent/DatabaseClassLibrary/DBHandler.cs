@@ -253,7 +253,7 @@ namespace DatabaseClassLibrary
                 }
                 reader.Close();
             }
-            if (tempAktivitet.HoldSport == 0)
+            if (_eventId != null)
             {
                 List<EventAktivitetHoldScore> scoreList = new List<EventAktivitetHoldScore>();
                 //scoreList = getHoldAktivitetScores(_eventId, _holdOrder, _aktivitetId);!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
