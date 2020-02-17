@@ -120,20 +120,38 @@ namespace DatabaseClassLibrary
             List<Hold> holdList = new List<Hold>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = "SELECT distinct _h.Id, _h.Navn FROM Hold _h";
+                string sql = "SELECT distinct _h.Id, _h.Navn";
+                sql += " FROM Hold _h";
                 if (_eventId != null)
                 {
-                    sql += ", EventDeltager _ed WHERE _h.Id = _ed.HoldId AND _ed.EventId = @EventId";
+                    sql += ", EventDeltager _ed";
                 }
                 if (_holdOrder != null && _aktivitetId != null)
                 {
-                    sql += "";
+                    sql += ", EventAktivitetHold _eah, EventAktivitet _ea";
+                }
+                if (_eventId != null || _holdOrder != null && _aktivitetId != null)
+                {
+                    sql += " WHERE";
+                }
+                if (_eventId != null)
+                {
+                    sql += " _h.Id = _ed.HoldId AND _ed.EventId = @EventId";
+                }
+                if (_holdOrder != null && _aktivitetId != null)
+                {
+                    sql += " AND _eah.HoldId = _h.Id AND _ea.Id = _eah.EventAktivitetId AND _ea.AktivitetId = @AktivitetId AND _eah.HoldOrder = @HoldOrder";
                 }
                 con.Open();
                 SqlCommand cmd = new SqlCommand(sql, con);
                 if (_eventId != null)
                 {
                     cmd.Parameters.AddWithValue("@EventId", _eventId);
+                }
+                if (_holdOrder != null && _aktivitetId != null)
+                {
+                    cmd.Parameters.AddWithValue("@HoldOrder", _holdOrder);
+                    cmd.Parameters.AddWithValue("@AktivitetId", _aktivitetId);
                 }
                 SqlDataReader reader = cmd.ExecuteReader();
 
@@ -147,7 +165,7 @@ namespace DatabaseClassLibrary
             if (_holdOrder != null && _aktivitetId != null)
             {
                 List<EventAktivitetHold> holdEventAktivitetList = new List<EventAktivitetHold>();
-                holdEventAktivitetList = getHoldAktivitet(_eventId, _holdOrder, _aktivitetId);
+                //holdEventAktivitetList = getHoldAktivitet(_eventId, _holdOrder, _aktivitetId); FIX!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 foreach (Hold _hold in holdList)
                 {
                     _hold.HoldAktiviteter = new List<EventAktivitetHold>();

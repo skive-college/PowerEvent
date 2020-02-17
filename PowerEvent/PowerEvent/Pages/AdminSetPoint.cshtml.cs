@@ -110,7 +110,7 @@ namespace PowerEvent
                 }
                 if (SelectedOrder != -1 && SelectedAktivitet != -1)
                 {
-                    HoldList = DBAdapter.getHold(SelectedEvent);
+                    HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedAktivitet);
                     if (ValgtAktivitet.HoldSport == 0)
                     {
                         SelectedDeltager = -1;
