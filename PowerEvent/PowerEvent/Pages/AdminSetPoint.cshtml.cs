@@ -108,12 +108,16 @@ namespace PowerEvent
                 {
                     AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
                 }
-                if (SelectedOrder != -1 && SelectedAktivitet != -1)
+                if (SelectedAktivitet != -1)
                 {
-                    HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedAktivitet);
-                    if (ValgtAktivitet.HoldSport == 0)
+                    //hent orderlist ind!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    if (SelectedOrder != -1)
                     {
-                        SelectedDeltager = -1;
+                        HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedAktivitet);
+                        if (ValgtAktivitet.HoldSport == 0)
+                        {
+                            SelectedDeltager = -1;
+                        }
                     }
                 }
                 if (SelectedDeltager != -1)
@@ -232,7 +236,6 @@ namespace PowerEvent
                 if (SelectedAktivitet != -1 && SelectedEvent != -1)
                 {
                     guiSelectedListReset();
-                    //getOrderList!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 }
             }
             else if (navn == "OrderList")
