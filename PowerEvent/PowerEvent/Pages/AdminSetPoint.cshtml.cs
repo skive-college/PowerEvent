@@ -160,7 +160,7 @@ namespace PowerEvent
 
         private void checkListScript()
         {
-            //on click for select element script. navn = select elementets "id"
+            //on click for select element script. navn = select elementets "navn"
             string navn = Request.Query["navn"];
 
             try

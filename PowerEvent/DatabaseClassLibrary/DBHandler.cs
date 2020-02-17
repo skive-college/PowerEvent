@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text;
 using DatabaseClassLibrary.Models;
+using System.Linq;
 
 namespace DatabaseClassLibrary
 {
@@ -150,19 +151,10 @@ namespace DatabaseClassLibrary
                 foreach (Hold _hold in holdList)
                 {
                     _hold.HoldAktiviteter = new List<EventAktivitetHold>();
-                    foreach (EventAktivitetHold _aktivitet in holdEventAktivitetList)
-                    {
-                        if (_hold.Id == _aktivitet.HoldId)
-                        {
-                            _hold.HoldAktiviteter.Add(_aktivitet);
-                        }
-                    }
+                    _hold.HoldAktiviteter.AddRange(holdEventAktivitetList.Where(i => i.HoldId == _hold.Id).ToList());
                     if (_hold.HoldAktiviteter != null)
                     {
-                        foreach (EventAktivitetHold _aktivitetHold in _hold.HoldAktiviteter)
-                        {
-                            holdEventAktivitetList.Remove(_aktivitetHold);
-                        }
+                        holdEventAktivitetList.RemoveAll(i => i.HoldId == _hold.Id);
                     }
                 }
             }
@@ -324,19 +316,10 @@ namespace DatabaseClassLibrary
                 foreach (Deltager _deltager in deltagerList)
                 {
                     _deltager.ScoreList = new List<DBDeltagerScore>();
-                    foreach (DBDeltagerScore _score in scoreList)
-                    {
-                        if (_deltager.Id == _score.DeltagerId)
-                        {
-                            _deltager.ScoreList.Add(_score);
-                        }
-                    }
+                    _deltager.ScoreList.AddRange(scoreList.Where(i => i.DeltagerId == _deltager.Id).ToList());
                     if (_deltager.ScoreList != null)
                     {
-                        foreach (DBDeltagerScore _dBDeltagerScore in _deltager.ScoreList)
-                        {
-                            scoreList.Remove(_dBDeltagerScore);
-                        }
+                        scoreList.RemoveAll(i => i.DeltagerId == _deltager.Id);
                     }
                 }
             }
