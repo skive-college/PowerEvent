@@ -127,7 +127,7 @@ namespace DatabaseClassLibrary
             }
         }
 
-        //returnerer alle hold. hvis "_eventID" er indtastet så returnerer den alle hold fra et event.    færdigør metode!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //returnerer alle hold. hvis "_eventID" er indtastet så returnerer den alle hold fra et event.
         public static List<object> getHold(int? _eventId = null, int? _holdOrder = null, int? _aktivitetId = null)
         {
             List<object> retur = new List<object>();
