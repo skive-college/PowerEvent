@@ -256,7 +256,7 @@ namespace DatabaseClassLibrary
             if (tempAktivitet.HoldSport == 0)
             {
                 List<EventAktivitetHoldScore> scoreList = new List<EventAktivitetHoldScore>();
-                //scoreList = getHoldAktivitetScores(_eventId, _holdOrder, _aktivitetId);
+                //scoreList = getHoldAktivitetScores(_eventId, _holdOrder, _aktivitetId);!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 foreach (EventAktivitetHold _hold in retur)
                 {
                     _hold.HoldScores = new List<EventAktivitetHoldScore>();
