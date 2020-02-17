@@ -215,6 +215,7 @@ namespace DatabaseClassLibrary
             }
             return retur;
         }
+
         private static List<EventAktivitetHold> getHoldAktivitet(int? _eventId, int? _holdOrder = null, int? _aktivitetId = null)
         {
             List<EventAktivitetHold> retur = new List<EventAktivitetHold>();
@@ -269,6 +270,7 @@ namespace DatabaseClassLibrary
             }
             return retur;
         }
+
         //lav SQL sætning!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         private static List<EventAktivitetHoldScore> getHoldAktivitetScores(int? _eventId = null, int? _holdOrder = null, int? _aktivitetId = null)
         {
