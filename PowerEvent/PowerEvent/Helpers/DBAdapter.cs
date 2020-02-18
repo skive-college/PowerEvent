@@ -71,7 +71,7 @@ namespace PowerEvent.Helpers
                         EventAktivitetHold eah = new EventAktivitetHold();
                         eah.HoldScores = new List<EventAktivitetHoldScore>();
                         eah.Id = adapt<int>("Id", _aktivitetHold);
-                        eah.Point = adapt<int>("Point", _aktivitetHold);
+                        eah.Point = adapt<int?>("Point", _aktivitetHold);
                         eah.HoldOrder = adapt<int>("HoldOrder", _aktivitetHold);
 
                         List<object> scores = adapt<List<object>>("HoldScores", _aktivitetHold);

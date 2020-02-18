@@ -231,7 +231,7 @@ namespace DatabaseClassLibrary
                 string sql = "SELECT * FROM EventAktivitetHold _eah, EventAktivitet _ea WHERE _ea.Id = _eah.EventAktivitetId  AND _ea.EventId = @EventId";
                 if (_holdOrder != null && _aktivitetId != null)
                 {
-                    sql += " AND _ea.AktivitetId = @HoldOrder AND _eah.HoldOrder = @AktivitetId";
+                    sql += " AND _ea.AktivitetId = @AktivitetId AND _eah.HoldOrder = @HoldOrder";
                 }
                 con.Open();
                 SqlCommand cmd = new SqlCommand(sql, con);
@@ -248,8 +248,16 @@ namespace DatabaseClassLibrary
 
                 while (reader.Read())
                 {
+                    int? pointRead = null;
+                    try
+                    {
+                        pointRead = int.Parse(reader["Point"].ToString());
+                    }
+                    catch
+                    {
+                    }
                     retur.Add(
-                        new EventAktivitetHold() { Id = int.Parse(reader["Id"].ToString()), EventAktivitetId = int.Parse(reader["EventAktivitetId"].ToString()), HoldId = int.Parse(reader["HoldId"].ToString()), Point = int.Parse(reader["Point"].ToString()), HoldOrder = int.Parse(reader["HoldOrder"].ToString()), EventAktivitet = tempAktivitet }
+                        new EventAktivitetHold() { Id = int.Parse(reader["Id"].ToString()), EventAktivitetId = int.Parse(reader["EventAktivitetId"].ToString()), HoldId = int.Parse(reader["HoldId"].ToString()), Point = pointRead, HoldOrder = int.Parse(reader["HoldOrder"].ToString()), EventAktivitet = tempAktivitet, HoldScores = new List<EventAktivitetHoldScore>() }
                         );
                 }
                 reader.Close();
