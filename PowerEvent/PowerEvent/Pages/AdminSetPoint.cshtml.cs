@@ -217,7 +217,6 @@ namespace PowerEvent
                 if (SelectedEvent != -1)
                 {
                     AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
-                    loadTempDataAktivitet();
                 }
             }
 
@@ -298,19 +297,6 @@ namespace PowerEvent
             if (tempEventList != null)
             {
                 SelectedEvent = tempEventList[0];
-            }
-        }
-        private void saveTempDataAktivitet()
-        {
-            TempData.Set("ValgtAktivitet", ValgtAktivitet);
-        }
-
-        private void loadTempDataAktivitet()
-        {
-            Aktivitet tempAktivitet = TempData.Get<Aktivitet>("ValgtAktivitet");
-            if (tempAktivitet != null)
-            {
-                ValgtAktivitet = tempAktivitet;
             }
         }
 
