@@ -46,7 +46,7 @@ namespace PowerEvent.Pages
 
 
 
-        //on click for select element script. navn = select elementets "id"
+        //on click for select element script. navn = select elementets "navn"
         private void checkListScript()
         {
             try 
