@@ -11,6 +11,7 @@ namespace DatabaseClassLibrary
     {
         private static readonly string connectionString = @"Data Source=planner.aspitweb.dk;Initial Catalog=PowerEvent;User ID=aspitlab;Password=aspitlab;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
+        //___________________________________________________________________________________________________________alt med Event ↓
 
         public static List<object> getEvent()
         {
@@ -33,8 +34,9 @@ namespace DatabaseClassLibrary
             }
             return retur;
         }
+        //___________________________________________________________________________________________________________alt med Event ↑
 
-
+        //___________________________________________________________________________________________________________alt med Aktivitet  ↓
         public static List<object> getAktivitet(int? _eventId = null, int? _aktivitetId = null)
         {
             List<object> retur = new List<object>();
@@ -98,7 +100,6 @@ namespace DatabaseClassLibrary
             return retur;
         }
 
-
         public static void addAktivitet(string _navn, int _pointType, int _holdSport)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -126,6 +127,9 @@ namespace DatabaseClassLibrary
                 command.ExecuteNonQuery();
             }
         }
+        //___________________________________________________________________________________________________________alt med Aktivitet ↑
+
+        //___________________________________________________________________________________________________________alt med Hold ↓
 
         //returnerer alle hold. hvis "_eventID" er indtastet så returnerer den alle hold fra et event.
         public static List<object> getHold(int? _eventId = null, int? _holdOrder = null, int? _aktivitetId = null)
@@ -318,7 +322,9 @@ namespace DatabaseClassLibrary
             }
             return retur;
         }
+        //___________________________________________________________________________________________________________alt med Hold ↑
 
+        //___________________________________________________________________________________________________________alt med Deltagere ↓
 
         //returnerer alle deltagere fra et event med "_eventId". hvis "_AktivitetId" er angivet returnere den også deres "Score" fra den angivne aktivitet i eventet. du kan også søge på hold med "HoldId".
         public static List<object> getDeltagere(int _eventId ,int? _aktivitetId = null, int? _holdId = null, int? _deltagerId = null)
@@ -472,10 +478,43 @@ namespace DatabaseClassLibrary
                 cmd.ExecuteNonQuery();
             }
         }
+        //___________________________________________________________________________________________________________alt med Deltagere ↑
 
+        //___________________________________________________________________________________________________________Alt med Hold Order ↓
 
+        private static List<int> getHoldOrder(int _eventId, int? _aktivitetId = null)
+        {
+            List<int> retur = new List<int>();
 
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "SELECT distinct _eah.HoldOrder FROM EventAktivitetHold _eah, EventAktivitet _ea Where _ea.Id = _eah.EventAktivitetId AND _ea.EventId = 1";
+                
+                if (_aktivitetId != null)
+                {                    
+                    sql += " AND _a.Id = @AktivitetId";
+                }
+                con.Open();
+                SqlCommand cmd = new SqlCommand(sql, con);                
+                cmd.Parameters.AddWithValue("@EventId", _eventId);
+                
+                if (_aktivitetId != null)
+                {
+                    cmd.Parameters.AddWithValue("@AktivitetId", _aktivitetId);
+                }
+                SqlDataReader reader = cmd.ExecuteReader();
 
+                while (reader.Read())
+                {
+                    retur.Add(
+                        int.Parse(reader["Id"].ToString()) 
+                        );
+                }
+                reader.Close();
+            }
+            return retur;
+        }
 
+        //___________________________________________________________________________________________________________Alt med Hold Order ↑
     }
 }
