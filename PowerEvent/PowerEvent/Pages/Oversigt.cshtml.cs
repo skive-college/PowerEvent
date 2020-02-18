@@ -14,6 +14,7 @@ namespace PowerEvent.Pages
 {
     public class Oversigt : PageModel
     {
+        //value på det valgte element i "select" list i GUI. skal være en "BindProperty".
         [BindProperty]
         public int SelectedEvent { get; set; }
 
@@ -31,22 +32,9 @@ namespace PowerEvent.Pages
             HoldListe = new List<Hold>();
             EventList = DBAdapter.getEvent();
             checkListScript();
-            foreach (var _deltager in DeltagerList)
+            if (DeltagerList.Count != 0)
             {
-                bool exists = false;
-                foreach (var _hold in HoldListe)
-                {
-                    if (_deltager.HoldId == _hold.Id)
-                    {
-                        exists = true;
-                    }
-                }
-                if (exists == false)
-                {
-                    Hold h = new Hold();
-                    h.Id = _deltager.Id;
-                    HoldListe.Add(h);
-                }
+                HoldListe = DBAdapter.getHold(SelectedEvent);
             }
         }
 
@@ -58,17 +46,24 @@ namespace PowerEvent.Pages
 
 
 
-
+        //on click for select element script. navn = select elementets "navn"
         private void checkListScript()
         {
-            //on click for select element script. navn = select elementets "id"
             try 
             {
                 SelectedEvent = int.Parse(Request.Query["EventList"]);
             }
             catch
             {
+            }
 
+            if (SelectedEvent == -1)
+            {
+                loadTempDataEvent();
+                if (SelectedEvent != -1)
+                {
+                    DeltagerList = DBAdapter.getDeltagere(SelectedEvent);
+                }
             }
 
             string navn = Request.Query["navn"];
@@ -76,12 +71,25 @@ namespace PowerEvent.Pages
             {
                 if (SelectedEvent != -1)
                 {
+                    saveTempDataEvent();
                     DeltagerList = DBAdapter.getDeltagere(SelectedEvent);
                 }
-                else
-                {
-                    EventList = DBAdapter.getEvent();
-                }
+            }
+        }
+
+        private void saveTempDataEvent()
+        {
+            List<int> tempEventList = new List<int>();
+            tempEventList.Add(SelectedEvent);
+            TempData.Set("SelectedEventId", tempEventList);
+        }
+
+        private void loadTempDataEvent()
+        {
+            List<int> tempEventList = TempData.Peek<List<int>>("SelectedEventId");
+            if (tempEventList != null)
+            {
+                SelectedEvent = tempEventList[0];
             }
         }
 

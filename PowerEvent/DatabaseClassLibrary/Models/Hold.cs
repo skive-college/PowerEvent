@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PowerEvent.Models
+namespace DatabaseClassLibrary.Models
 {
     public class Hold
     {
