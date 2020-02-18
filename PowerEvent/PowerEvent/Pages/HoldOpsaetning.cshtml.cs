@@ -11,7 +11,8 @@ namespace PowerEvent
 {
     public class HoldOpsaetningModel : PageModel
     {
-
+        public List<Event> EventList { get; set;
+        }
         public List<Deltager> DeltagerList { get; set; }
 
         public List<Hold> HoldList { get; set; }
@@ -19,7 +20,8 @@ namespace PowerEvent
 
         public void OnGet()
         {
-            //DeltagerList = DBAdapter.getDeltagere();
+            EventList = DBAdapter.getEvent();
+            DeltagerList = DBAdapter.getDeltagere(1);
             HoldList = DBAdapter.getHold();
         }
 

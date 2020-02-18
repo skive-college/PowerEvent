@@ -7,11 +7,18 @@
 <h1>HoldOpsaetning</h1>
 
 <p>Event:</p>
-<select></select>
+<select id="EventList" onchange="eventListChanged()">
+    @{ 
+        foreach (var pevent in Model.EventList)
+        {
+            <option label="@pevent.Navn" value="@pevent.Id"></option>
+        }
+    }
+</select>
 
 <div class="container">
     <div class="row">
-        <div class="col-sm-5">            
+        <div class="col-sm-5">
             <form method="post">
                 <p>Spillers navn</p>
                 <input type="text" name="Navn"/>
@@ -50,3 +57,9 @@
         </div>
     </div>
 </div>
+
+<script>
+    function eventListChanged() {
+        document.getElementById("EventList")
+    }
+</script>
