@@ -205,7 +205,7 @@ namespace DatabaseClassLibrary
                             object tempScore = new { Id = _score.Id, EventAktivitetHoldId = _score.EventAktivitetHoldId, HoldScore = _score.HoldScore };
                             hAktivitetScores.Add(tempScore);
                         }
-                        object tempAktivitet = new { _hAktivitet.EventAktivitet.Id, _hAktivitet.EventAktivitet.Navn, _hAktivitet.EventAktivitet.PointType, _hAktivitet.EventAktivitet.HoldSport };
+                        object tempAktivitet = new { Id = _hAktivitet.EventAktivitet.Id, Navn = _hAktivitet.EventAktivitet.Navn, PointType = _hAktivitet.EventAktivitet.PointType, HoldSport = _hAktivitet.EventAktivitet.HoldSport };
                         object tempHoldAktivitet = new { _hAktivitet.Id, EventAktivitet = tempAktivitet, _hAktivitet.Point, _hAktivitet.HoldOrder, HoldScores = hAktivitetScores };
                         hAktivitetList.Add(tempHoldAktivitet);
                     }
@@ -265,7 +265,7 @@ namespace DatabaseClassLibrary
             if (_eventId != null)
             {
                 List<EventAktivitetHoldScore> scoreList = new List<EventAktivitetHoldScore>();
-                //scoreList = getHoldAktivitetScores(_eventId, _holdOrder, _aktivitetId);!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                scoreList = getHoldAktivitetScores(_eventId, _holdOrder, _aktivitetId);
                 foreach (EventAktivitetHold _hold in retur)
                 {
                     _hold.HoldScores = new List<EventAktivitetHoldScore>();
@@ -279,16 +279,15 @@ namespace DatabaseClassLibrary
             return retur;
         }
 
-        //lav SQL sætning!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        private static List<EventAktivitetHoldScore> getHoldAktivitetScores(int? _eventId = null, int? _holdOrder = null, int? _aktivitetId = null)
+        private static List<EventAktivitetHoldScore> getHoldAktivitetScores(int? _eventId, int? _holdOrder = null, int? _aktivitetId = null)
         {
             List<EventAktivitetHoldScore> retur = new List<EventAktivitetHoldScore>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = "SELECT distinct _h.Id, _h.Navn FROM Hold _h";
-                if (_eventId != null)
+                string sql = "SELECT _eahs.Id, _eahs.EventAktivitetHoldId, _eahs.HoldScore FROM EventAktivitetHoldScore _eahs, EventAktivitetHold _eah, EventAktivitet _ea WHERE _eahs.EventAktivitetHoldId = _eah.Id AND _eah.EventAktivitetId = _ea.Id AND _ea.EventId = @EventId";
+                if (_holdOrder != null && _aktivitetId != null)
                 {
-                    sql += ", EventDeltager _ed WHERE _h.Id = _ed.HoldId AND _ed.EventId = @EventId";
+                    sql += " AND _Eah.HoldOrder = @HoldOrder AND _ea.AktivitetId = @AktivitetId";
                 }
                 con.Open();
                 SqlCommand cmd = new SqlCommand(sql, con);
@@ -296,6 +295,12 @@ namespace DatabaseClassLibrary
                 {
                     cmd.Parameters.AddWithValue("@EventId", _eventId);
                 }
+                if (_holdOrder != null && _aktivitetId != null)
+                {
+                    cmd.Parameters.AddWithValue("@HoldOrder", _holdOrder);
+                    cmd.Parameters.AddWithValue("@AktivitetId", _aktivitetId);
+                }
+
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())

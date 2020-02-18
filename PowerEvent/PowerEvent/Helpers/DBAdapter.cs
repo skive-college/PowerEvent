@@ -74,6 +74,14 @@ namespace PowerEvent.Helpers
                         eah.Point = adapt<int?>("Point", _aktivitetHold);
                         eah.HoldOrder = adapt<int>("HoldOrder", _aktivitetHold);
 
+                        object tempEventAktivitet = adapt<object>("EventAktivitet", _aktivitetHold);
+                        Aktivitet tempAktivitet = new Aktivitet();
+                        tempAktivitet.Id = adapt<int> ("Id", tempEventAktivitet);
+                        tempAktivitet.Navn = adapt<string>("Navn", tempEventAktivitet);
+                        tempAktivitet.PointType = adapt<int>("PointType", tempEventAktivitet);
+                        tempAktivitet.HoldSport = adapt<int>("HoldSport", tempEventAktivitet);
+                        eah.EventAktivitet = tempAktivitet;
+
                         List<object> scores = adapt<List<object>>("HoldScores", _aktivitetHold);
                         foreach (object _score in scores)
                         {
