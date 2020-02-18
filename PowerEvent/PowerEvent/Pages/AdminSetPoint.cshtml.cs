@@ -41,7 +41,10 @@ namespace PowerEvent
                 {
                     if (AktivitetList.Count == 0)
                     {
-                        valgtAktivitet = DBAdapter.getAktivitet(SelectedEvent, SelectedAktivitet)[0];
+                        if (SelectedAktivitet != -1)
+                        {
+                            valgtAktivitet = DBAdapter.getAktivitet(SelectedEvent, SelectedAktivitet)[0];
+                        }
                     }
                     else
                     {
@@ -226,6 +229,7 @@ namespace PowerEvent
                 {
                     guiSelectedListReset();
                     saveTempDataEvent();
+                    SelectedAktivitet = -1;
                 }
             }
             else if (navn == "AktivitetList")

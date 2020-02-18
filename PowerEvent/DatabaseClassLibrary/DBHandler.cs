@@ -216,6 +216,7 @@ namespace DatabaseClassLibrary
             return retur;
         }
 
+        //returnerer alle EventAktivitetHold (inklusiv deres "holdscores") i det angivne event med "_eventId". hvis "_holdOrder" og "_aktivitetId" er angivet; returnerer alle EventAktivitetHold med "_aktivitetId" og "_holdOrder"
         private static List<EventAktivitetHold> getHoldAktivitet(int? _eventId, int? _holdOrder = null, int? _aktivitetId = null)
         {
             List<EventAktivitetHold> retur = new List<EventAktivitetHold>();
@@ -224,7 +225,10 @@ namespace DatabaseClassLibrary
             if (_aktivitetId != null)
             {
                 tempAktivitetList = getAktivitetIntern(_eventId, _aktivitetId);
-                tempAktivitet = tempAktivitetList[0];
+                if (tempAktivitetList.Count != 0)
+                {
+                    tempAktivitet = tempAktivitetList[0];
+                }
             }
             using (SqlConnection con = new SqlConnection(connectionString))
             {
@@ -279,6 +283,7 @@ namespace DatabaseClassLibrary
             return retur;
         }
 
+        //returnerer alle EventAktivitetHoldScore fra det angivne event med "_eventId". hvis "_holdOrder" og "_aktivitetId" er angivet; returnerer EventAktivitetHoldScore fra angivne "aktivitet" med den angivne holdOrder.
         private static List<EventAktivitetHoldScore> getHoldAktivitetScores(int? _eventId, int? _holdOrder = null, int? _aktivitetId = null)
         {
             List<EventAktivitetHoldScore> retur = new List<EventAktivitetHoldScore>();
