@@ -36,10 +36,10 @@
             {
                 <div class="col-6 col-md-3 col-lg-2">
                     <br />
-                    <div style="background-color: @_hold.Farve;">
+                    <div>
                         <table style=" height: auto; width: 100%;">
                             <tr>
-                                <th class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em;">@_hold.Navn</th>
+                                <th class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em; background-color: @_hold.Farve; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; color: white">@_hold.Navn</th>
                             </tr>
                             @{
                                 //opretter deltagerne af hver hold
@@ -48,7 +48,7 @@
                                     if (_deltager.HoldId == _hold.Id)
                                     {
                                         <tr>
-                                            <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center">@_deltager.Navn</td>
+                                            <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center;">@_deltager.Navn</td>
                                         </tr>
                                     }
                                 }
