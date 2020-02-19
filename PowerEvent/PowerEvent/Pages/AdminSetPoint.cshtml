@@ -29,7 +29,10 @@
             }
             if (@Model.SelectedEvent != -1)
             {
-                <option value="-1">Vælg en Aktivitet</option>
+                if (@Model.SelectedAktivitet == -1)
+                {
+                    <option value="-1">Vælg en Aktivitet</option>
+                }
                 foreach (var item in @Model.AktivitetList)
                 {
                     <option value="@item.Id">@item.Navn</option>
@@ -42,7 +45,10 @@
             <option value="-1" hidden></option>
             if (@Model.SelectedEvent != -1 && Model.SelectedAktivitet != -1)
             {
-                <option value="-1">Vælg en runde</option>
+                if (@Model.SelectedOrder == -1)
+                {
+                    <option value="-1">Vælg en runde</option>
+                }
                 foreach (var item in @Model.OrderList)
                 {
                     <option value="@item">@item</option>
@@ -137,15 +143,13 @@
                                                 }
                                                 else if (Model.ValgtAktivitet.HoldSport == 0)
                                                 {
-                                                    @*
-                                                        if (@Model.DeltagerList[Model.SelectedDeltager].ScoreList != null)
+                                                    @*if (true)
+                                                    {
+                                                        foreach (var item in @Model.HoldList.Where(i => i.Id == @Model.SelectedHold).HoldAktiviteter )
                                                         {
-                                                            foreach (var item in @Model.DeltagerList[Model.SelectedDeltager].ScoreList)
-                                                            {
-                                                                <option value="@item.Id">@item.Score</option>
-                                                            }
+                                                            <option value="@item.Id">@item.HoldScore</option>
                                                         }
-                                                    *@
+                                                    }*@
                                                 }
                                             }
                                         </select>
