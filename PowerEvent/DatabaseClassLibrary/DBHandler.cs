@@ -488,11 +488,11 @@ namespace DatabaseClassLibrary
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = "SELECT distinct _eah.HoldOrder FROM EventAktivitetHold _eah, EventAktivitet _ea Where _ea.Id = _eah.EventAktivitetId AND _ea.EventId = 1";
+                string sql = "SELECT distinct _eah.HoldOrder FROM EventAktivitetHold _eah, EventAktivitet _ea Where _ea.Id = _eah.EventAktivitetId AND _ea.EventId = @EventId";
                 
                 if (_aktivitetId != null)
                 {                    
-                    sql += " AND _a.Id = @AktivitetId";
+                    sql += " AND _ea.AktivitetId = @AktivitetId";
                 }
                 con.Open();
                 SqlCommand cmd = new SqlCommand(sql, con);                
@@ -507,7 +507,7 @@ namespace DatabaseClassLibrary
                 while (reader.Read())
                 {
                     retur.Add(
-                        int.Parse(reader["Id"].ToString()) 
+                        int.Parse(reader["HoldOrder"].ToString()) 
                         );
                 }
                 reader.Close();

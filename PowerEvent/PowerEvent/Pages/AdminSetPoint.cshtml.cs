@@ -92,6 +92,8 @@ namespace PowerEvent
         
         public List<Aktivitet> AktivitetList { get; set; }
 
+        public List<int> OrderList { get; set; }
+
         public void OnGet()
         {
             SelectedEvent = -1;
@@ -107,13 +109,18 @@ namespace PowerEvent
             checkListScript();
             if (SelectedEvent != -1)
             {
+                loadTempDataEvent();
+                if (SelectedEvent != -1)
+                {
+                    AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+                }
                 if (AktivitetList.Count == 0)
                 {
                     AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
                 }
                 if (SelectedAktivitet != -1)
                 {
-                    //hent orderlist ind!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    OrderList = DBAdapter.getHoldOrder(SelectedEvent, SelectedAktivitet);
                     if (SelectedOrder != -1)
                     {
                         HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedAktivitet);
@@ -212,15 +219,6 @@ namespace PowerEvent
             {
             }
 
-
-            if (SelectedEvent == -1)
-            {
-                loadTempDataEvent();
-                if (SelectedEvent != -1)
-                {
-                    AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
-                }
-            }
 
 
             if (navn == "EventList")

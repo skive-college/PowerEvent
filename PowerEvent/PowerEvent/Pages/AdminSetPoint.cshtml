@@ -29,10 +29,7 @@
             }
             if (@Model.SelectedEvent != -1)
             {
-                if (@Model.SelectedAktivitet == -1)
-                {
-                    <option value="-1">Vælg en Aktivitet</option>
-                }
+                <option value="-1">Vælg en Aktivitet</option>
                 foreach (var item in @Model.AktivitetList)
                 {
                     <option value="@item.Id">@item.Navn</option>
@@ -42,22 +39,14 @@
     </select>
     <select id="OrderList" asp-for="@Model.SelectedOrder" onchange="listChanged('OrderList')">
         @{
-            if (Model.SelectedEvent == -1 || Model.SelectedAktivitet == -1)
-            {
-                <option value="-1" hidden></option>
-            }
+            <option value="-1" hidden></option>
             if (@Model.SelectedEvent != -1 && Model.SelectedAktivitet != -1)
             {
-                if (Model.SelectedOrder == -1)
+                <option value="-1">Vælg en runde</option>
+                foreach (var item in @Model.OrderList)
                 {
-                    <option value="-1">Vælg en runde</option>
+                    <option value="@item">@item</option>
                 }
-                //lav database metode til alle runder. tilpas derefter databasemetode til at kunne returnerer alle hold baset på deres eventAktivitetHold.Holdorder
-                <option value="1">Runde1</option>
-                <option value="2">Runde2</option>
-                <option value="3">Runde3</option>
-                <option value="4">Runde4</option>
-                <option value="5">Runde5</option>
             }
         }
 
