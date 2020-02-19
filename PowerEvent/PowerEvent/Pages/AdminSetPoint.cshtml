@@ -151,7 +151,7 @@
                                         </select>
                                     </div>
                                     <div class="row">
-                                        <input type="text" placeholder="Giv point" />
+                                        <input type="text" asp-for="@Model.Score" placeholder="Giv point" />
                                         <input type="submit" value="Gem" asp-page-handler="CmdAddPoint" />
                                         <input type="submit" value="Slet" asp-page-handler="CmdDeletePoint" />
                                     </div>

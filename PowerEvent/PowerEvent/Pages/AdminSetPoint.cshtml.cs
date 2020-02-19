@@ -13,6 +13,9 @@ namespace PowerEvent
     public class AdminSetPointModel : PageModel
     {
         [BindProperty]
+        public int Score { get; set; }
+
+        [BindProperty]
         public int SelectedEvent { get; set; }
 
         [BindProperty]
@@ -150,10 +153,15 @@ namespace PowerEvent
         {
             if (ValgtAktivitet.HoldSport == 0)
             {
-
+                //HoldSport Add HOLD score 
+                if (Score != null)
+                {
+                    DBAdapter.(Score);
+                }
             }
             else if (ValgtAktivitet.HoldSport == 1)
             {
+                //HoldSport Add DELTAGER score
 
             }
         }
@@ -162,10 +170,12 @@ namespace PowerEvent
         {
             if (ValgtAktivitet.HoldSport == 0)
             {
+                //HoldSport Delete HOLD score
 
             }
             else if (ValgtAktivitet.HoldSport == 1)
             {
+                //HoldSport Deltete DELTAGER score
 
             }
         }

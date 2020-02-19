@@ -322,6 +322,23 @@ namespace DatabaseClassLibrary
             }
             return retur;
         }
+
+        public static void addHoldScore(int _eventId, int _aktivitetId, int _holdOrder, int _holdId, int _score)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "INSERT INTO Aktivitet Values(@Navn, @PointType, @HoldSport) FROM EventAktivitetHoldScore _eahs, EventAktivitetHold _eah, EventAktivitet _ea WHERE _eahs.EventAktivitetHoldId = _eah.Id AND _eah.EventAktivitetId = _ea.Id AND _ea.EventId ";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@eventId", _eventId);
+                command.Parameters.AddWithValue("@aktivitetId", _aktivitetId);
+                command.Parameters.AddWithValue("@holdOrder", _holdOrder);
+                command.Parameters.AddWithValue("@holdId", _holdId);
+                command.Parameters.AddWithValue("@score", _score);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
         //___________________________________________________________________________________________________________alt med Hold ↑
 
         //___________________________________________________________________________________________________________alt med Deltagere ↓
