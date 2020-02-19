@@ -63,6 +63,7 @@ namespace PowerEvent.Helpers
                 tempHold.HoldAktiviteter = new List<EventAktivitetHold>();
                 tempHold.Id = adapt<int>("Id", _object);
                 tempHold.Navn = adapt<string>("Navn", _object);
+                tempHold.Farve = adapt<string>("Farve", _object);
                 if (_holdOrder != null || _aktivitetId != null)
                 {
                     List<object> tempAktivitetHoldList = adapt<List<object>>("HoldAktiviteter", _object);

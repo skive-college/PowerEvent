@@ -138,7 +138,7 @@ namespace DatabaseClassLibrary
             List<Hold> holdList = new List<Hold>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = "SELECT distinct _h.Id, _h.Navn";
+                string sql = "SELECT distinct _h.Id, _h.Navn, _h.Farve";
                 sql += " FROM Hold _h";
                 if (_eventId != null)
                 {
@@ -175,7 +175,7 @@ namespace DatabaseClassLibrary
 
                 while (reader.Read())
                 {
-                    holdList.Add(new Hold() { Id = int.Parse(reader["Id"].ToString()), Navn = reader["Navn"].ToString() });
+                    holdList.Add(new Hold() { Id = int.Parse(reader["Id"].ToString()), Navn = reader["Navn"].ToString(), Farve = reader["Farve"].ToString() });
                 }
                 reader.Close();
             }
@@ -214,7 +214,7 @@ namespace DatabaseClassLibrary
                         hAktivitetList.Add(tempHoldAktivitet);
                     }
                 }
-                retur.Add(new { Id = _hold.Id, Navn = _hold.Navn, HoldAktiviteter = hAktivitetList }
+                retur.Add(new { Id = _hold.Id, Navn = _hold.Navn, Farve = _hold.Farve, HoldAktiviteter = hAktivitetList }
                     );
             }
             return retur;
