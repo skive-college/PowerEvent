@@ -129,30 +129,30 @@ namespace PowerEvent.Pages
 
                 if (item.PointType == 0)
                 {
-                    pointTxt = " MinPoint";
+                    pointTxt = "MinScore";
                 }
                 else if (item.PointType == 1)
                 {
-                    pointTxt = " MaxPoint";
+                    pointTxt = "MaxScore";
                 }
                 else if (item.PointType == 2)
                 {
-                    pointTxt = " MinSec";
+                    pointTxt = "MinSec";
                 }
                 else if (item.PointType == 3)
                 {
-                    pointTxt = " MaxSec";
+                    pointTxt = "MaxSec";
                 }
                 //----------------------------------------------
                 if (item.HoldSport == 0)
                 {
-                    holdSportTxt = " Hold point";
+                    holdSportTxt = "HoldScore";
                 }
                 else if (item.HoldSport == 1)
                 {
-                    holdSportTxt = " Deltager point";
+                    holdSportTxt = "DeltagerScore";
                 }
-                temp.Add(new SelectListItem { Value = item.Id + "", Text = item.Navn + pointTxt + holdSportTxt});
+                temp.Add(new SelectListItem { Value = item.Id + "", Text = "Aktivitet: " + item.Navn + ". PointType: " + pointTxt + ", " + holdSportTxt});
                 i++;
             }
             AktivitetList = temp;
