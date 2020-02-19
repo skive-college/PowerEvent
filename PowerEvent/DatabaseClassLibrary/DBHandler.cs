@@ -482,7 +482,7 @@ namespace DatabaseClassLibrary
 
         //___________________________________________________________________________________________________________Alt med Hold Order ↓
 
-        private static List<int> getHoldOrder(int _eventId, int? _aktivitetId = null)
+        public static List<int> getHoldOrder(int _eventId, int? _aktivitetId = null)
         {
             List<int> retur = new List<int>();
 

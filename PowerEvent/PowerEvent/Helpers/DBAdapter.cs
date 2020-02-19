@@ -139,6 +139,18 @@ namespace PowerEvent.Helpers
 
 
 
+        public static List<int> getHoldOrder(int _eventId, int? _aktivitetId = null)
+        {
+           
+            return DBHandler.getHoldOrder(_eventId, _aktivitetId);
+        }
+
+
+
+
+
+//_____________________________________________________________________________________________________________
+
         //trækker en "property" ud af det "object". <T> = f.eks "string" eller int;
         private static T adapt<T>(string _property, object _object)
         {
