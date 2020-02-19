@@ -11,7 +11,7 @@ namespace PowerEvent.Models
 
         public string Navn { get; set; }
 
-        public int HoldId { get; set; }
+        public int? HoldId { get; set; }
 
         public int EventId { get; set; }
 

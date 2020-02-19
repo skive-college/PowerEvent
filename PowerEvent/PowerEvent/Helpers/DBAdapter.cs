@@ -110,7 +110,7 @@ namespace PowerEvent.Helpers
                 tempdeltager.ScoreList = new List<DeltagerScore>();
                 tempdeltager.Id = adapt<int>("Id", _object);
                 tempdeltager.Navn = adapt<string>("Navn", _object);
-                tempdeltager.HoldId = adapt<int>("HoldId", _object);
+                tempdeltager.HoldId = adapt<int?>("HoldId", _object);
                 tempdeltager.EventId = adapt<int>("EventId", _object);
                 if (_aktivitetId != null)
                 {

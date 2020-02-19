@@ -382,8 +382,10 @@ namespace DatabaseClassLibrary
 
                 while (reader.Read())
                 {
+                    int? tempHoldId = null;
+                    tempHoldId = int.Parse(reader["HoldId"].ToString());
                     deltagerList.Add(
-                        new Deltager{ Id = int.Parse(reader["Id"].ToString()), Navn = reader["Navn"].ToString(), HoldId = int.Parse(reader["HoldId"].ToString()), EventId = int.Parse(reader["EventId"].ToString()) }
+                        new Deltager{ Id = int.Parse(reader["Id"].ToString()), Navn = reader["Navn"].ToString(), HoldId = tempHoldId, EventId = int.Parse(reader["EventId"].ToString()) }
                     );
                 }
                 reader.Close();
