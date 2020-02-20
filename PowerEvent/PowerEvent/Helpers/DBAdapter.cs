@@ -99,6 +99,11 @@ namespace PowerEvent.Helpers
             return holdList;
         }
 
+        public static void addHoldScore(int _eventId, int _aktivitetId, int _holdOrder, int _holdId, int _score)
+        {
+            DBHandler.addHoldScore(_eventId, _aktivitetId, _holdOrder, _holdId, _score);
+        }
+
         public static List<Deltager> getDeltagere(int _eventId, int? _aktivitetId = null, int? _holdId = null, int? _deltagerId = null)
         {
             List<object> DbList = DBHandler.getDeltagere(_eventId, _aktivitetId, _holdId, _deltagerId);
