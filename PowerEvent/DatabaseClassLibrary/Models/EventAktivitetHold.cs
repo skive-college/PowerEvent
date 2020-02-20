@@ -13,8 +13,6 @@ namespace DatabaseClassLibrary.Models
 
         public int HoldId { get; set; }
 
-        public Aktivitet EventAktivitet { get; set; }
-
         public int? Point { get; set; }
 
         public int HoldOrder { get; set; }

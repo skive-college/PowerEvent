@@ -128,6 +128,8 @@ namespace PowerEvent
                     if (SelectedOrder != -1)
                     {
                         HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedAktivitet);
+                        HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent, SelectedOrder, SelectedAktivitet);
+                        HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent, SelectedOrder, SelectedAktivitet);
                         if (SelectedHold != -1)
                         {
                             if (ValgtAktivitet.HoldSport == 1)
