@@ -129,68 +129,51 @@ namespace DatabaseClassLibrary
         }
 
 
-        //public static List<object> getEventAktivitet(int? _eventId = null, int? _aktivitetId = null)
-        //{
-        //    List<object> retur = new List<object>();
-        //    List<EventAktivitet> aktivitetList = getAktivitetIntern(_eventId, _aktivitetId);
-        //    foreach (Aktivitet _aktivitet in aktivitetList)
-        //    {
-        //        retur.Add(
-        //                new { Id = _aktivitet.Id, Navn = _aktivitet.Navn, PointType = _aktivitet.PointType, HoldSport = _aktivitet.HoldSport }
-        //                );
-        //    }
-        //    return retur;
-        //}
+        public static List<object> getEventAktivitet(int _eventId, int? _aktivitetId = null)
+        {
+            List<object> retur = new List<object>();
+            List<EventAktivitet> aktivitetList = getEventAktivitetIntern(_eventId, _aktivitetId);
+            foreach (EventAktivitet _eventAktivitet in aktivitetList)
+            {
+                retur.Add(
+                        new { Id = _eventAktivitet.Id, EventId = _eventAktivitet.EventId, AktivitetId = _eventAktivitet.AktivitetId }
+                        );
+            }
+            return retur;
+        }
 
-        //private static List<EventAktivitet> getEventAktivitetIntern(int? _eventId = null, int? _aktivitetId = null)
-        //{
-        //    List<Aktivitet> retur = new List<Aktivitet>();
+        private static List<EventAktivitet> getEventAktivitetIntern(int _eventId, int? _aktivitetId = null)
+        {
+            List<EventAktivitet> retur = new List<EventAktivitet>();
 
-        //    using (SqlConnection con = new SqlConnection(connectionString))
-        //    {
-        //        string sql = "SELECT _a.Id, _a.Navn, _a.PointType ,_a.HoldSport FROM Aktivitet _a";
-        //        if (_eventId != null)
-        //        {
-        //            sql += ", EventAktivitet _ea";
-        //        }
-        //        if (_eventId != null || _aktivitetId != null)
-        //        {
-        //            sql += " WHERE";
-        //        }
-        //        if (_eventId != null)
-        //        {
-        //            sql += " _a.Id = _ea.AktivitetId AND _ea.EventId = @EventId";
-        //        }
-        //        if (_aktivitetId != null)
-        //        {
-        //            if (_eventId != null)
-        //            {
-        //                sql += " AND";
-        //            }
-        //            sql += " _a.Id = @AktivitetId";
-        //        }
-        //        con.Open();
-        //        SqlCommand cmd = new SqlCommand(sql, con);
-        //        if (_eventId != null)
-        //        {
-        //            cmd.Parameters.AddWithValue("@EventId", _eventId);
-        //        }
-        //        if (_aktivitetId != null)
-        //        {
-        //            cmd.Parameters.AddWithValue("@AktivitetId", _aktivitetId);
-        //        }
-        //        SqlDataReader reader = cmd.ExecuteReader();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "SELECT _ea.Id, _ea.EventId, _ea.AktivitetId FROM EventAktivitet _ea WHERE _ea.EventId = @EventId";
+                if (_aktivitetId != null)
+                {
+                    sql += " AND _ea.AktivitetId = @AktivitetId";
+                }
+                con.Open();
+                SqlCommand cmd = new SqlCommand(sql, con);
 
-        //        while (reader.Read())
-        //        {
-        //            retur.Add(
-        //                new Aktivitet { Id = int.Parse(reader["Id"].ToString()), Navn = reader["Navn"].ToString(), PointType = int.Parse(reader["PointType"].ToString()), HoldSport = int.Parse(reader["HoldSport"].ToString()) }
-        //                );
-        //        }
-        //        reader.Close();
-        //    }
-        //    return retur;
-        //}
+                cmd.Parameters.AddWithValue("@EventId", _eventId);
+
+                if (_aktivitetId != null)
+                {
+                    cmd.Parameters.AddWithValue("@AktivitetId", _aktivitetId);
+                }
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    retur.Add(
+                        new EventAktivitet { Id = int.Parse(reader["Id"].ToString()), EventId = int.Parse(reader["EventId"].ToString()), AktivitetId = int.Parse(reader["AktivitetId"].ToString()) }
+                        );
+                }
+                reader.Close();
+            }
+            return retur;
+        }
 
 
         //___________________________________________________________________________________________________________alt med Aktivitet ↑
