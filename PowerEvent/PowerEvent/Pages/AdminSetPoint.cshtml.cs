@@ -12,7 +12,6 @@ namespace PowerEvent
 {
     public class AdminSetPointModel : PageModel
     {
-        [BindProperty]
         public int? TxtScore { get; set; }
 
         [BindProperty]
@@ -97,11 +96,15 @@ namespace PowerEvent
 
         public List<int> OrderList { get; set; }
 
+        public int ValgtKnap { get; set; }
+
+
         public void OnGet()
         {
             SelectedEvent = -1;
             SelectedAktivitet = -1;
             SelectedOrder = -1;
+            ValgtKnap = 0;
             TxtScore = null;
             guiSelectedListReset();
             AktivitetList = new List<Aktivitet>();
@@ -140,6 +143,21 @@ namespace PowerEvent
                         }
                     }
                 }
+                if (ValgtKnap != 0)
+                {
+                    switch (ValgtKnap)
+                    {
+                        case 1:
+                            CmdAddPoint();
+                            break;
+                        case 2:
+                            CmdDeletePoint();
+                            break;
+                    }
+                    HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedAktivitet);
+                    HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent, SelectedOrder, SelectedAktivitet);
+                    HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent, SelectedOrder, SelectedAktivitet);
+                }
             }
         }
 
@@ -153,9 +171,8 @@ namespace PowerEvent
 
         }
 
-        public void OnPostCmdAddPoint()
+        public void CmdAddPoint()
         {
-            OnGet();
             if (ValgtAktivitet.HoldSport == 0)
             {
                 //HoldSport Add HOLD score 
@@ -166,19 +183,23 @@ namespace PowerEvent
             }
             else if (ValgtAktivitet.HoldSport == 1)
             {
+                if (TxtScore != null)
+                {
+                    
+                }
                 //HoldSport Add DELTAGER score
             }
         }
 
-        public void OnPostCmdDeletePoint()
+        public void CmdDeletePoint()
         {
-            OnGet();
             if (ValgtAktivitet.HoldSport == 0)
             {
                 //HoldSport Delete HOLD score
                 if (SelectedPoint != -1)
                 {
                     DBAdapter.deleteHoldScore(SelectedPoint);
+                    SelectedPoint = -1;
                 }
             }
             else if (ValgtAktivitet.HoldSport == 1)
@@ -236,6 +257,20 @@ namespace PowerEvent
             catch
             {
             }
+            try
+            {
+                ValgtKnap = int.Parse(Request.Query["valgtKnap"]);
+            }
+            catch
+            {
+            }
+            try
+            {
+                TxtScore = int.Parse(Request.Query["txtScore"]);
+            }
+            catch
+            {
+            }
 
 
 
@@ -281,7 +316,7 @@ namespace PowerEvent
             {
                 if (SelectedDeltager != -1)
                 {
-                    
+
                 }
             }
         }
