@@ -172,6 +172,7 @@ namespace PowerEvent
 
         public void OnPostCmdDeletePoint()
         {
+            OnGet();
             if (ValgtAktivitet.HoldSport == 0)
             {
                 //HoldSport Delete HOLD score
