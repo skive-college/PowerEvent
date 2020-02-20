@@ -325,18 +325,20 @@ namespace DatabaseClassLibrary
 
         public static void addHoldScore(int _eventId, int _aktivitetId, int _holdOrder, int _holdId, int _score)
         {
-            using (SqlConnection con = new SqlConnection(connectionString))
+            List<EventAktivitetHold> tempList = getHoldAktivitet(_eventId, _holdOrder, _aktivitetId);
+            EventAktivitetHold temphold = new EventAktivitetHold();
+            temphold = tempList.Where(i => i.EventAktivitetId == _holdId).FirstOrDefault();
+            if (temphold != null)
             {
-                string sql = "INSERT INTO Aktivitet Values(@Navn, @PointType, @HoldSport) FROM EventAktivitetHoldScore _eahs, EventAktivitetHold _eah, EventAktivitet _ea WHERE _eahs.EventAktivitetHoldId = _eah.Id AND _eah.EventAktivitetId = _ea.Id AND _ea.EventId ";
-
-                SqlCommand command = new SqlCommand(sql, con);
-                command.Parameters.AddWithValue("@eventId", _eventId);
-                command.Parameters.AddWithValue("@aktivitetId", _aktivitetId);
-                command.Parameters.AddWithValue("@holdOrder", _holdOrder);
-                command.Parameters.AddWithValue("@holdId", _holdId);
-                command.Parameters.AddWithValue("@score", _score);
-                con.Open();
-                command.ExecuteNonQuery();
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    string sql = "INSERT INTO EventAktivitetHoldScore Values(@EventAktivitetHoldId, @HoldScore)";
+                    SqlCommand command = new SqlCommand(sql, con);
+                    command.Parameters.AddWithValue("@EventAktivitetHoldId", temphold);
+                    command.Parameters.AddWithValue("@HoldScore", _score);
+                    con.Open();
+                    command.ExecuteNonQuery();
+                }
             }
         }
         //___________________________________________________________________________________________________________alt med Hold ↑

@@ -13,7 +13,7 @@ namespace PowerEvent
     public class AdminSetPointModel : PageModel
     {
         [BindProperty]
-        public int Score { get; set; }
+        public int? TxtScore { get; set; }
 
         [BindProperty]
         public int SelectedEvent { get; set; }
@@ -102,6 +102,7 @@ namespace PowerEvent
             SelectedEvent = -1;
             SelectedAktivitet = -1;
             SelectedOrder = -1;
+            TxtScore = null;
             guiSelectedListReset();
             AktivitetList = new List<Aktivitet>();
             HoldList = new List<Hold>();
@@ -151,18 +152,18 @@ namespace PowerEvent
 
         public void OnPostCmdAddPoint()
         {
+            OnGet();
             if (ValgtAktivitet.HoldSport == 0)
             {
                 //HoldSport Add HOLD score 
-                if (Score != null)
+                if (TxtScore != null)
                 {
-                   // DBAdapter.(Score);
+                    DBAdapter.addHoldScore(SelectedEvent, SelectedAktivitet, SelectedOrder, SelectedHold, TxtScore.Value);
                 }
             }
             else if (ValgtAktivitet.HoldSport == 1)
             {
                 //HoldSport Add DELTAGER score
-
             }
         }
 
