@@ -273,6 +273,11 @@ namespace PowerEvent
             }
 
 
+            if (SelectedEvent == -1)
+            {
+                loadTempDataEvent();
+            }
+
 
             if (navn == "EventList")
             {

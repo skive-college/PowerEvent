@@ -40,8 +40,7 @@ namespace PowerEvent.Pages
 
         public void OnPost()
         {
-            EventList = DBAdapter.getEvent();
-            checkListScript();
+
         }
 
 
