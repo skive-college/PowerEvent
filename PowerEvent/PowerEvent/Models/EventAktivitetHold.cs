@@ -9,7 +9,9 @@ namespace PowerEvent.Models
     {
         public int Id { get; set; }
 
-        public Aktivitet EventAktivitet { get; set; }
+        public int EventAktivitetId { get; set; }
+
+        public int HoldId { get; set; }
 
         public int? Point { get; set; }
 

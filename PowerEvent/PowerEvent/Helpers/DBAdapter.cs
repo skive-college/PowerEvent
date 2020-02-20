@@ -52,6 +52,24 @@ namespace PowerEvent.Helpers
             DBHandler.addAktivitet(_navn ,_pointType, _holdSport);
         }
 
+
+        public static List<EventAktivitet> getEventAktivitet(int _eventId, int? _aktivitetId = null)
+        {
+            List<object> dbList = DBHandler.getEventAktivitet(_eventId, _aktivitetId);
+            List<EventAktivitet> AktivitetList = new List<EventAktivitet>();
+
+            foreach (object _object in dbList)
+            {
+                EventAktivitet temp = new EventAktivitet();
+                temp.Id = adapt<int>("Id", _object);
+                temp.EventId = adapt<int>("Navn", _object);
+                temp.AktivitetId = adapt<int>("PointType", _object);
+                AktivitetList.Add(temp);
+            }
+            return AktivitetList;
+        }
+
+
         public static List<Hold> getHold(int? _eventId = null, int? _holdOrder = null, int? _aktivitetId = null)
         {
             List<object> dbList = DBHandler.getHold(_eventId, _holdOrder, _aktivitetId);
@@ -64,42 +82,70 @@ namespace PowerEvent.Helpers
                 tempHold.Id = adapt<int>("Id", _object);
                 tempHold.Navn = adapt<string>("Navn", _object);
                 tempHold.Farve = adapt<string>("Farve", _object);
-                if (_holdOrder != null || _aktivitetId != null)
-                {
-                    List<object> tempAktivitetHoldList = adapt<List<object>>("HoldAktiviteter", _object);
-                    foreach (object _aktivitetHold in tempAktivitetHoldList)
-                    {
-                        EventAktivitetHold eah = new EventAktivitetHold();
-                        eah.HoldScores = new List<EventAktivitetHoldScore>();
-                        eah.Id = adapt<int>("Id", _aktivitetHold);
-                        eah.Point = adapt<int?>("Point", _aktivitetHold);
-                        eah.HoldOrder = adapt<int>("HoldOrder", _aktivitetHold);
-
-                        object tempEventAktivitet = adapt<object>("EventAktivitet", _aktivitetHold);
-                        Aktivitet tempAktivitet = new Aktivitet();
-                        tempAktivitet.Id = adapt<int> ("Id", tempEventAktivitet);
-                        tempAktivitet.Navn = adapt<string>("Navn", tempEventAktivitet);
-                        tempAktivitet.PointType = adapt<int>("PointType", tempEventAktivitet);
-                        tempAktivitet.HoldSport = adapt<int>("HoldSport", tempEventAktivitet);
-                        eah.EventAktivitet = tempAktivitet;
-
-                        List<object> scores = adapt<List<object>>("HoldScores", _aktivitetHold);
-                        foreach (object _score in scores)
-                        {
-                            EventAktivitetHoldScore tempHoldScores = new EventAktivitetHoldScore();
-                            tempHoldScores.Id = adapt<int>("Id", _score);
-                            tempHoldScores.HoldScore = adapt<int>("HoldScore", _score);
-                            eah.HoldScores.Add(tempHoldScores);
-                        }
-                        tempHold.HoldAktiviteter.Add(eah);
-                    }
-                }
+                
                 holdList.Add(tempHold);
             }
             return holdList;
         }
+        public static List<Hold> getHoldAktivitet(List<Hold> _holdList, int? _eventId = null, int? _holdOrder = null, int? _aktivitetId = null)
+        {
+            List<object> tempAktivitetHoldList = DBHandler.getHoldAktivitet(_eventId, _holdOrder, _aktivitetId);
+            List<EventAktivitetHold> eventAktivitetHoldList = new List<EventAktivitetHold>();
+            foreach (object _aktivitetHold in tempAktivitetHoldList)
+            {
+                EventAktivitetHold eah = new EventAktivitetHold();
+                eah.HoldScores = new List<EventAktivitetHoldScore>();
+                eah.Id = adapt<int>("Id", _aktivitetHold);
+                eah.EventAktivitetId = adapt<int>("EventAktivitetId", _aktivitetHold);
+                eah.HoldId = adapt<int>("HoldId", _aktivitetHold);
+                eah.Point = adapt<int?>("Point", _aktivitetHold);
+                eah.HoldOrder = adapt<int>("HoldOrder", _aktivitetHold);
+                
+                eventAktivitetHoldList.Add(eah);
+            }
+            foreach (Hold _hold in _holdList)
+            {
+                _hold.HoldAktiviteter = new List<EventAktivitetHold>();
+                _hold.HoldAktiviteter.AddRange(eventAktivitetHoldList.Where(i => i.HoldId == _hold.Id).ToList());
+                if (_hold.HoldAktiviteter != null)
+                {
+                    eventAktivitetHoldList.RemoveAll(i => i.HoldId == _hold.Id);
+                }
+            }
+            return _holdList;
 
-        public static void addHoldScore(int _eventId, int _aktivitetId, int _holdOrder, int _holdId, int _score)
+        }
+
+        public static List<Hold> getHoldAktivitetScores(List<Hold> _holdList, int? _eventId = null, int? _holdOrder = null, int? _aktivitetId = null)
+        {
+            List<object> scores = DBHandler.getHoldAktivitetScores(_eventId, _holdOrder, _aktivitetId);
+            List<EventAktivitetHoldScore> scoreList = new List<EventAktivitetHoldScore>();
+            foreach (object _score in scores)
+            {
+                EventAktivitetHoldScore tempHoldScores = new EventAktivitetHoldScore();
+                tempHoldScores.Id = adapt<int>("Id", _score);
+                tempHoldScores.EventAktivitetHoldId = adapt<int>("EventAktivitetHoldId", _score);
+                tempHoldScores.HoldScore = adapt<int>("HoldScore", _score);
+                scoreList.Add(tempHoldScores);
+            }
+
+            foreach (Hold _hold in _holdList)
+            {
+                foreach (EventAktivitetHold _aktivitetHold in _hold.HoldAktiviteter)
+                {
+                    _aktivitetHold.HoldScores = new List<EventAktivitetHoldScore>();
+                    _aktivitetHold.HoldScores.AddRange(scoreList.Where(i => i.EventAktivitetHoldId == _hold.Id).ToList());
+                    if (_aktivitetHold.HoldScores != null)
+                    {
+                        scoreList.RemoveAll(i => i.EventAktivitetHoldId == _hold.Id);
+                    }
+                }
+            }
+            return _holdList;
+            
+        }
+
+            public static void addHoldScore(int _eventId, int _aktivitetId, int _holdOrder, int _holdId, int _score)
         {
             DBHandler.addHoldScore(_eventId, _aktivitetId, _holdOrder, _holdId, _score);
         }
