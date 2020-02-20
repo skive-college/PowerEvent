@@ -341,6 +341,19 @@ namespace DatabaseClassLibrary
                 }
             }
         }
+
+        public static void deleteHoldScore(int _id)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "Delete From EventAktivitetHoldScore WHERE id = @Id";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Id", _id);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
         //___________________________________________________________________________________________________________alt med Hold ↑
 
         //___________________________________________________________________________________________________________alt med Deltagere ↓
