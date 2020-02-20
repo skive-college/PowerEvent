@@ -108,6 +108,7 @@ namespace PowerEvent
             HoldList = new List<Hold>();
             DeltagerList = new List<Deltager>();
             EventList = DBAdapter.getEvent();
+            OrderList = new List<int>();
 
 
             checkListScript();
@@ -174,7 +175,10 @@ namespace PowerEvent
             if (ValgtAktivitet.HoldSport == 0)
             {
                 //HoldSport Delete HOLD score
-
+                if (SelectedPoint != -1)
+                {
+                    DBAdapter.deleteHoldScore(SelectedPoint);
+                }
             }
             else if (ValgtAktivitet.HoldSport == 1)
             {

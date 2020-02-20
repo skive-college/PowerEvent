@@ -150,6 +150,11 @@ namespace PowerEvent.Helpers
             DBHandler.addHoldScore(_eventId, _aktivitetId, _holdOrder, _holdId, _score);
         }
 
+        public static void deleteHoldScore(int _id)
+        {
+            DBHandler.deleteHoldScore(_id);
+        }
+
         public static List<Deltager> getDeltagere(int _eventId, int? _aktivitetId = null, int? _holdId = null, int? _deltagerId = null)
         {
             List<object> DbList = DBHandler.getDeltagere(_eventId, _aktivitetId, _holdId, _deltagerId);
