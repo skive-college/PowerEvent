@@ -134,7 +134,7 @@ namespace PowerEvent.Helpers
                 foreach (EventAktivitetHold _aktivitetHold in _hold.HoldAktiviteter)
                 {
                     _aktivitetHold.HoldScores = new List<EventAktivitetHoldScore>();
-                    _aktivitetHold.HoldScores.AddRange(scoreList.Where(i => i.EventAktivitetHoldId == _hold.Id).ToList());
+                    _aktivitetHold.HoldScores.AddRange(scoreList.Where(i => i.EventAktivitetHoldId == _aktivitetHold.Id).ToList());
                     if (_aktivitetHold.HoldScores != null)
                     {
                         scoreList.RemoveAll(i => i.EventAktivitetHoldId == _hold.Id);
