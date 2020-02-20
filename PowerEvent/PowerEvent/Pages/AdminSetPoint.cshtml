@@ -143,13 +143,15 @@
                                                 }
                                                 else if (Model.ValgtAktivitet.HoldSport == 0)
                                                 {
-                                                    @*if (true)
+                                                    if (Model.SelectedHold != -1)
                                                     {
-                                                        foreach (var item in @Model.HoldList.Where(i => i.Id == @Model.SelectedHold).HoldAktiviteter )
+                                                        int holdIndex = Model.HoldList.IndexOf(Model.HoldList.Where(i => i.Id == Model.SelectedHold).FirstOrDefault());
+                                                        int aktivitetIndex = Model.HoldList[holdIndex].HoldAktiviteter.IndexOf(Model.HoldList[holdIndex].HoldAktiviteter.Where(i => i.HoldId == Model.SelectedHold).FirstOrDefault());
+                                                        foreach (var item in @Model.HoldList[holdIndex].HoldAktiviteter[aktivitetIndex].HoldScores)
                                                         {
                                                             <option value="@item.Id">@item.HoldScore</option>
                                                         }
-                                                    }*@
+                                                    }
                                                 }
                                             }
                                         </select>
