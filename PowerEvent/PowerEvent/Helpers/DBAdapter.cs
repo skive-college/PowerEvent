@@ -52,6 +52,24 @@ namespace PowerEvent.Helpers
             DBHandler.addAktivitet(_navn ,_pointType, _holdSport);
         }
 
+
+        public static List<EventAktivitet> getEventAktivitet(int _eventId, int? _aktivitetId = null)
+        {
+            List<object> dbList = DBHandler.getEventAktivitet(_eventId, _aktivitetId);
+            List<EventAktivitet> AktivitetList = new List<EventAktivitet>();
+
+            foreach (object _object in dbList)
+            {
+                EventAktivitet temp = new EventAktivitet();
+                temp.Id = adapt<int>("Id", _object);
+                temp.EventId = adapt<int>("Navn", _object);
+                temp.AktivitetId = adapt<int>("PointType", _object);
+                AktivitetList.Add(temp);
+            }
+            return AktivitetList;
+        }
+
+
         public static List<Hold> getHold(int? _eventId = null, int? _holdOrder = null, int? _aktivitetId = null)
         {
             List<object> dbList = DBHandler.getHold(_eventId, _holdOrder, _aktivitetId);
