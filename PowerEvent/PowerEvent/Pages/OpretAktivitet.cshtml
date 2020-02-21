@@ -38,12 +38,7 @@
             function elementChanged(elementet)
             {
                 let url = new URL(location.href);
-                @{ 
-                    if (true)
-                    {
 
-                    }
-                }
                 let AktivitetList = document.getElementById('AktivitetList');
                 let AktivitetListValgt = AktivitetList.options[AktivitetList.selectedIndex].value;
                 url.searchParams.set("AktivitetList", AktivitetListValgt);
