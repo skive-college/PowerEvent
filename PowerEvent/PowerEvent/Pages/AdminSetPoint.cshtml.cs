@@ -32,6 +32,8 @@ namespace PowerEvent
         [BindProperty]
         public int SelectedPoint { get; set; }
 
+        public string ValgtGuiElemement { get; set; }
+
 
         private Aktivitet valgtAktivitet;
 
@@ -96,15 +98,12 @@ namespace PowerEvent
 
         public List<int> OrderList { get; set; }
 
-        public int ValgtKnap { get; set; }
-
 
         public void OnGet()
         {
             SelectedEvent = -1;
             SelectedAktivitet = -1;
             SelectedOrder = -1;
-            ValgtKnap = 0;
             TxtScore = null;
             guiSelectedListReset();
             AktivitetList = new List<Aktivitet>();
@@ -143,16 +142,15 @@ namespace PowerEvent
                         }
                     }
                 }
-                if (ValgtKnap != 0)
+                if (ValgtGuiElemement == "CmdAddPoint" || ValgtGuiElemement == "CmdDeletePoint")
                 {
-                    switch (ValgtKnap)
+                    if (ValgtGuiElemement == "CmdAddPoint")
                     {
-                        case 1:
-                            CmdAddPoint();
-                            break;
-                        case 2:
-                            CmdDeletePoint();
-                            break;
+                        CmdAddPoint();
+                    }
+                    else if (ValgtGuiElemement == "CmdDeletePoint")
+                    {
+                        CmdDeletePoint();
                     }
                     HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedAktivitet);
                     HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent, SelectedOrder, SelectedAktivitet);
@@ -213,7 +211,7 @@ namespace PowerEvent
         private void checkListScript()
         {
             //on click for select element script. navn = select elementets "navn"
-            string navn = Request.Query["navn"];
+            ValgtGuiElemement = Request.Query["ValgtGuiElemement"];
 
             try
             {
@@ -259,13 +257,6 @@ namespace PowerEvent
             }
             try
             {
-                ValgtKnap = int.Parse(Request.Query["valgtKnap"]);
-            }
-            catch
-            {
-            }
-            try
-            {
                 TxtScore = int.Parse(Request.Query["txtScore"]);
             }
             catch
@@ -279,7 +270,7 @@ namespace PowerEvent
             }
 
 
-            if (navn == "EventList")
+            if (ValgtGuiElemement == "EventList")
             {
                 if (SelectedEvent != -1)
                 {
@@ -288,21 +279,21 @@ namespace PowerEvent
                     SelectedAktivitet = -1;
                 }
             }
-            else if (navn == "AktivitetList")
+            else if (ValgtGuiElemement == "AktivitetList")
             {
                 if (SelectedAktivitet != -1 && SelectedEvent != -1)
                 {
                     guiSelectedListReset();
                 }
             }
-            else if (navn == "OrderList")
+            else if (ValgtGuiElemement == "OrderList")
             {
                 if (SelectedOrder != -1 && SelectedAktivitet != -1 && SelectedEvent != -1)
                 {
                     guiSelectedListReset();
                 }
             }
-            else if (navn == "HoldList")
+            else if (ValgtGuiElemement == "HoldList")
             {
                 if (SelectedHold != -1)
                 {
@@ -310,14 +301,14 @@ namespace PowerEvent
                     SelectedPoint = -1;
                 }
             }
-            else if (navn == "DeltagerList")
+            else if (ValgtGuiElemement == "DeltagerList")
             {
                 if (SelectedDeltager != -1)
                 {
                     SelectedPoint = -1;
                 }
             }
-            else if (navn == "PointList")
+            else if (ValgtGuiElemement == "PointList")
             {
                 if (SelectedDeltager != -1)
                 {

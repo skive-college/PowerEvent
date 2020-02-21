@@ -7,7 +7,7 @@
 
 <form method="post">
     <style> #EventList { width: 120px; } #EventList:focus { min-width: 120px; width: auto; } </style>
-    <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="listChanged('EventList')">
+    <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
         @{
             if (@Model.SelectedEvent == -1)
             {
@@ -21,7 +21,7 @@
         }
     </select>
     <style> #AktivitetList { width: 120px; } #AktivitetList:focus { min-width: 120px; width: auto; } </style>
-    <select id="AktivitetList" asp-for="@Model.SelectedAktivitet" onchange="listChanged('AktivitetList')">
+    <select id="AktivitetList" asp-for="@Model.SelectedAktivitet" onchange="elementChanged('AktivitetList')">
         @{
             if (@Model.SelectedEvent == -1)
             {
@@ -40,7 +40,7 @@
             }
         }
     </select>
-    <select id="OrderList" asp-for="@Model.SelectedOrder" onchange="listChanged('OrderList')">
+    <select id="OrderList" asp-for="@Model.SelectedOrder" onchange="elementChanged('OrderList')">
         @{
             <option value="-1" hidden></option>
             if (@Model.SelectedEvent != -1 && Model.SelectedAktivitet != -1)
@@ -72,7 +72,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <select id="HoldList" onchange="listChanged('HoldList')" asp-for="@Model.SelectedHold" multiple style=" height: 350px; width: 300px" class="col">
+                                        <select id="HoldList" onchange="elementChanged('HoldList')" asp-for="@Model.SelectedHold" multiple style=" height: 350px; width: 300px" class="col">
                                             @{
                                                 <option value="-1" hidden></option>
                                                 foreach (var item in @Model.HoldList)
@@ -96,7 +96,7 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <select id="DeltagerList" asp-for="@Model.SelectedDeltager" onchange="listChanged('DeltagerList')" multiple style=" height: 350px; width: 300px" class="col">
+                                                <select id="DeltagerList" asp-for="@Model.SelectedDeltager" onchange="elementChanged('DeltagerList')" multiple style=" height: 350px; width: 300px" class="col">
                                                     @{
                                                         <option value="-1" hidden></option>
                                                         foreach (var item in @Model.DeltagerList)
@@ -128,7 +128,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <select id="PointList" asp-for="@Model.SelectedPoint" onchange="listChanged('PointList')" multiple style=" height: 350px; width: 300px" class="col">
+                                        <select id="PointList" asp-for="@Model.SelectedPoint" onchange="elementChanged('PointList')" multiple style=" height: 350px; width: 300px" class="col">
                                             @{
                                                 <option value="-1" hidden></option>
                                                 if (Model.ValgtAktivitet.HoldSport == 1 && Model.SelectedDeltager != -1)
@@ -156,8 +156,8 @@
                                     </div>
                                     <div class="row">
                                         <input id="TxtScore" type="text" placeholder="Giv point"/>
-                                        <input type="button" value="Gem" onclick="listChanged('CmdAddPoint')"/>
-                                        <input type="button" value="Slet" onclick="listChanged('CmdDeletePoint')"/>
+                                        <input type="button" value="Gem" onclick="elementChanged('CmdAddPoint')"/>
+                                        <input type="button" value="Slet" onclick="elementChanged('CmdDeletePoint')"/>
                                     </div>
                                 </div>
                                 <br />
@@ -173,11 +173,10 @@
 @section Scripts
 {
     <script>
-            function listChanged(listen)
+            function elementChanged(elementet)
             {
                 let url = new URL(location.href);
 
-                url.searchParams.set("valgtKnap", 0);
                 url.searchParams.set("HoldList", -1);
                 url.searchParams.set("DeltagerList", -1);
                 url.searchParams.set("PointList", -1);
@@ -215,17 +214,12 @@
                         }
                     }
                 }
-                if (listen == 'CmdAddPoint') {
+                if (elementet == 'CmdAddPoint') {
                     let tekstfelt = document.getElementById('TxtScore').value;
                     url.searchParams.set("TxtScore", tekstfelt);
-                    url.searchParams.set("valgtKnap", 1);
-                }
-                else if (listen == 'CmdDeletePoint') {
-                    let tekstfelt = document.getElementById('TxtScore');
-                    url.searchParams.set("valgtKnap", 2);
                 }
 
-                url.searchParams.set("navn", listen);
+                url.searchParams.set("ValgtGuiElemement", elementet);
                 location.href = url;
             }
     </script>

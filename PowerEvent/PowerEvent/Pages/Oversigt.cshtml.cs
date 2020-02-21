@@ -24,6 +24,8 @@ namespace PowerEvent.Pages
 
         public List<Deltager> DeltagerList { get; set; }
 
+        public string ValgtGuiElemement { get; set; }
+
 
         public void OnGet()
         {
@@ -65,8 +67,8 @@ namespace PowerEvent.Pages
                 }
             }
 
-            string navn = Request.Query["navn"];
-            if (navn == "EventList")
+            ValgtGuiElemement = Request.Query["ValgtGuiElemement"];
+            if (ValgtGuiElemement == "EventList")
             {
                 if (SelectedEvent != -1)
                 {

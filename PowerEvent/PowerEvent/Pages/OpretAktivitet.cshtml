@@ -4,30 +4,53 @@
     ViewData["Title"] = "OpretAktivitet";
 }
 
-    <div class="container">
-        <form method="Post">
-            Opret aktivitet: <input type="text" asp-for="@Model.Aktivitet" placeholder="Aktivitet" />
-            <select data-val="true" asp-for="@Model.SelectedPointType">
-                @{
-                    foreach (var item in @Model.PointTypeList)
+<div class="container">
+    <form method="Post">
+        Opret aktivitet: <input type="text" asp-for="@Model.Aktivitet" placeholder="Aktivitet" />
+        <select data-val="true" asp-for="@Model.SelectedPointType">
+            @{
+                foreach (var item in @Model.PointTypeList)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            }
+        </select>
+        <select data-val="true" asp-for="@Model.SelectedHoldSport">
+            @{
+                foreach (var item in @Model.HoldSportList)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            }
+        </select>
+        <input type="submit" value="Gem" asp-page-handler="CmdSubmit" />
+        <br />
+
+        <select id="AktivitetList" data-val="true" asp-for="@Model.SelectedAktivitetList" asp-items="@Model.AktivitetList" onchange="elementChanged('AktivitetList')" multiple style=" height: 400px; width: 450px"></select>
+
+        <input type="submit" value="Slet" asp-page-handler="CmdDelete" />
+    </form>
+</div>
+
+@section Scripts
+{
+    <script>
+            function elementChanged(elementet)
+            {
+                let url = new URL(location.href);
+                @{ 
+                    if (true)
                     {
-                        <option value="@item.Value">@item.Text</option>
+
                     }
                 }
-            </select>
-            <select data-val="true" asp-for="@Model.SelectedHoldSport">
-                @{
-                    foreach (var item in @Model.HoldSportList)
-                    {
-                        <option value="@item.Value">@item.Text</option>
-                    }
-                }
-            </select>
-            <input type="submit" value="Gem" asp-page-handler="CmdSubmit" />
-            <br />
+                let AktivitetList = document.getElementById('AktivitetList');
+                let AktivitetListValgt = AktivitetList.options[AktivitetList.selectedIndex].value;
+                url.searchParams.set("AktivitetList", AktivitetListValgt);
 
-            <select data-val="true" asp-for="@Model.SelectedAktivitetList" asp-items="@Model.AktivitetList" multiple style=" height: 400px; width: 450px"></select>
 
-            <input type="submit" value="Slet" asp-page-handler="CmdDelete" />
-        </form>
-    </div>
+                url.searchParams.set("ValgtGuiElemement", elementet);
+                location.href = url;
+            }
+    </script>
+}

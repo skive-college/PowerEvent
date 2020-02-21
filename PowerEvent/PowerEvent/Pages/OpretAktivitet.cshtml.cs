@@ -25,7 +25,9 @@ namespace PowerEvent.Pages
 
         public string TempAktivitet { get; set; }
 
-        
+        public string ValgtGuiElemement { get; set; }
+
+
         public List<SelectListItem> AktivitetList { get; set; }
 
         public List<Aktivitet> TempAktivitetList { get; set; }
@@ -82,6 +84,8 @@ namespace PowerEvent.Pages
             {
                 HoldSportList = TempHoldSportList;
             }
+
+            checkListScript();
         }
         
         public void OnPost()
@@ -165,7 +169,23 @@ namespace PowerEvent.Pages
 
 
 
+        private void checkListScript()
+        {
+            try
+            {
+                SelectedAktivitetList = int.Parse(Request.Query["AktivitetList"]);
+            }
+            catch
+            {
+            }
 
+            ValgtGuiElemement = Request.Query["ValgtGuiElemement"];
+
+            if (ValgtGuiElemement == "AktivitetList")
+            {
+
+            }
+        }
 
 
 
@@ -263,5 +283,6 @@ namespace PowerEvent.Pages
                 }
             }
         }
+
     }
 }
