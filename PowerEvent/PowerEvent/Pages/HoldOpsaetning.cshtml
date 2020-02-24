@@ -8,58 +8,82 @@
 
 <p>Event:</p>
 <select id="EventList" onchange="eventListChanged()">
-    @{ 
+    @{
+        if (Model.Request.Query.Count == 0)
+        {
+            <option label="Vælg et event"></option>
+        }
         foreach (var pevent in Model.EventList)
         {
-            <option label="@pevent.Navn" value="@pevent.Id"></option>
+            if (pevent.Id == Model.EventID)
+            {
+                <option label="@pevent.Navn" value="@pevent.Id" selected></option>
+            }
+            else
+            {
+                <option label="@pevent.Navn" value="@pevent.Id"></option>
+            }
         }
     }
 </select>
 
-<div class="container">
-    <div class="row">
-        <div class="col-sm-5">
-            <form method="post">
-                <p>Spillers navn</p>
-                <input type="text" name="Navn"/>
-                <input type="submit" value="Opret" asp-page-handler="CmdSubmitNavn"/>
-            </form>
-            <select id="deltagerselect" multiple>
-                @{
-                    foreach (var deltager in Model.DeltagerList)
-                    {
-                        <option label="@deltager.Navn"></option>
-                    }
-                }
-            </select>
-        </div>
-        <div class="col-sm-2">
-            <div>
-                <select id="holdselect">
-                    @{ 
-                        foreach (var hold in Model.HoldList)
-                        {
-                            <option label="@hold.Navn" value="@hold.Id"></option>
+@{ 
+    if (Model.Request.Query.Count != 0)
+    {
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-5">
+                    <form method="post">
+                        <p>Spillers navn</p>
+                        <input type="text" name="Navn" asp-for="@Model.DeltagerNavn"/>
+                        <input type="submit" value="Opret" formmethod="post" asp-page-handler="CmdSubmitNavn"/>
+                    </form>
+                        <select id="deltagerselect" style="min-width:150px" multiple>
+                        @{
+                            foreach (var deltager in Model.DeltagerList)
+                            {
+                                <option label="@deltager.Navn"></option>
+                            }
                         }
-                    }
-                </select>
-                <button name="Random" onclick=""></button>
-                <button name="Tilføj" onclick=""></button>
-            </div>
-            
-        </div>
-        <div class="col-sm-5">
-            <select disabled multiple>
-                @{
+                        </select>
+                </div>
+                <div class="col-sm-2">
+                    <div>
+                        <select id="holdselect">
+                            @{ 
+                                foreach (var hold in Model.HoldList)
+                                {
+                                    <option label="@hold.Navn" value="@hold.Id"></option>
+                                }
+                            }
+                        </select>
+                        <button onclick="">Random</button>
+                        <button onclick="">Tilføj</button>
+                    </div>
                     
-                }
-            </select>
+                </div>
+                <div class="col-sm-5">
+                    <select disabled multiple style="min-width:300px">
+                        @{
+        
+                        }
+                    </select>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+    }
+}
 
 <script>
     function eventListChanged() {
-        document.getElementById("EventList")
+        let list = document.getElementById("EventList");
+        let items = list.children;
+        let id = items.item(list.selectedIndex).getAttribute("value");
+
+        let url = new URL(location.href)
+        url.searchParams.set("Event", id)
+        location.href = url
     }
+
 </script>
+

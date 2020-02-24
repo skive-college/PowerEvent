@@ -14,6 +14,8 @@ namespace PowerEvent
         [BindProperty]
         public int SelectedEvent { get; set; }
 
+        public string ValgtGuiElemement { get; set; }
+
         public List<Event> EventList { get; set; }
         public string EventName { get; set; }
         public string TeamEt { get; set; }
@@ -25,10 +27,10 @@ namespace PowerEvent
             TeamTo = "teamto";
             SelectedEvent = -1;
             EventList = DBAdapter.getEvent();
-            checkListScript();
+            checkScript();
         }
 
-        private void checkListScript()
+        private void checkScript()
         {
             try 
             {
@@ -47,8 +49,8 @@ namespace PowerEvent
                 }
             }
 
-            string navn = Request.Query["navn"];
-            if (navn == "EventList")
+            ValgtGuiElemement = Request.Query["ValgtGuiElemement"];
+            if (ValgtGuiElemement == "EventList")
             {
                 if (SelectedEvent != -1)
                 {

@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace PowerEvent.Models
 {
-    public class EventAktivitetHoldScore
+    public class EventAktivitet
     {
         public int Id { get; set; }
 
-        public int EventAktivitetHoldId { get; set; }
+        public int EventId { get; set; }
 
-        public int HoldScore { get; set; }
+        public int AktivitetId { get; set; }
     }
 }

@@ -9,6 +9,7 @@ namespace PowerEvent.Helpers
 {
     public class DBAdapter
     {
+        //___________________________________________________________________________________________________________Alt med Event ↓
 
         public static List<Event> getEvent()
         {
@@ -24,6 +25,10 @@ namespace PowerEvent.Helpers
             }
             return eventList;
         }
+
+        //___________________________________________________________________________________________________________Alt med Event ↑
+
+        //___________________________________________________________________________________________________________Alt med Aktivitet ↓
 
         public static List<Aktivitet> getAktivitet(int? _eventId = null, int? _aktivitetId = null)
         {
@@ -52,9 +57,30 @@ namespace PowerEvent.Helpers
             DBHandler.addAktivitet(_navn ,_pointType, _holdSport);
         }
 
-        public static List<Hold> getHold(int? _eventId = null, int? _holdOrder = null, int? _aktivitetId = null)
+
+        public static List<EventAktivitet> getEventAktivitet(int _eventId, int? _aktivitetId = null)
         {
-            List<object> dbList = DBHandler.getHold(_eventId, _holdOrder, _aktivitetId);
+            List<object> dbList = DBHandler.getEventAktivitet(_eventId, _aktivitetId);
+            List<EventAktivitet> AktivitetList = new List<EventAktivitet>();
+
+            foreach (object _object in dbList)
+            {
+                EventAktivitet temp = new EventAktivitet();
+                temp.Id = adapt<int>("Id", _object);
+                temp.EventId = adapt<int>("EventId", _object);
+                temp.AktivitetId = adapt<int>("AktivitetId", _object);
+                AktivitetList.Add(temp);
+            }
+            return AktivitetList;
+        }
+
+        //___________________________________________________________________________________________________________Alt med Aktivitet ↑
+
+        //___________________________________________________________________________________________________________Alt med Hold ↓
+
+        public static List<Hold> getHold(int? _eventId = null, int? _holdOrder = null, int? _eventAktivitetId = null)
+        {
+            List<object> dbList = DBHandler.getHold(_eventId, _holdOrder, _eventAktivitetId);
             List<Hold> holdList = new List<Hold>();
 
             foreach (object _object in dbList)
@@ -64,39 +90,81 @@ namespace PowerEvent.Helpers
                 tempHold.Id = adapt<int>("Id", _object);
                 tempHold.Navn = adapt<string>("Navn", _object);
                 tempHold.Farve = adapt<string>("Farve", _object);
-                if (_holdOrder != null || _aktivitetId != null)
-                {
-                    List<object> tempAktivitetHoldList = adapt<List<object>>("HoldAktiviteter", _object);
-                    foreach (object _aktivitetHold in tempAktivitetHoldList)
-                    {
-                        EventAktivitetHold eah = new EventAktivitetHold();
-                        eah.HoldScores = new List<EventAktivitetHoldScore>();
-                        eah.Id = adapt<int>("Id", _aktivitetHold);
-                        eah.Point = adapt<int?>("Point", _aktivitetHold);
-                        eah.HoldOrder = adapt<int>("HoldOrder", _aktivitetHold);
-
-                        object tempEventAktivitet = adapt<object>("EventAktivitet", _aktivitetHold);
-                        Aktivitet tempAktivitet = new Aktivitet();
-                        tempAktivitet.Id = adapt<int> ("Id", tempEventAktivitet);
-                        tempAktivitet.Navn = adapt<string>("Navn", tempEventAktivitet);
-                        tempAktivitet.PointType = adapt<int>("PointType", tempEventAktivitet);
-                        tempAktivitet.HoldSport = adapt<int>("HoldSport", tempEventAktivitet);
-                        eah.EventAktivitet = tempAktivitet;
-
-                        List<object> scores = adapt<List<object>>("HoldScores", _aktivitetHold);
-                        foreach (object _score in scores)
-                        {
-                            EventAktivitetHoldScore tempHoldScores = new EventAktivitetHoldScore();
-                            tempHoldScores.Id = adapt<int>("Id", _score);
-                            tempHoldScores.HoldScore = adapt<int>("HoldScore", _score);
-                            eah.HoldScores.Add(tempHoldScores);
-                        }
-                        tempHold.HoldAktiviteter.Add(eah);
-                    }
-                }
+                
                 holdList.Add(tempHold);
             }
             return holdList;
+        }
+        public static List<Hold> getHoldAktivitet(List<Hold> _holdList, int? _eventId = null, int? _holdOrder = null, int? _eventAktivitetId = null)
+        {
+            List<object> tempAktivitetHoldList = DBHandler.getHoldAktivitet(_eventId, _holdOrder, _eventAktivitetId);
+            List<EventAktivitetHold> eventAktivitetHoldList = new List<EventAktivitetHold>();
+            foreach (object _aktivitetHold in tempAktivitetHoldList)
+            {
+                EventAktivitetHold eah = new EventAktivitetHold();
+                eah.HoldScores = new List<EventAktivitetHoldScore>();
+                eah.Id = adapt<int>("Id", _aktivitetHold);
+                eah.EventAktivitetId = adapt<int>("EventAktivitetId", _aktivitetHold);
+                eah.HoldId = adapt<int>("HoldId", _aktivitetHold);
+                eah.Point = adapt<int?>("Point", _aktivitetHold);
+                eah.HoldOrder = adapt<int>("HoldOrder", _aktivitetHold);
+                
+                eventAktivitetHoldList.Add(eah);
+            }
+            foreach (Hold _hold in _holdList)
+            {
+                _hold.HoldAktiviteter = new List<EventAktivitetHold>();
+                _hold.HoldAktiviteter.AddRange(eventAktivitetHoldList.Where(i => i.HoldId == _hold.Id).ToList());
+                if (_hold.HoldAktiviteter != null)
+                {
+                    eventAktivitetHoldList.RemoveAll(i => i.HoldId == _hold.Id);
+                }
+            }
+            return _holdList;
+
+        }
+
+        public static List<Hold> getHoldAktivitetScores(List<Hold> _holdList, int? _eventId = null, int? _holdOrder = null, int? _eventAktivitetId = null)
+        {
+            List<object> scores = DBHandler.getHoldAktivitetScores(_eventId, _holdOrder, _eventAktivitetId);
+            List<EventAktivitetHoldScore> scoreList = new List<EventAktivitetHoldScore>();
+            foreach (object _score in scores)
+            {
+                EventAktivitetHoldScore tempHoldScores = new EventAktivitetHoldScore();
+                tempHoldScores.Id = adapt<int>("Id", _score);
+                tempHoldScores.EventAktivitetHoldId = adapt<int>("EventAktivitetHoldId", _score);
+                tempHoldScores.HoldScore = adapt<int>("HoldScore", _score);
+                scoreList.Add(tempHoldScores);
+            }
+
+            foreach (Hold _hold in _holdList)
+            {
+                foreach (EventAktivitetHold _aktivitetHold in _hold.HoldAktiviteter)
+                {
+                    _aktivitetHold.HoldScores = new List<EventAktivitetHoldScore>();
+                    _aktivitetHold.HoldScores.AddRange(scoreList.Where(i => i.EventAktivitetHoldId == _aktivitetHold.Id).ToList());
+                    if (_aktivitetHold.HoldScores != null)
+                    {
+                        scoreList.RemoveAll(i => i.EventAktivitetHoldId == _hold.Id);
+                    }
+                }
+            }
+            return _holdList;
+            
+        }
+
+            public static void addHoldScore(int _eventId, int _eventAktivitetId, int _holdOrder, int _holdId, int _score)
+        {
+            DBHandler.addHoldScore(_eventId, _eventAktivitetId, _holdOrder, _holdId, _score);
+        }
+
+        //___________________________________________________________________________________________________________Alt med Hold ↑
+
+        //___________________________________________________________________________________________________________Alt med Hold Order ↓
+
+        public static void deleteHoldScore(int _id)
+        {
+            DBHandler.deleteHoldScore(_id);
         }
 
         public static List<Deltager> getDeltagere(int _eventId, int? _aktivitetId = null, int? _holdId = null, int? _deltagerId = null)
@@ -129,15 +197,25 @@ namespace PowerEvent.Helpers
             return retur;
         }
 
-        public static void addDeltager(string _navn, int _holdId, int _eventId)
+        public static void addDeltager(string _navn, int _eventId)
         {
-            DBHandler.addDeltager(_navn, _holdId, _eventId);
+            DBHandler.addDeltager(_navn, _eventId);
         }
 
 
+        public static void addDeltagerScore(int _eventId, int _aktivitetId, int _holdId, int _deltagerId, int _score)
+        {
+            DBHandler.addDeltagerScore(_eventId, _aktivitetId, _holdId, _deltagerId, _score);
+        }
 
+        public static void deleteDeltagerScore(int _id)
+        {
+            DBHandler.deleteDeltagerScore(_id);
+        }
 
+        //___________________________________________________________________________________________________________Alt med Deltager ↑
 
+        //___________________________________________________________________________________________________________Alt med Hold Order ↓
 
         public static List<int> getHoldOrder(int _eventId, int? _aktivitetId = null)
         {
@@ -145,11 +223,13 @@ namespace PowerEvent.Helpers
             return DBHandler.getHoldOrder(_eventId, _aktivitetId);
         }
 
+        //___________________________________________________________________________________________________________Alt med Hold Order ↑
 
 
 
 
-//_____________________________________________________________________________________________________________
+
+        //_____________________________________________________________________________________________________________ikke noget under her!!!!
 
         //trækker en "property" ud af det "object". <T> = f.eks "string" eller int;
         private static T adapt<T>(string _property, object _object)
