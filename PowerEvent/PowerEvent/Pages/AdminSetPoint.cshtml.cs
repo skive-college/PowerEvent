@@ -156,7 +156,7 @@ namespace PowerEvent
                 //HoldSport Add HOLD score 
                 if (Score != null)
                 {
-                    DBAdapter.(Score);
+                   // DBAdapter.(Score);
                 }
             }
             else if (ValgtAktivitet.HoldSport == 1)
