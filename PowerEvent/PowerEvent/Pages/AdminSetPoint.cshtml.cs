@@ -12,7 +12,6 @@ namespace PowerEvent
 {
     public class AdminSetPointModel : PageModel
     {
-        [BindProperty]
         public int? TxtScore { get; set; }
 
         [BindProperty]
@@ -32,6 +31,8 @@ namespace PowerEvent
 
         [BindProperty]
         public int SelectedPoint { get; set; }
+
+        public string ValgtGuiElemement { get; set; }
 
 
         private Aktivitet valgtAktivitet;
@@ -97,6 +98,7 @@ namespace PowerEvent
 
         public List<int> OrderList { get; set; }
 
+
         public void OnGet()
         {
             SelectedEvent = -1;
@@ -140,6 +142,20 @@ namespace PowerEvent
                         }
                     }
                 }
+                if (ValgtGuiElemement == "CmdAddPoint" || ValgtGuiElemement == "CmdDeletePoint")
+                {
+                    if (ValgtGuiElemement == "CmdAddPoint")
+                    {
+                        CmdAddPoint();
+                    }
+                    else if (ValgtGuiElemement == "CmdDeletePoint")
+                    {
+                        CmdDeletePoint();
+                    }
+                    HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedAktivitet);
+                    HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent, SelectedOrder, SelectedAktivitet);
+                    HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent, SelectedOrder, SelectedAktivitet);
+                }
             }
         }
 
@@ -153,9 +169,8 @@ namespace PowerEvent
 
         }
 
-        public void OnPostCmdAddPoint()
+        public void CmdAddPoint()
         {
-            OnGet();
             if (ValgtAktivitet.HoldSport == 0)
             {
                 //HoldSport Add HOLD score 
@@ -166,19 +181,23 @@ namespace PowerEvent
             }
             else if (ValgtAktivitet.HoldSport == 1)
             {
+                if (TxtScore != null)
+                {
+                    
+                }
                 //HoldSport Add DELTAGER score
             }
         }
 
-        public void OnPostCmdDeletePoint()
+        public void CmdDeletePoint()
         {
-            OnGet();
             if (ValgtAktivitet.HoldSport == 0)
             {
                 //HoldSport Delete HOLD score
                 if (SelectedPoint != -1)
                 {
                     DBAdapter.deleteHoldScore(SelectedPoint);
+                    SelectedPoint = -1;
                 }
             }
             else if (ValgtAktivitet.HoldSport == 1)
@@ -192,7 +211,7 @@ namespace PowerEvent
         private void checkListScript()
         {
             //on click for select element script. navn = select elementets "navn"
-            string navn = Request.Query["navn"];
+            ValgtGuiElemement = Request.Query["ValgtGuiElemement"];
 
             try
             {
@@ -236,10 +255,22 @@ namespace PowerEvent
             catch
             {
             }
+            try
+            {
+                TxtScore = int.Parse(Request.Query["txtScore"]);
+            }
+            catch
+            {
+            }
 
 
+            if (SelectedEvent == -1)
+            {
+                loadTempDataEvent();
+            }
 
-            if (navn == "EventList")
+
+            if (ValgtGuiElemement == "EventList")
             {
                 if (SelectedEvent != -1)
                 {
@@ -248,21 +279,21 @@ namespace PowerEvent
                     SelectedAktivitet = -1;
                 }
             }
-            else if (navn == "AktivitetList")
+            else if (ValgtGuiElemement == "AktivitetList")
             {
                 if (SelectedAktivitet != -1 && SelectedEvent != -1)
                 {
                     guiSelectedListReset();
                 }
             }
-            else if (navn == "OrderList")
+            else if (ValgtGuiElemement == "OrderList")
             {
                 if (SelectedOrder != -1 && SelectedAktivitet != -1 && SelectedEvent != -1)
                 {
                     guiSelectedListReset();
                 }
             }
-            else if (navn == "HoldList")
+            else if (ValgtGuiElemement == "HoldList")
             {
                 if (SelectedHold != -1)
                 {
@@ -270,18 +301,18 @@ namespace PowerEvent
                     SelectedPoint = -1;
                 }
             }
-            else if (navn == "DeltagerList")
+            else if (ValgtGuiElemement == "DeltagerList")
             {
                 if (SelectedDeltager != -1)
                 {
                     SelectedPoint = -1;
                 }
             }
-            else if (navn == "PointList")
+            else if (ValgtGuiElemement == "PointList")
             {
                 if (SelectedDeltager != -1)
                 {
-                    
+
                 }
             }
         }

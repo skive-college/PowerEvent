@@ -363,14 +363,14 @@ namespace DatabaseClassLibrary
         {
             List<EventAktivitetHold> tempList = getHoldAktivitetIntern(_eventId, _holdOrder, _aktivitetId);
             EventAktivitetHold temphold = new EventAktivitetHold();
-            temphold = tempList.Where(i => i.EventAktivitetId == _holdId).FirstOrDefault();
+            temphold = tempList.Where(i => i.HoldId == _holdId).FirstOrDefault();
             if (temphold != null)
             {
                 using (SqlConnection con = new SqlConnection(connectionString))
                 {
                     string sql = "INSERT INTO EventAktivitetHoldScore Values(@EventAktivitetHoldId, @HoldScore)";
                     SqlCommand command = new SqlCommand(sql, con);
-                    command.Parameters.AddWithValue("@EventAktivitetHoldId", temphold);
+                    command.Parameters.AddWithValue("@EventAktivitetHoldId", temphold.Id);
                     command.Parameters.AddWithValue("@HoldScore", _score);
                     con.Open();
                     command.ExecuteNonQuery();
