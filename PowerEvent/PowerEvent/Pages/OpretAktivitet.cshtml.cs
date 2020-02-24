@@ -70,7 +70,6 @@ namespace PowerEvent.Pages
             };
             //saveTempDataHoldSport();
 
-
             checkScript();
 
             if (ValgtGuiElemement == "CmdGemAktivitet")

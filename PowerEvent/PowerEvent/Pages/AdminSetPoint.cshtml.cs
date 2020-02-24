@@ -112,7 +112,6 @@ namespace PowerEvent
             EventList = DBAdapter.getEvent();
             OrderList = new List<int>();
 
-
             checkScript();
             if (SelectedEvent != -1)
             {
