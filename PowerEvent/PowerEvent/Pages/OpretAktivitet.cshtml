@@ -44,10 +44,10 @@
         <div class="row">
             <div class="col-12 col-lg-6">
                 <div class="row">
-                    <select id="AktivitetList" asp-for="@Model.SelectedAktivitetList" onchange="elementChanged('AktivitetList')" multiple style=" height: 350px; width: 450px">
+                    <select id="AktivitetList" asp-for="@Model.SelectedEventAktivitet" onchange="elementChanged('AktivitetList')" multiple style=" height: 350px; width: 450px">
                         @{
                             <option value="-1" hidden></option>
-                            foreach (var item in @Model.AktivitetList)
+                            foreach (var item in @Model.GuiAktivitetList)
                             {
                                 <option value="@item.Value">@item.Text</option>
                             }
@@ -78,10 +78,10 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <select id="AktivitetList" asp-for="@Model.SelectedAktivitetList" onchange="elementChanged('AktivitetList')" multiple style=" height: 350px; width: 450px">
+                        <select id="AktivitetList" asp-for="@Model.SelectedEventAktivitet" onchange="elementChanged('AktivitetList')" multiple style=" height: 350px; width: 450px">
                             @{
                                 <option value="-1" hidden></option>
-                                foreach (var item in @Model.AktivitetList)
+                                foreach (var item in @Model.GuiAktivitetList)
                                 {
                                     <option value="@item.Value">@item.Text</option>
                                 }
