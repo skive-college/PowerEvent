@@ -1,57 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using DatabaseClassLibrary;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using PowerEvent.Models;
 using PowerEvent.Helpers;
+using PowerEvent.Models;
 
-namespace PowerEvent.Pages
+namespace PowerEvent
 {
-    public class Oversigt : PageModel
+    public class AdminSlutResultatModel : PageModel
     {
-        //value på det valgte element i "select" list i GUI. skal være en "BindProperty".
         [BindProperty]
         public int SelectedEvent { get; set; }
 
+        public string ValgtGuiElemement { get; set; }
+
         public List<Event> EventList { get; set; }
 
-        public List<Hold> HoldListe { get; set; }
 
-        public List<Deltager> DeltagerList { get; set; }
-
-        public string ValgtGuiElemement { get; set; }
 
 
         public void OnGet()
         {
             SelectedEvent = -1;
-            DeltagerList = new List<Deltager>();
-            HoldListe = new List<Hold>();
             EventList = DBAdapter.getEvent();
 
             checkScript();
-            if (DeltagerList.Count != 0)
-            {
-                HoldListe = DBAdapter.getHold(SelectedEvent);
-            }
         }
 
-        public void OnPost()
-        {
-
-        }
-
-
-
-        //on click for select element script. navn = select elementets "navn"
         private void checkScript()
         {
-            try 
+            try
             {
                 SelectedEvent = int.Parse(Request.Query["EventList"]);
             }
@@ -64,7 +44,7 @@ namespace PowerEvent.Pages
                 loadTempDataEvent();
                 if (SelectedEvent != -1)
                 {
-                    DeltagerList = DBAdapter.getDeltagere(SelectedEvent);
+
                 }
             }
 
@@ -74,7 +54,6 @@ namespace PowerEvent.Pages
                 if (SelectedEvent != -1)
                 {
                     saveTempDataEvent();
-                    DeltagerList = DBAdapter.getDeltagere(SelectedEvent);
                 }
             }
         }
@@ -95,7 +74,6 @@ namespace PowerEvent.Pages
                 SelectedEvent = tempEventList[0];
             }
         }
-
 
     }
 }

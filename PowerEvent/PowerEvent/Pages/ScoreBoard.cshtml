@@ -6,6 +6,32 @@
 <div container>
     <div class="text-center">
         <h1>ScoreBoard @Model.EventName</h1>
+        <div class="row justify-content-md-center">
+            <style>
+                #EventList {
+                    width: 120px;
+                }
+
+                    #EventList:focus {
+                        min-width: 120px;
+                        width: auto;
+                    }
+            </style>
+            <!-- {asp-for="Model.SelectedEvent"} laver SelectedEvent int om til "value" property på det valgte element -->
+            <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
+                @{
+                    if (@Model.SelectedEvent == -1)
+                    {
+                        <option value="-1" style="width:300px;">Vælg et event</option>
+                    }
+
+                    foreach (var item in @Model.EventList)
+                    {
+                        <option value="@item.Id">@item.Navn</option>
+                    }
+                }
+            </select>
+        </div>
         <div class="row">
             <div class="col-sm-6">
                 <p>Team : @Model.TeamEt</p>
@@ -62,7 +88,7 @@
             </table>
         </div>
 
-        
+
 
         <div class="col-md">
             <table class="table">
@@ -76,37 +102,55 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th>Name1</th>
-                        <th>Name1Score1</th>
-                        <th>Name1Score2</th>
-                        <th>Name1Score3</th>
+                        <th>T2Name1</th>
+                        <th>T2Name1Score1</th>
+                        <th>T2Name1Score2</th>
+                        <th>T2Name1Score3</th>
                     </tr>
                     <tr>
-                        <th>Name2</th>
-                        <th>Name2Score1</th>
-                        <th>Name2Score2</th>
-                        <th>Name2Score3</th>
+                        <th>T2Name2</th>
+                        <th>T2Name2Score1</th>
+                        <th>T2Name2Score2</th>
+                        <th>T2Name2Score3</th>
                     </tr>
                     <tr>
-                        <th>Name3</th>
-                        <th>Name3Score1</th>
-                        <th>Name3Score2</th>
-                        <th>Name3Score3</th>
+                        <th>T2Name3</th>
+                        <th>T2Name3Score1</th>
+                        <th>T2Name3Score2</th>
+                        <th>T2Name3Score3</th>
                     </tr>
                     <tr>
-                        <th>Name4</th>
-                        <th>Name4Score1</th>
-                        <th>Name4Score2</th>
-                        <th>Name4Score3</th>
+                        <th>T2Name4</th>
+                        <th>T2Name4Score1</th>
+                        <th>T2Name4Score2</th>
+                        <th>T2Name4Score3</th>
                     </tr>
                     <tr>
-                        <th>Name5</th>
-                        <th>Name5Score1</th>
-                        <th>Name5Score2</th>
-                        <th>Name5Score3</th>
+                        <th>T2Name5</th>
+                        <th>T2Name5Score1</th>
+                        <th>T2Name5Score2</th>
+                        <th>T2Name5Score3</th>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+@section Scripts
+{
+    <script>
+        function elementChanged(elementet) {
+            let url = new URL(location.href);
+
+            //lav nedenstående 3 linjer for hver "select" liste
+            let EventList = document.getElementById('EventList');
+            let EventListValgt = EventList.options[EventList.selectedIndex].value;
+            url.searchParams.set("EventList", EventListValgt);
+
+
+            url.searchParams.set("ValgtGuiElemement", elementet);
+            location.href = url;
+        }
+    </script>
+}
+

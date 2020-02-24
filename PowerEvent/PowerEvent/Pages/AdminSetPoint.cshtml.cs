@@ -12,6 +12,8 @@ namespace PowerEvent
 {
     public class AdminSetPointModel : PageModel
     {
+        public int? TxtScore { get; set; }
+
         [BindProperty]
         public int SelectedEvent { get; set; }
 
@@ -30,6 +32,8 @@ namespace PowerEvent
         [BindProperty]
         public int SelectedPoint { get; set; }
 
+        public string ValgtGuiElemement { get; set; }
+
 
         private Aktivitet valgtAktivitet;
 
@@ -41,7 +45,10 @@ namespace PowerEvent
                 {
                     if (AktivitetList.Count == 0)
                     {
-                        valgtAktivitet = DBAdapter.getAktivitet(SelectedEvent, SelectedAktivitet)[0];
+                        if (SelectedAktivitet != -1)
+                        {
+                            valgtAktivitet = DBAdapter.getAktivitet(SelectedEvent, SelectedAktivitet)[0];
+                        }
                     }
                     else
                     {
@@ -89,40 +96,64 @@ namespace PowerEvent
         
         public List<Aktivitet> AktivitetList { get; set; }
 
+        public List<int> OrderList { get; set; }
+
+
         public void OnGet()
         {
             SelectedEvent = -1;
             SelectedAktivitet = -1;
             SelectedOrder = -1;
+            TxtScore = null;
             guiSelectedListReset();
             AktivitetList = new List<Aktivitet>();
             HoldList = new List<Hold>();
             DeltagerList = new List<Deltager>();
             EventList = DBAdapter.getEvent();
+            OrderList = new List<int>();
 
-
-            checkListScript();
+            checkScript();
             if (SelectedEvent != -1)
             {
+                loadTempDataEvent();
+                if (SelectedEvent != -1)
+                {
+                    AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+                }
                 if (AktivitetList.Count == 0)
                 {
                     AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
                 }
                 if (SelectedAktivitet != -1)
                 {
-                    //hent orderlist ind!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    OrderList = DBAdapter.getHoldOrder(SelectedEvent, SelectedAktivitet);
                     if (SelectedOrder != -1)
                     {
                         HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedAktivitet);
-                        if (ValgtAktivitet.HoldSport == 0)
+                        HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent, SelectedOrder, SelectedAktivitet);
+                        HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent, SelectedOrder, SelectedAktivitet);
+                        if (SelectedHold != -1)
                         {
-                            SelectedDeltager = -1;
+                            if (ValgtAktivitet.HoldSport == 1)
+                            {
+                                DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedAktivitet, SelectedHold);
+                            }
                         }
                     }
                 }
-                if (SelectedDeltager != -1)
+                if (ValgtGuiElemement == "CmdAddPoint" || ValgtGuiElemement == "CmdDeletePoint")
                 {
-                    DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedAktivitet, SelectedHold);
+                    if (ValgtGuiElemement == "CmdAddPoint")
+                    {
+                        CmdAddPoint();
+                    }
+                    else if (ValgtGuiElemement == "CmdDeletePoint")
+                    {
+                        CmdDeletePoint();
+                    }
+                    HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedAktivitet);
+                    HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent, SelectedOrder, SelectedAktivitet);
+                    HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent, SelectedOrder, SelectedAktivitet);
                 }
             }
         }
@@ -137,35 +168,49 @@ namespace PowerEvent
 
         }
 
-        public void OnPostCmdAddPoint()
+        public void CmdAddPoint()
         {
             if (ValgtAktivitet.HoldSport == 0)
             {
-
+                //HoldSport Add HOLD score 
+                if (TxtScore != null)
+                {
+                    DBAdapter.addHoldScore(SelectedEvent, SelectedAktivitet, SelectedOrder, SelectedHold, TxtScore.Value);
+                }
             }
             else if (ValgtAktivitet.HoldSport == 1)
             {
+                if (TxtScore != null)
+                {
+                    
+                }
+                //HoldSport Add DELTAGER score
+            }
+        }
+
+        public void CmdDeletePoint()
+        {
+            if (ValgtAktivitet.HoldSport == 0)
+            {
+                //HoldSport Delete HOLD score
+                if (SelectedPoint != -1)
+                {
+                    DBAdapter.deleteHoldScore(SelectedPoint);
+                    SelectedPoint = -1;
+                }
+            }
+            else if (ValgtAktivitet.HoldSport == 1)
+            {
+                //HoldSport Deltete DELTAGER score
 
             }
         }
 
-        public void OnPostCmdDeletePoint()
-        {
-            if (ValgtAktivitet.HoldSport == 0)
-            {
 
-            }
-            else if (ValgtAktivitet.HoldSport == 1)
-            {
-
-            }
-        }
-
-
-        private void checkListScript()
+        private void checkScript()
         {
             //on click for select element script. navn = select elementets "navn"
-            string navn = Request.Query["navn"];
+            ValgtGuiElemement = Request.Query["ValgtGuiElemement"];
 
             try
             {
@@ -209,70 +254,64 @@ namespace PowerEvent
             catch
             {
             }
+            try
+            {
+                TxtScore = int.Parse(Request.Query["txtScore"]);
+            }
+            catch
+            {
+            }
 
 
             if (SelectedEvent == -1)
             {
                 loadTempDataEvent();
-                if (SelectedEvent != -1)
-                {
-                    AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
-                    loadTempDataAktivitet();
-                }
             }
 
 
-            if (navn == "EventList")
+            if (ValgtGuiElemement == "EventList")
             {
                 if (SelectedEvent != -1)
                 {
                     guiSelectedListReset();
                     saveTempDataEvent();
-                    AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+                    SelectedAktivitet = -1;
                 }
             }
-            else if (navn == "AktivitetList")
+            else if (ValgtGuiElemement == "AktivitetList")
             {
                 if (SelectedAktivitet != -1 && SelectedEvent != -1)
                 {
                     guiSelectedListReset();
                 }
             }
-            else if (navn == "OrderList")
+            else if (ValgtGuiElemement == "OrderList")
             {
                 if (SelectedOrder != -1 && SelectedAktivitet != -1 && SelectedEvent != -1)
                 {
                     guiSelectedListReset();
                 }
             }
-            else if (navn == "HoldList")
+            else if (ValgtGuiElemement == "HoldList")
             {
-                if (SelectedHold != -1 && SelectedOrder != -1 && SelectedAktivitet != -1 && SelectedEvent != -1)
+                if (SelectedHold != -1)
                 {
-                    if (ValgtAktivitet.HoldSport == 1)
-                    {
-                        DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedAktivitet, SelectedHold);
-                    }
-                    else
-                    {
-                        //getHoldPoint!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    }
                     SelectedDeltager = -1;
                     SelectedPoint = -1;
                 }
             }
-            else if (navn == "DeltagerList")
+            else if (ValgtGuiElemement == "DeltagerList")
             {
                 if (SelectedDeltager != -1)
                 {
                     SelectedPoint = -1;
                 }
             }
-            else if (navn == "PointList")
+            else if (ValgtGuiElemement == "PointList")
             {
                 if (SelectedDeltager != -1)
                 {
-                    
+
                 }
             }
         }
@@ -298,19 +337,6 @@ namespace PowerEvent
             if (tempEventList != null)
             {
                 SelectedEvent = tempEventList[0];
-            }
-        }
-        private void saveTempDataAktivitet()
-        {
-            TempData.Set("ValgtAktivitet", ValgtAktivitet);
-        }
-
-        private void loadTempDataAktivitet()
-        {
-            Aktivitet tempAktivitet = TempData.Get<Aktivitet>("ValgtAktivitet");
-            if (tempAktivitet != null)
-            {
-                ValgtAktivitet = tempAktivitet;
             }
         }
 

@@ -11,6 +11,9 @@ namespace PowerEvent.Models
 
         public string Navn { get; set; }
 
+        public string Farve { get; set; }
+
         public List<EventAktivitetHold> HoldAktiviteter { get; set; }
+
     }
 }
