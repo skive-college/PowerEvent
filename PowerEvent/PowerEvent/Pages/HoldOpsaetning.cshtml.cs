@@ -38,8 +38,9 @@ namespace PowerEvent
 
         public void OnPostCmdSubmitNavn()
         {
-            DBAdapter.addDeltager(DeltagerNavn, 0, EventID);
-            //OnGet();
+            //DBAdapter.addDeltager(DeltagerNavn, EventID);
+            //DBAdapter.addDeltager("bs", 1);
+            OnGet();
         }
     }
 }

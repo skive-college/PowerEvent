@@ -539,18 +539,19 @@ namespace DatabaseClassLibrary
         }
 
 
-        public static void addDeltager(string _navn, int _holdId, int _eventId)
+        public static void addDeltager(string _navn, int _eventId)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = "INSERT INTO EventDeltager (Navn, HoldId, EventId) VALUES (@Navn, @HoldId, @EventId)";
+                string sql = "INSERT INTO EventDeltager (Navn, EventId) VALUES (@Navn, @EventId)";
 
+                con.Open();
                 SqlCommand cmd = new SqlCommand(sql, con);
                 cmd.Parameters.AddWithValue("@Navn", _navn);
-                cmd.Parameters.AddWithValue("@HoldId", _holdId);
                 cmd.Parameters.AddWithValue("@EventId", _eventId);
 
                 cmd.ExecuteNonQuery();
+                con.Close();
             }
         }
         //___________________________________________________________________________________________________________alt med Deltagere ↑
