@@ -9,6 +9,7 @@ namespace PowerEvent.Pages
 {
     public class opretAktivit : PageModel
     {
+
         [BindProperty]
         public int SelectedPointType { get; set; }
         
@@ -20,11 +21,16 @@ namespace PowerEvent.Pages
 
         public int TempSelectedInfoId { get; set; }
 
+        [BindProperty]
+        public int SelectedEvent { get; set; }
+
+        
 
         public string TxtAktivitet { get; set; }
 
         public string ValgtGuiElemement { get; set; }
 
+        public List<Event> EventList { get; set; }
 
         public List<SelectListItem> AktivitetList { get; set; }
 
@@ -43,8 +49,10 @@ namespace PowerEvent.Pages
             SelectedPointType = -1;
             SelectedHoldSport = -1;
             SelectedAktivitetList = -1;
+            SelectedEvent = -1;
             TempAktivitetList = new List<Aktivitet>();
-            
+            EventList = DBAdapter.getEvent();
+
             //loadTempDataTempPointTypeList();
             //loadTempDataTempHoldSportList();
             loadTempAktivitetList();
@@ -185,12 +193,53 @@ namespace PowerEvent.Pages
             catch
             {
             }
-
+            try
+            {
+                SelectedEvent = int.Parse(Request.Query["EventList"]);
+            }
+            catch
+            {
+            }
+            
             ValgtGuiElemement = Request.Query["ValgtGuiElemement"];
+
+            if (SelectedEvent == -1)
+            {
+                loadTempDataEvent();
+                if (SelectedEvent != -1)
+                {
+
+                }
+            }
 
             if (ValgtGuiElemement == "AktivitetList")
             {
 
+            }
+            else if (ValgtGuiElemement == "EventList")
+            {
+                if (SelectedEvent != -1)
+                {
+                    saveTempDataEvent();
+                }
+            }
+
+        }
+
+
+        private void saveTempDataEvent()
+        {
+            List<int> tempEventList = new List<int>();
+            tempEventList.Add(SelectedEvent);
+            TempData.Set("SelectedEventId", tempEventList);
+        }
+
+        private void loadTempDataEvent()
+        {
+            List<int> tempEventList = TempData.Peek<List<int>>("SelectedEventId");
+            if (tempEventList != null)
+            {
+                SelectedEvent = tempEventList[0];
             }
         }
 
