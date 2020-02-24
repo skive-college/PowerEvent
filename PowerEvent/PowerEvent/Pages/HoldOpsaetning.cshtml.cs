@@ -11,8 +11,13 @@ namespace PowerEvent
 {
     public class HoldOpsaetningModel : PageModel
     {
-        public List<Event> EventList { get; set;
-        }
+        [BindProperty]
+        public string DeltagerNavn { get; set; }
+
+        public int EventID { get; set; }
+
+        public List<Event> EventList { get; set; }
+
         public List<Deltager> DeltagerList { get; set; }
 
         public List<Hold> HoldList { get; set; }
@@ -20,15 +25,21 @@ namespace PowerEvent
 
         public void OnGet()
         {
+            EventID = 0;
+            if(Request.Query.Count != 0)
+            {
+                EventID = int.Parse(Request.Query["Event"]);
+                DeltagerList = DBAdapter.getDeltagere(EventID);
+                HoldList = DBAdapter.getHold();
+            }
             EventList = DBAdapter.getEvent();
-            DeltagerList = DBAdapter.getDeltagere(1);
-            HoldList = DBAdapter.getHold();
+            
         }
 
         public void OnPostCmdSubmitNavn()
         {
-
-            OnGet();
+            DBAdapter.addDeltager(DeltagerNavn, 0, EventID);
+            //OnGet();
         }
     }
 }
