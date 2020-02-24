@@ -71,7 +71,7 @@ namespace PowerEvent.Pages
             //saveTempDataHoldSport();
 
 
-            checkListScript();
+            checkScript();
 
             if (ValgtGuiElemement == "CmdGemAktivitet")
             {
@@ -156,7 +156,7 @@ namespace PowerEvent.Pages
         }
 
 
-        private void checkListScript()
+        private void checkScript()
         {
             try
             {
