@@ -9,6 +9,7 @@ namespace PowerEvent.Helpers
 {
     public class DBAdapter
     {
+        //___________________________________________________________________________________________________________Alt med Event ↓
 
         public static List<Event> getEvent()
         {
@@ -24,6 +25,10 @@ namespace PowerEvent.Helpers
             }
             return eventList;
         }
+
+        //___________________________________________________________________________________________________________Alt med Event ↑
+
+        //___________________________________________________________________________________________________________Alt med Aktivitet ↓
 
         public static List<Aktivitet> getAktivitet(int? _eventId = null, int? _aktivitetId = null)
         {
@@ -69,6 +74,9 @@ namespace PowerEvent.Helpers
             return AktivitetList;
         }
 
+        //___________________________________________________________________________________________________________Alt med Aktivitet ↑
+
+        //___________________________________________________________________________________________________________Alt med Hold ↓
 
         public static List<Hold> getHold(int? _eventId = null, int? _holdOrder = null, int? _aktivitetId = null)
         {
@@ -150,6 +158,10 @@ namespace PowerEvent.Helpers
             DBHandler.addHoldScore(_eventId, _aktivitetId, _holdOrder, _holdId, _score);
         }
 
+        //___________________________________________________________________________________________________________Alt med Hold ↑
+
+        //___________________________________________________________________________________________________________Alt med Hold Order ↓
+
         public static void deleteHoldScore(int _id)
         {
             DBHandler.deleteHoldScore(_id);
@@ -201,7 +213,9 @@ namespace PowerEvent.Helpers
             DBHandler.deleteDeltagerScore(_id);
         }
 
+        //___________________________________________________________________________________________________________Alt med Deltager ↑
 
+        //___________________________________________________________________________________________________________Alt med Hold Order ↓
 
         public static List<int> getHoldOrder(int _eventId, int? _aktivitetId = null)
         {
@@ -209,11 +223,13 @@ namespace PowerEvent.Helpers
             return DBHandler.getHoldOrder(_eventId, _aktivitetId);
         }
 
+        //___________________________________________________________________________________________________________Alt med Hold Order ↑
 
 
 
 
-//_____________________________________________________________________________________________________________
+
+        //_____________________________________________________________________________________________________________ikke noget under her!!!!
 
         //trækker en "property" ud af det "object". <T> = f.eks "string" eller int;
         private static T adapt<T>(string _property, object _object)
