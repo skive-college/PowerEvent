@@ -191,7 +191,15 @@ namespace PowerEvent.Helpers
         }
 
 
+        public static void addDeltagerScore(int _eventId, int _aktivitetId, int _holdId, int _deltagerId, int _score)
+        {
+            DBHandler.addDeltagerScore(_eventId, _aktivitetId, _holdId, _deltagerId, _score);
+        }
 
+        public static void deleteDeltagerScore(int _id)
+        {
+            DBHandler.deleteDeltagerScore(_id);
+        }
 
 
 

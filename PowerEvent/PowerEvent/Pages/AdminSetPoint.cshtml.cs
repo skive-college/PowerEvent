@@ -183,7 +183,7 @@ namespace PowerEvent
             {
                 if (TxtScore != null)
                 {
-                    
+                    DBAdapter.addDeltagerScore(SelectedEvent, SelectedAktivitet, SelectedHold, SelectedDeltager, TxtScore.Value);
                 }
                 //HoldSport Add DELTAGER score
             }
@@ -203,7 +203,8 @@ namespace PowerEvent
             else if (ValgtAktivitet.HoldSport == 1)
             {
                 //HoldSport Deltete DELTAGER score
-
+                DBAdapter.deleteDeltagerScore(SelectedPoint);
+                SelectedPoint = -1;
             }
         }
 

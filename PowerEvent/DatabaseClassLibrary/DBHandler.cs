@@ -446,7 +446,7 @@ namespace DatabaseClassLibrary
                     {
                         sql += " AND";
                     }
-                    sql += " _ed = @DeltagerId";
+                    sql += " _ed.DeltagerId = @DeltagerId";
                 }
 
                 con.Open();
@@ -551,6 +551,39 @@ namespace DatabaseClassLibrary
                 cmd.Parameters.AddWithValue("@EventId", _eventId);
 
                 cmd.ExecuteNonQuery();
+            }
+        }
+
+        public static void addDeltagerScore(int _eventId, int _aktivitetId, int _holdId, int _deltagerId, int _score)
+        {
+            List<Deltager> tempList = getDeltagereIntern(_eventId, _aktivitetId, _holdId);
+            Deltager tempDeltager = new Deltager();
+            tempDeltager = tempList.Where(i => i.Id == _deltagerId).FirstOrDefault();
+            if (tempDeltager != null)
+            {
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    string sql = "INSERT INTO EventAktiviteDeltager Values(@DeltagerId, @EventAktivitetId, @HoldScore)";
+                    SqlCommand command = new SqlCommand(sql, con);
+                    command.Parameters.AddWithValue("@DeltagerId", tempDeltager.Id);
+                    command.Parameters.AddWithValue("@EventAktivitetHoldId", tempDeltager.);
+                    command.Parameters.AddWithValue("@HoldScore", _score);
+                    con.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static void deleteDeltagerScore(int _id)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "Delete From EventAktivitetDeltager WHERE id = @Id";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Id", _id);
+                con.Open();
+                command.ExecuteNonQuery();
             }
         }
         //___________________________________________________________________________________________________________alt med Deltagere ↑
