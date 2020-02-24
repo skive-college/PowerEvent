@@ -21,7 +21,7 @@
         }
     </select>
     <style> #AktivitetList { width: 120px; } #AktivitetList:focus { min-width: 120px; width: auto; } </style>
-    <select id="AktivitetList" asp-for="@Model.SelectedAktivitet" onchange="elementChanged('AktivitetList')">
+    <select id="AktivitetList" asp-for="@Model.SelectedEventAktivitet" onchange="elementChanged('AktivitetList')">
         @{
             if (@Model.SelectedEvent == -1)
             {
@@ -29,13 +29,13 @@
             }
             if (@Model.SelectedEvent != -1)
             {
-                if (@Model.SelectedAktivitet == -1)
+                if (@Model.SelectedEventAktivitet == -1)
                 {
                     <option value="-1">Vælg en Aktivitet</option>
                 }
-                foreach (var item in @Model.AktivitetList)
+                foreach (var item in @Model.EventAktivitetList)
                 {
-                    <option value="@item.Id">@item.Navn</option>
+                    <option value="@item.Id">@Model.AktivitetList.Where(i => i.Id == item.AktivitetId).FirstOrDefault().Navn</option>
                 }
             }
         }
@@ -43,7 +43,7 @@
     <select id="OrderList" asp-for="@Model.SelectedOrder" onchange="elementChanged('OrderList')">
         @{
             <option value="-1" hidden></option>
-            if (@Model.SelectedEvent != -1 && Model.SelectedAktivitet != -1)
+            if (@Model.SelectedEvent != -1 && Model.SelectedEventAktivitet != -1)
             {
                 if (@Model.SelectedOrder == -1)
                 {
@@ -60,7 +60,7 @@
     <div class="container">
         <div class="row">
             @{
-                if (@Model.SelectedAktivitet != -1 && Model.SelectedOrder != -1)
+                if (@Model.SelectedEventAktivitet != -1 && Model.SelectedOrder != -1)
                 {
                     <div class="container">
                         <div class="row">
@@ -195,7 +195,7 @@
                 url.searchParams.set("OrderList", OrderListValgt);
 
                 @{
-                    if (@Model.SelectedAktivitet != -1 && Model.SelectedOrder != -1)
+                    if (@Model.SelectedEventAktivitet != -1 && Model.SelectedOrder != -1)
                     {
                         @: let HoldList = document.getElementById('HoldList');
                         @: let HoldListValgt = HoldList.options[HoldList.selectedIndex].value;
