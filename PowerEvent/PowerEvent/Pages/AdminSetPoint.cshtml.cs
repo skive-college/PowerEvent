@@ -113,7 +113,7 @@ namespace PowerEvent
             OrderList = new List<int>();
 
 
-            checkListScript();
+            checkScript();
             if (SelectedEvent != -1)
             {
                 loadTempDataEvent();
@@ -208,7 +208,7 @@ namespace PowerEvent
         }
 
 
-        private void checkListScript()
+        private void checkScript()
         {
             //on click for select element script. navn = select elementets "navn"
             ValgtGuiElemement = Request.Query["ValgtGuiElemement"];

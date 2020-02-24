@@ -33,7 +33,7 @@ namespace PowerEvent.Pages
             DeltagerList = new List<Deltager>();
             HoldListe = new List<Hold>();
             EventList = DBAdapter.getEvent();
-            checkListScript();
+            checkScript();
             if (DeltagerList.Count != 0)
             {
                 HoldListe = DBAdapter.getHold(SelectedEvent);
@@ -48,7 +48,7 @@ namespace PowerEvent.Pages
 
 
         //on click for select element script. navn = select elementets "navn"
-        private void checkListScript()
+        private void checkScript()
         {
             try 
             {

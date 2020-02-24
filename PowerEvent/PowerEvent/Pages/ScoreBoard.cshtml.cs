@@ -27,10 +27,10 @@ namespace PowerEvent
             TeamTo = "teamto";
             SelectedEvent = -1;
             EventList = DBAdapter.getEvent();
-            checkListScript();
+            checkScript();
         }
 
-        private void checkListScript()
+        private void checkScript()
         {
             try 
             {
