@@ -18,6 +18,9 @@ namespace PowerEvent.Pages
         public int SelectedHoldSport { get; set; }
 
         [BindProperty]
+        public int SelectedAktivitet { get; set; }
+
+        [BindProperty]
         public int SelectedEventAktivitet { get; set; }
 
         public int TempSelectedInfoId { get; set; }
@@ -59,14 +62,14 @@ namespace PowerEvent.Pages
                     {
                         if (AktivitetList.Count == 0)
                         {
-                            if (SelectedEventAktivitet != -1)
+                            if (SelectedAktivitet != -1)
                             {
                                 return DBAdapter.getAktivitet(SelectedEvent).Where(i => i.Id == EventAktivitetList.Where(i => i.Id == SelectedEventAktivitet).FirstOrDefault().AktivitetId).FirstOrDefault();
                             }
                         }
                         else
                         {
-                            if (SelectedEventAktivitet != -1)
+                            if (SelectedAktivitet != -1)
                             {
                                 return AktivitetList.Where(i => i.Id == EventAktivitetList.Where(i => i.Id == SelectedEventAktivitet).FirstOrDefault().AktivitetId).FirstOrDefault();
                             }
@@ -85,9 +88,11 @@ namespace PowerEvent.Pages
         {
             SelectedPointType = -1;
             SelectedHoldSport = -1;
-            SelectedEventAktivitet = -1;
+            SelectedAktivitet = -1;
             SelectedEvent = -1;
+            SelectedEventAktivitet = -1;
             AktivitetList = new List<Aktivitet>();
+            EventAktivitetList = new List<EventAktivitet>();
             EventList = DBAdapter.getEvent();
 
             //loadTempDataTempPointTypeList();
@@ -117,6 +122,12 @@ namespace PowerEvent.Pages
 
             checkScript();
 
+            if (SelectedEvent != -1)
+            {
+                AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+                EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
+            }
+
             if (ValgtGuiElemement == "CmdGemAktivitet")
             {
                 CmdSaveAktivitet();
@@ -135,12 +146,12 @@ namespace PowerEvent.Pages
 
         public void CmdDeleteAktivitet()
         {
-            if (SelectedEventAktivitet != -1)
+            if (SelectedAktivitet != -1)
             {
-                DBAdapter.deleteAktivitet(SelectedEventAktivitet);
+                DBAdapter.deleteAktivitet(SelectedAktivitet);
                 loadAktivitetList();
                 setAktivitetList();
-                SelectedEventAktivitet = -1;
+                SelectedAktivitet = -1;
             }
         }
 
@@ -218,7 +229,7 @@ namespace PowerEvent.Pages
             }
             try
             {
-                SelectedEventAktivitet = int.Parse(Request.Query["AktivitetList"]);
+                SelectedAktivitet = int.Parse(Request.Query["AktivitetList"]);
             }
             catch
             {
@@ -237,7 +248,15 @@ namespace PowerEvent.Pages
             catch
             {
             }
-            
+            try
+            {
+                SelectedEventAktivitet = int.Parse(Request.Query["EventAktivitetList"]);
+            }
+            catch
+            {
+            }
+
+
             ValgtGuiElemement = Request.Query["ValgtGuiElemement"];
 
             if (SelectedEvent == -1)

@@ -44,7 +44,7 @@
         <div class="row">
             <div class="col-12 col-lg-6">
                 <div class="row">
-                    <select id="AktivitetList" asp-for="@Model.SelectedEventAktivitet" onchange="elementChanged('AktivitetList')" multiple style=" height: 350px; width: 450px">
+                    <select id="AktivitetList" asp-for="@Model.SelectedAktivitet" onchange="elementChanged('AktivitetList')" multiple style=" height: 350px; width: 450px">
                         @{
                             <option value="-1" hidden></option>
                             foreach (var item in @Model.GuiAktivitetList)
@@ -78,12 +78,12 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <select id="AktivitetList" asp-for="@Model.SelectedEventAktivitet" onchange="elementChanged('AktivitetList')" multiple style=" height: 350px; width: 450px">
+                        <select id="EventAktivitetList" asp-for="@Model.SelectedEventAktivitet" onchange="elementChanged('EventAktivitetList')" multiple style=" height: 350px; width: 450px">
                             @{
                                 <option value="-1" hidden></option>
-                                foreach (var item in @Model.GuiAktivitetList)
+                                foreach (var item in @Model.EventAktivitetList)
                                 {
-                                    <option value="@item.Value">@item.Text</option>
+                                    <option value="@item.Id">@Model.AktivitetList.Where(i => i.Id == item.AktivitetId).FirstOrDefault().Navn</option>
                                 }
                             }
                         </select>
@@ -119,9 +119,14 @@
                 url.searchParams.set("TxtAktivitet", valgtAktivitet);
             }
 
+            let EventAktivitetList = document.getElementById('EventAktivitetList');
+            let EventAktivitetListValgt = EventAktivitetList.options[EventAktivitetList.selectedIndex].value;
+            url.searchParams.set("EventAktivitetList", EventAktivitetListValgt);
+
             let EventList = document.getElementById('EventList');
             let EventListValgt = EventList.options[EventList.selectedIndex].value;
             url.searchParams.set("EventList", EventListValgt);
+
 
             url.searchParams.set("ValgtGuiElemement", elementet);
             location.href = url;
