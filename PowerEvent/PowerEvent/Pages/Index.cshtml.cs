@@ -21,7 +21,6 @@ namespace PowerEvent
 
         public void OnGet()
         {
-
             checkScript();
 
             if (ValgtGuiElemement == "cmdLogin")
@@ -60,6 +59,8 @@ namespace PowerEvent
             }
             ValgtGuiElemement = Request.Query["ValgtGuiElemement"];
         }
+
+
 
 
 

@@ -674,8 +674,43 @@ namespace DatabaseClassLibrary
 
         //___________________________________________________________________________________________________________Alt med Hold Order ↑
 
+
         //___________________________________________________________________________________________________________Alt med Login ↓
 
+        //public static object validateLoginIntern(string _brugernavn, string _kode)
+        //{
+        //    object retur;
+
+        //    }
+        //    return retur;
+        //}
+
+        //public static Bruger validateLoginIntern(string _brugernavn, string _kode )
+        //{
+        //    Bruger retur;
+
+        //    using (SqlConnection con = new SqlConnection(connectionString))
+        //    {
+        //        string sql = "Select _b.Id, _b.AdminType FROM Bruger _b WHERE _b.Brugernavn LIKE @Brugernavn AND _b.Kodeord LIKE @Kode";
+
+
+        //        con.Open();
+        //        SqlCommand cmd = new SqlCommand(sql, con);
+        //        cmd.Parameters.AddWithValue("@Brugernavn", _brugernavn);
+        //        cmd.Parameters.AddWithValue("@Kode", _kode);
+
+        //        SqlDataReader reader = cmd.ExecuteReader();
+
+        //        while (reader.Read())
+        //        {
+        //            retur = new Bruger() {id }
+        //                int.Parse(reader["HoldOrder"].ToString())
+        //                );
+        //        }
+        //        reader.Close();
+        //    }
+        //    return retur;
+        //}
 
 
 
