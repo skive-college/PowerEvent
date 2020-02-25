@@ -12,11 +12,9 @@ namespace PowerEvent
 {
     public class OpretHoldModel : PageModel
     {
-        [BindProperty]
-        public int SelectedPointType { get; set; }
 
         [BindProperty]
-        public int SelectedHoldSport { get; set; }
+        public int SelectedHold { get; set; }
 
         [BindProperty]
         public int SelectedAktivitet { get; set; }
@@ -29,21 +27,19 @@ namespace PowerEvent
         [BindProperty]
         public int SelectedEvent { get; set; }
 
-        public string TxtAktivitet { get; set; }
+        public string TxtHold { get; set; }
+
+        public string TxtFarve { get; set; }
 
         public string ValgtGuiElemement { get; set; }
 
         public List<Event> EventList { get; set; }
 
-        public List<SelectListItem> GuiAktivitetList { get; set; }
+        public List<SelectListItem> GuiHoldList { get; set; }
 
-        public List<Aktivitet> AktivitetList { get; set; }
+        public List<Hold> HoldList { get; set; }
 
         public List<EventAktivitet> EventAktivitetList { get; set; }
-
-        public List<SelectListItem> PointTypeList { get; set; }
-
-        public List<SelectListItem> TempPointTypeList { get; set; }
 
         public List<SelectListItem> HoldSportList { get; set; }
 
@@ -59,7 +55,7 @@ namespace PowerEvent
                 {
                     if (EventAktivitetList.Count != 0)
                     {
-                        if (AktivitetList.Count == 0)
+                        if (HoldList.Count == 0)
                         {
                             if (SelectedAktivitet != -1)
                             {
@@ -70,7 +66,7 @@ namespace PowerEvent
                         {
                             if (SelectedAktivitet != -1)
                             {
-                                return AktivitetList.Where(i => i.Id == EventAktivitetList.Where(i => i.Id == SelectedEventAktivitet).FirstOrDefault().AktivitetId).FirstOrDefault();
+                                //return HoldList.Where(i => i.Id == EventAktivitetList.Where(i => i.Id == SelectedEventAktivitet).FirstOrDefault().AktivitetId).FirstOrDefault();
                             }
                         }
                     }
@@ -85,51 +81,25 @@ namespace PowerEvent
 
         public void OnGet()
         {
-            SelectedPointType = -1;
-            SelectedHoldSport = -1;
+            SelectedHold = -1;
             SelectedAktivitet = -1;
             SelectedEvent = -1;
             SelectedEventAktivitet = -1;
-            AktivitetList = new List<Aktivitet>();
+            HoldList = new List<Hold>();
             EventAktivitetList = new List<EventAktivitet>();
             EventList = DBAdapter.getEvent();
-
-            //loadTempDataTempPointTypeList();
-            //loadTempDataTempHoldSportList();
-            loadAktivitetList();
-            setAktivitetList();
-
-            //---------------------------------------------------------
-
-            PointTypeList = new List<SelectListItem>()
-            {
-            new SelectListItem { Value = "3", Text = "MaxSec" },
-            new SelectListItem { Value = "2", Text = "MinSec" },
-            new SelectListItem { Value = "1", Text = "MaxPoint" },
-            new SelectListItem { Value = "0", Text = "MinPoint" }
-            };
-            //saveTempDataPointType();
-
-            //-----------------------------------------------------------
-
-            HoldSportList = new List<SelectListItem>()
-            {
-            new SelectListItem { Value = "0", Text = "Hold point" },
-            new SelectListItem { Value = "1", Text = "Deltager point" },
-            };
-            //saveTempDataHoldSport();
-
+            loadHoldList();
             checkScript();
 
             if (SelectedEvent != -1)
             {
-                AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+                HoldList = DBAdapter.getHold();
                 EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
             }
 
-            if (ValgtGuiElemement == "CmdGemAktivitet")
+            if (ValgtGuiElemement == "CmdGemHold")
             {
-                CmdSaveAktivitet();
+                CmdSaveHold();
             }
             else if (ValgtGuiElemement == "CmdSletAktivitet")
             {
@@ -143,7 +113,6 @@ namespace PowerEvent
             {
                 CmdSletEventAktivitet();
             }
-
         }
 
         public void OnPost()
@@ -156,19 +125,17 @@ namespace PowerEvent
             if (SelectedAktivitet != -1)
             {
                 DBAdapter.deleteAktivitet(SelectedAktivitet);
-                loadAktivitetList();
-                setAktivitetList();
+                loadHoldList();
                 SelectedAktivitet = -1;
             }
         }
 
-        public void CmdSaveAktivitet()
+        public void CmdSaveHold()
         {
-            if (TxtAktivitet != "" && SelectedPointType != -1 && SelectedHoldSport != -1)
+            if (TxtHold != "" && TxtFarve != "")
             {
-                DBAdapter.addAktivitet(TxtAktivitet, SelectedPointType, SelectedHoldSport);
-                loadAktivitetList();
-                setAktivitetList();
+                DBAdapter.addHold(TxtHold, TxtFarve);
+                loadHoldList();
             }
         }
 
@@ -177,7 +144,7 @@ namespace PowerEvent
             if (SelectedAktivitet != -1 && SelectedEvent != -1)
             {
                 DBAdapter.addEventAktivitet(SelectedEvent, SelectedAktivitet);
-                loadAktivitetList();
+                loadHoldList();
                 loadEventAktivitetList();
             }
         }
@@ -186,79 +153,27 @@ namespace PowerEvent
             if (SelectedEventAktivitet != -1)
             {
                 DBAdapter.deleteEventAktivitet(SelectedEventAktivitet);
-                loadAktivitetList();
+                loadHoldList();
                 loadEventAktivitetList();
                 SelectedEventAktivitet = -1;
             }
         }
 
-        private void setAktivitetList()
-        {
-            List<SelectListItem> temp = new List<SelectListItem>();
-            int i = 0;
-            foreach (Aktivitet item in AktivitetList)
-            {
-                string pointTxt = "";
-                string holdSportTxt = "";
 
-                if (item.PointType == 0)
-                {
-                    pointTxt = "MinScore";
-                }
-                else if (item.PointType == 1)
-                {
-                    pointTxt = "MaxScore";
-                }
-                else if (item.PointType == 2)
-                {
-                    pointTxt = "MinSec";
-                }
-                else if (item.PointType == 3)
-                {
-                    pointTxt = "MaxSec";
-                }
-                //----------------------------------------------
-                if (item.HoldSport == 0)
-                {
-                    holdSportTxt = "HoldScore";
-                }
-                else if (item.HoldSport == 1)
-                {
-                    holdSportTxt = "DeltagerScore";
-                }
-                temp.Add(new SelectListItem { Value = item.Id + "", Text = "Aktivitet: " + item.Navn + ". PointType: " + pointTxt + ", " + holdSportTxt });
-                i++;
-            }
-            GuiAktivitetList = temp;
-        }
-
-        private void loadAktivitetList()
+        private void loadHoldList()
         {
-            AktivitetList = DBAdapter.getAktivitet();
+            HoldList = DBAdapter.getHold();
         }
 
         private void loadEventAktivitetList()
         {
+            //SKAL LAVES
             EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
         }
 
 
         private void checkScript()
         {
-            try
-            {
-                SelectedPointType = int.Parse(Request.Query["PointTypeList"]);
-            }
-            catch
-            {
-            }
-            try
-            {
-                SelectedHoldSport = int.Parse(Request.Query["HoldSportList"]);
-            }
-            catch
-            {
-            }
             try
             {
                 SelectedAktivitet = int.Parse(Request.Query["AktivitetList"]);
@@ -268,7 +183,7 @@ namespace PowerEvent
             }
             try
             {
-                TxtAktivitet = Request.Query["TxtAktivitet"];
+                TxtHold = Request.Query["TxtHold"];
             }
             catch
             {

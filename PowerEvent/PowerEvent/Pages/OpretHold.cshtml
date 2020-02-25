@@ -9,10 +9,10 @@
         <p>Opret aktivitet:</p>
     </div>
     <div class="row">
-        <input id="TxtAktivitet" type="text" placeholder="Aktivitet" />
+        <input id="TxtHold" type="text" placeholder="Hold navn" />
         <input id="TxtFarve" type="text" placeholder="Farve kode (HEX)" />
 
-        <input type="button" value="Gem" onclick="elementChanged('CmdGemAktivitet')" />
+        <input type="button" value="Gem" onclick="elementChanged('CmdGemHold')" />
     </div>
     <br />
 
@@ -21,12 +21,12 @@
     <div class="row">
         <div class="col-12 col-lg-6">
             <div class="row">
-                <select id="AktivitetList" asp-for="@Model.SelectedAktivitet" onchange="elementChanged('AktivitetList')" multiple style=" height: 350px; width: 450px">
+                <select id="HoldList" asp-for="@Model.SelectedHold" onchange="elementChanged('HoldList')" multiple style=" height: 350px; width: 450px">
                     @{
                         <option value="-1" hidden></option>
-                        foreach (var item in @Model.GuiAktivitetList)
+                        foreach (var item in @Model.HoldList)
                         {
-                            <option value="@item.Value">@item.Text</option>
+                            <option value="@item.Id">@item.Navn</option>
                         }
                     }
                 </select>
@@ -61,9 +61,9 @@
                         }
                     }
                 </select>
-                <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
+                <select id="EventAktivitetList" data-val="true" asp-for="@Model.SelectedEventAktivitet" onchange="elementChanged('EventAktivitetList')">
                     @{
-                        if (@Model.SelectedEvent == -1)
+                        if (@Model.SelectedEventAktivitet == -1)
                         {
                             <option value="-1" style="width:300px;">Vælg et event</option>
                         }
@@ -77,12 +77,12 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <select id="EventAktivitetList" asp-for="@Model.SelectedEventAktivitet" onchange="elementChanged('EventAktivitetList')" multiple style=" height: 350px; width: 450px">
+                    <select id="HoldList" asp-for="@Model.SelectedHold" onchange="elementChanged('HoldList')" multiple style=" height: 350px; width: 450px">
                         @{
                             <option value="-1" hidden></option>
-                            foreach (var item in @Model.EventAktivitetList)
+                            foreach (var item in @Model.HoldList)
                             {
-                                <option value="@item.Id">@Model.AktivitetList.Where(i => i.Id == item.AktivitetId).FirstOrDefault().Navn</option>
+                                <option value="@item.Id">@item.Navn</option>
                             }
                         }
                     </select>
@@ -102,30 +102,18 @@
         function elementChanged(elementet)
         {
             let url = new URL(location.href);
-            url.searchParams.set("TxtAktivitet", '');
+            url.searchParams.set("TxtHold", '');
+            url.searchParams.set("TxtFarve", '');
 
-            let PointTypeList = document.getElementById('PointTypeList');
-            let PointTypeListValgt = PointTypeList.options[PointTypeList.selectedIndex].value;
-            url.searchParams.set("PointTypeList", PointTypeListValgt);
+            let HoldList = document.getElementById('HoldList');
+            let HoldListValgt = AktivitetList.options[HoldList.selectedIndex].value;
+            url.searchParams.set("HoldList", HoldListValgt);
 
-            let HoldSportList = document.getElementById('HoldSportList');
-            let HoldSportListValgt = HoldSportList.options[HoldSportList.selectedIndex].value;
-            url.searchParams.set("HoldSportList", HoldSportListValgt);
-
-            let AktivitetList = document.getElementById('AktivitetList');
-            let AktivitetListValgt = AktivitetList.options[AktivitetList.selectedIndex].value;
-            url.searchParams.set("AktivitetList", AktivitetListValgt);
-
-            if (elementet == 'CmdGemAktivitet') {
-                let valgtAktivitet = document.getElementById('TxtAktivitet').value;
-                url.searchParams.set("TxtAktivitet", valgtAktivitet);
+            if (elementet == 'CmdGemHold') {
+                let valgtAktivitet = document.getElementById('TxtHold').value;
+                url.searchParams.set("TxtHold", valgtAktivitet);
                 let TxtFarve = document.getElementById('TxtFarve').value;
                 url.searchParams.set("TxtFarve", TxtFarve);
-            }
-
-            if (elementet == 'CmdAddEventAktivitetHold') {
-                let TxtFarve = document.getElementById('TxtHoldOrder').value;
-                url.searchParams.set("TxtHoldOrder", TxtFarve);
             }
 
             let EventAktivitetList = document.getElementById('EventAktivitetList');
@@ -135,7 +123,6 @@
             let EventList = document.getElementById('EventList');
             let EventListValgt = EventList.options[EventList.selectedIndex].value;
             url.searchParams.set("EventList", EventListValgt);
-
 
             url.searchParams.set("ValgtGuiElemement", elementet);
             location.href = url;

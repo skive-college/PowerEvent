@@ -417,6 +417,21 @@ namespace DatabaseClassLibrary
                 command.ExecuteNonQuery();
             }
         }
+
+        public static void addHold(string _holdNavn, string _frave)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "INSERT INTO Hold Values(@Navn, @Farve)";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Navn", _holdNavn);
+                command.Parameters.AddWithValue("@Farve", _frave);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
         //___________________________________________________________________________________________________________alt med Hold ↑
 
         //___________________________________________________________________________________________________________alt med Deltagere ↓
