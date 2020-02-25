@@ -162,19 +162,22 @@ namespace PowerEvent
                     {
                         CmdDeletePoint();
                     }
-                    HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedEventAktivitet);
-                    HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
-                    HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                    if (ValgtAktivitet.HoldSport == 0)
+                    {
+                        HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                        HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                        HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+
+                    }
+                    else if (ValgtAktivitet.HoldSport == 1)
+                    {
+                         DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedEventAktivitet, SelectedHold);
+                    }
                 }
             }
         }
 
         public void OnPost()
-        {
-
-        }
-
-        public void OnPostCmdRemoveHold()
         {
 
         }
@@ -187,7 +190,9 @@ namespace PowerEvent
                 if (TxtScore != null)
                 {
                     DBAdapter.addHoldScore(SelectedEvent, SelectedEventAktivitet, SelectedOrder, SelectedHold, TxtScore.Value);
-                    
+                    HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                    HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                    HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
                 }
             }
             else if (ValgtAktivitet.HoldSport == 1)
@@ -195,6 +200,7 @@ namespace PowerEvent
                 if (TxtScore != null)
                 {
                     DBAdapter.addDeltagerScore(SelectedEvent, SelectedEventAktivitet, SelectedHold, SelectedDeltager, TxtScore.Value);
+                    DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedEventAktivitet, SelectedHold);
                 }
                 //HoldSport Add DELTAGER score
             }
