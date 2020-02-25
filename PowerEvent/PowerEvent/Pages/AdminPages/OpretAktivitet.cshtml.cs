@@ -23,8 +23,6 @@ namespace PowerEvent.Pages
         [BindProperty]
         public int SelectedEventAktivitet { get; set; }
 
-        public int TempSelectedInfoId { get; set; }
-
         [BindProperty]
         public int SelectedEvent { get; set; }
 
@@ -47,8 +45,6 @@ namespace PowerEvent.Pages
         public List<SelectListItem> TempPointTypeList { get; set; }
 
         public List<SelectListItem> HoldSportList { get; set; }
-
-        public List<SelectListItem> TempHoldSportList { get; set; }
 
         private Aktivitet valgtAktivitet;
 

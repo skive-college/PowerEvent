@@ -22,8 +22,6 @@ namespace PowerEvent
         [BindProperty]
         public int SelectedEventAktivitet { get; set; }
 
-        public int TempSelectedInfoId { get; set; }
-
         [BindProperty]
         public int SelectedEvent { get; set; }
 
@@ -35,15 +33,10 @@ namespace PowerEvent
 
         public List<Event> EventList { get; set; }
 
-        public List<SelectListItem> GuiHoldList { get; set; }
-
         public List<Hold> HoldList { get; set; }
 
         public List<EventAktivitet> EventAktivitetList { get; set; }
 
-        public List<SelectListItem> HoldSportList { get; set; }
-
-        public List<SelectListItem> TempHoldSportList { get; set; }
 
         private Aktivitet valgtAktivitet;
 
