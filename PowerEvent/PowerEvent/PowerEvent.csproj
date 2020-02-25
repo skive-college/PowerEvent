@@ -13,10 +13,6 @@
     <ProjectReference Include="..\DatabaseClassLibrary\DatabaseClassLibrary.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\AdminPages\" />
-  </ItemGroup>
-
 
 
 </Project>
