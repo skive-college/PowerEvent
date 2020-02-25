@@ -103,7 +103,7 @@ namespace PowerEvent
             }
             else if (ValgtGuiElemement == "CmdSletAktivitet")
             {
-                CmdDeleteAktivitet();
+                CmdDeleteHold();
             }
             else if (ValgtGuiElemement == "CmdAddEventAktivitet")
             {
@@ -120,11 +120,11 @@ namespace PowerEvent
 
         }
 
-        public void CmdDeleteAktivitet()
+        public void CmdDeleteHold()
         {
             if (SelectedAktivitet != -1)
             {
-                DBAdapter.deleteAktivitet(SelectedAktivitet);
+                DBAdapter.deleteHold(SelectedAktivitet);
                 loadHoldList();
                 SelectedAktivitet = -1;
             }
@@ -176,7 +176,7 @@ namespace PowerEvent
         {
             try
             {
-                SelectedAktivitet = int.Parse(Request.Query["AktivitetList"]);
+                SelectedHold = int.Parse(Request.Query["HoldList"]);
             }
             catch
             {
@@ -184,6 +184,13 @@ namespace PowerEvent
             try
             {
                 TxtHold = Request.Query["TxtHold"];
+            }
+            catch
+            {
+            }
+            try
+            {
+                TxtFarve = Request.Query["TxtFarve"];
             }
             catch
             {
