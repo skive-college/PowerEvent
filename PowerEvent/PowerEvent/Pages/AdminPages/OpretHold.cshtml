@@ -39,16 +39,7 @@
         <br />
         <div class="col-12 col-lg-6">
             <div class="row">
-                <style>
-                    #EventList {
-                        width: 120px;
-                    }
-
-                        #EventList:focus {
-                            min-width: 120px;
-                            width: auto;
-                        }
-                </style>
+                <style> #EventList { width: 120px; } #EventList:focus { min-width: 120px; width: auto; } </style>
                 <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
                     @{
                         if (@Model.SelectedEvent == -1)
@@ -106,7 +97,7 @@
             url.searchParams.set("TxtFarve", '');
 
             let HoldList = document.getElementById('HoldList');
-            let HoldListValgt = AktivitetList.options[HoldList.selectedIndex].value;
+            let HoldListValgt = HoldList.options[HoldList.selectedIndex].value;
             url.searchParams.set("HoldList", HoldListValgt);
 
             if (elementet == 'CmdGemHold') {

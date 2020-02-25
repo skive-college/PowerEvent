@@ -418,7 +418,7 @@ namespace DatabaseClassLibrary
             }
         }
 
-        public static void addHold(string _holdNavn, string _frave)
+        public static void addHold(string _holdNavn, string _farve)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
@@ -426,7 +426,7 @@ namespace DatabaseClassLibrary
 
                 SqlCommand command = new SqlCommand(sql, con);
                 command.Parameters.AddWithValue("@Navn", _holdNavn);
-                command.Parameters.AddWithValue("@Farve", _frave);
+                command.Parameters.AddWithValue("@Farve", _farve);
                 con.Open();
                 command.ExecuteNonQuery();
             }
