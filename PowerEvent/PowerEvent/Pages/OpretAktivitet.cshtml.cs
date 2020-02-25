@@ -27,8 +27,6 @@ namespace PowerEvent.Pages
 
         [BindProperty]
         public int SelectedEvent { get; set; }
-        
-        public string TxtSletKode{ get; set; }
 
         public string TxtAktivitet { get; set; }
 
@@ -154,7 +152,7 @@ namespace PowerEvent.Pages
 
         public void CmdDeleteAktivitet()
         {
-            if (SelectedAktivitet != -1 && TxtSletKode == "123")
+            if (SelectedAktivitet != -1)
             {
                 DBAdapter.deleteAktivitet(SelectedAktivitet);
                 loadAktivitetList();
