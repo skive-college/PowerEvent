@@ -101,8 +101,9 @@
             url.searchParams.set("HoldList", HoldListValgt);
 
             if (elementet == 'CmdGemHold') {
-                let valgtAktivitet = document.getElementById('TxtHold').value;
-                url.searchParams.set("TxtHold", valgtAktivitet);
+                let TxtHold = document.getElementById('TxtHold').value;
+                url.searchParams.set("TxtHold", TxtHold);
+
                 let TxtFarve = document.getElementById('TxtFarve').value;
                 url.searchParams.set("TxtFarve", TxtFarve);
             }
