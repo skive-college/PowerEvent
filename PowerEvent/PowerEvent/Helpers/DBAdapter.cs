@@ -26,6 +26,16 @@ namespace PowerEvent.Helpers
             return eventList;
         }
 
+        public static void addEventAktivitet(int _eventId, int _aktivitetId)
+        {
+            DBHandler.addEventAktivitet(_eventId, _aktivitetId);
+        }
+
+        public static void deleteEventAktivitet(int _id)
+        {
+            DBHandler.deleteEventAktivitet(_id);
+        }
+
         //___________________________________________________________________________________________________________Alt med Event ↑
 
         //___________________________________________________________________________________________________________Alt med Aktivitet ↓
