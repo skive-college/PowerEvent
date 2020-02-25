@@ -158,7 +158,7 @@ namespace PowerEvent.Pages
                 loadAktivitetList();
                 setAktivitetList();
                 SelectedAktivitet = -1;
-                TxtSletKode = "";
+
             }
         }
 
