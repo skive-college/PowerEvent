@@ -130,7 +130,7 @@ namespace PowerEvent.Pages
             {
                 CmdSaveAktivitet();
             }
-            else if (ValgtGuiElemement == "CmdSletAktivitet")
+            else if (ValgtGuiElemement == "CmdDeleteAktivitet")
             {
                 CmdDeleteAktivitet();
             }
@@ -138,7 +138,7 @@ namespace PowerEvent.Pages
             {
                 CmdAddEventAktivitet();
             }
-            else if (ValgtGuiElemement == "CmdSletEventAktivitet")
+            else if (ValgtGuiElemement == "CmdDeleteEventAktivitet")
             {
                 CmdSletEventAktivitet();
             }
