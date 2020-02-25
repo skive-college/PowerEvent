@@ -168,9 +168,9 @@ namespace PowerEvent.Helpers
             DBHandler.addHoldScore(_eventId, _eventAktivitetId, _holdOrder, _holdId, _score);
         }
 
-        public static void addHold(string _holdNavn, string _frave)
+        public static void addHold(string _holdNavn, string _farve)
         {
-            DBHandler.addHold(_holdNavn, _frave);
+            DBHandler.addHold(_holdNavn, _farve);
         }
         //___________________________________________________________________________________________________________Alt med Hold ↑
 
