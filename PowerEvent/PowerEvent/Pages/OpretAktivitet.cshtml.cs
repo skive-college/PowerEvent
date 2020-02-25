@@ -27,10 +27,9 @@ namespace PowerEvent.Pages
 
         [BindProperty]
         public int SelectedEvent { get; set; }
-
         
-        [BindProperty]
         public string TxtSletKode{ get; set; }
+
         public string TxtAktivitet { get; set; }
 
         public string ValgtGuiElemement { get; set; }
@@ -137,6 +136,14 @@ namespace PowerEvent.Pages
             {
                 CmdDeleteAktivitet();
             }
+            else if (ValgtGuiElemement == "CmdAddEventAktivitet")
+            {
+
+            }
+            else if (ValgtGuiElemement == "CmdSletEventAktivitet")
+            {
+
+            }
 
         }
         
@@ -153,6 +160,7 @@ namespace PowerEvent.Pages
                 loadAktivitetList();
                 setAktivitetList();
                 SelectedAktivitet = -1;
+                TxtSletKode = "";
             }
         }
 

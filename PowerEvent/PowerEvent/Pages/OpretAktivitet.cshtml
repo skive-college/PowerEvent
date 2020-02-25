@@ -41,6 +41,7 @@
         <br />
 
 
+
         <div class="row">
             <div class="col-12 col-lg-6">
                 <div class="row">
@@ -56,14 +57,22 @@
                 </div>
 
                 <div class="row">
-                <input type="text" asp-for="@Model.TxtSletKode" placeholder="Indtast kode for at slette (123)"/>
                 <input type="button" value="Slet" onclick="elementChanged('CmdSletAktivitet')" />
                 </div>
             </div>
             <br/>
             <div class="col-12 col-lg-6">
                 <div class="row">
-                    <style> #EventList { width: 120px; } #EventList:focus { min-width: 120px; width: auto; } </style>
+                    <style>
+                        #EventList {
+                            width: 120px;
+                        }
+
+                            #EventList:focus {
+                                min-width: 120px;
+                                width: auto;
+                            }
+                    </style>
                     <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
                         @{
                             if (@Model.SelectedEvent == -1)
@@ -90,6 +99,8 @@
                         </select>
                     </div>
                 </div>
+                <input type="button" value="Tilføj" onclick="elementChanged('CmdAddEventAktivitet')" />
+                <input type="button" value="Slet" onclick="elementChanged('CmdSletEventAktivitet')" />
             </div>
             <br/>
         </div>

@@ -213,9 +213,13 @@ namespace PowerEvent
             }
             else if (ValgtAktivitet.HoldSport == 1)
             {
-                //HoldSport Deltete DELTAGER score
-                DBAdapter.deleteDeltagerScore(SelectedPoint);
-                SelectedPoint = -1;
+                if (SelectedPoint != -1)
+                {
+                    //HoldSport Deltete DELTAGER score
+                    DBAdapter.deleteDeltagerScore(SelectedPoint);
+                    SelectedPoint = -1;
+                }
+                
             }
         }
 
