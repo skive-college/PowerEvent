@@ -7,6 +7,7 @@
 <h1>HoldOpsaetning</h1>
 
 <p>Event:</p>
+<style> #EventList { width: 120px; } #EventList:focus { min-width: 120px; width: auto; } </style>
 <select id="EventList" onchange="eventListChanged()">
     @{
         if (Model.Request.Query.Count == 0)
