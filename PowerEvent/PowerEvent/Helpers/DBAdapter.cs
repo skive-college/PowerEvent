@@ -172,6 +172,11 @@ namespace PowerEvent.Helpers
         {
             DBHandler.addHold(_holdNavn, _farve);
         }
+
+        public static void deleteHold(int _id)
+        {
+            DBHandler.deleteHold(_id);
+        }
         //___________________________________________________________________________________________________________Alt med Hold ↑
 
         //___________________________________________________________________________________________________________Alt med Hold Order ↓
