@@ -706,7 +706,7 @@ namespace DatabaseClassLibrary
             return retur;
         }
 
-        public static List<Login> getLoginIntern(string _brugernavn, string _kodeord)
+        public static List<Login> getLoginIntern(string _brugernavn = null, string _kodeord = null)
         {
             List<Login> retur = new List<Login>();
             using (SqlConnection con = new SqlConnection(connectionString))

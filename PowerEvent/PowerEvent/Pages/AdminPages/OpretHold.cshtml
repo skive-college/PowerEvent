@@ -100,8 +100,9 @@
                             if (@Model.SelectedEventAktivitet != -1)
                             {
                                 <option value="-1" hidden></option>
-                                foreach (var item in @Model.HoldAktivitetList)
+                                foreach (var item in @Model.HoldAktivitetLis)
                                 {
+                                    //t.Where(i => i.Id == i.HoldAktiviteter.Where(i => i.EventAktivitetId == Model.SelectedEventAktivitet).FirstOrDefault().HoldId).FirstOrDefault()
                                     <option value="@item.Id">@item.Navn</option>
                                 }
                             }
@@ -129,10 +130,14 @@
             let HoldList = document.getElementById('HoldList');
             let HoldListValgt = HoldList.options[HoldList.selectedIndex].value;
             url.searchParams.set("HoldList", HoldListValgt);
-
-            let HoldAktivitetList = document.getElementById('HoldAktivitetList');
-            let HoldAktivitetListValgt = HoldAktivitetList.options[HoldAktivitetList.selectedIndex].value;
-            url.searchParams.set("HoldAktivitetList", HoldAktivitetListValgt);
+            @{ 
+                if (Model.SelectedEventAktivitet != -1)
+                {
+                    @: let HoldAktivitetList = document.getElementById('HoldAktivitetList');
+                    @: let HoldAktivitetListValgt = HoldAktivitetList.options[HoldAktivitetList.selectedIndex].value;
+                    @: url.searchParams.set("HoldAktivitetList", HoldAktivitetListValgt);
+                }
+            }
 
             if (elementet == 'CmdGemHold') {
                 let TxtHold = document.getElementById('TxtHold').value;

@@ -168,7 +168,7 @@ namespace PowerEvent
         
         private void loadHoldAktivitetList()
         {
-            HoldAktivitetList = DBAdapter.getHold(SelectedEvent, SelectedEventAktivitet);
+            HoldAktivitetList = DBAdapter.getHold(SelectedEvent);
         }
 
         private void loadEventAktivitetList()
