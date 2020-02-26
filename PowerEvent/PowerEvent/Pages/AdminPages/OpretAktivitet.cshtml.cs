@@ -26,9 +26,7 @@ namespace PowerEvent.Pages
         [BindProperty]
         public int SelectedEvent { get; set; }
 
-        public string TxtHold { get; set; }
-
-        public string TxtFarve { get; set; }
+        public string TxtAktivitet { get; set; }
 
         public string ValgtGuiElemement { get; set; }
 
@@ -124,13 +122,13 @@ namespace PowerEvent.Pages
                 EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
             }
 
-            if (ValgtGuiElemement == "CmdGemHold")
+            if (ValgtGuiElemement == "CmdGemAktivitet")
             {
-                CmdGemHold();
+                CmdGemAktivitet();
             }
-            else if (ValgtGuiElemement == "CmdSletHold")
+            else if (ValgtGuiElemement == "CmdDeleteAktivitet")
             {
-                CmdSletHold();
+                CmdDeleteAktivitet();
             }
             else if (ValgtGuiElemement == "CmdAddEventAktivitet")
             {
@@ -148,22 +146,22 @@ namespace PowerEvent.Pages
 
         }
 
-        public void CmdSletHold()
+        public void CmdDeleteAktivitet()
         {
             if (SelectedAktivitet != -1)
             {
-                DBAdapter.deleteHold(SelectedAktivitet);
+                DBAdapter.deleteAktivitet(SelectedAktivitet);
                 loadAktivitetList();
                 setAktivitetList();
                 SelectedAktivitet = -1;
             }
         }
 
-        public void CmdGemHold()
+        public void CmdGemAktivitet()
         {
-            if (TxtHold != "" && TxtFarve != "")
+            if (TxtAktivitet != "")
             {
-                DBAdapter.addHold(TxtHold, TxtFarve);
+                DBAdapter.addAktivitet(TxtAktivitet, SelectedPointType, SelectedHoldSport);
                 loadAktivitetList();
                 setAktivitetList();
             }
@@ -265,7 +263,7 @@ namespace PowerEvent.Pages
             }
             try
             {
-                TxtHold = Request.Query["TxtHold"];
+                TxtAktivitet = Request.Query["TxtAktivitet"];
             }
             catch
             {

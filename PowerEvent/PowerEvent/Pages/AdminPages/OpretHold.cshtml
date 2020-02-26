@@ -58,9 +58,9 @@
                         {
                             <option value="-1" style="width:300px;">Vælg et event</option>
                         }
-                        foreach (var item in @Model.EventList)
+                        foreach (var item in @Model.EventAktivitetList)
                         {
-                            <option value="@item.Id">@item.Navn</option>
+                            <option value="@item.Id">@item.</option>
                         }
                     }
                 </select>
@@ -68,10 +68,10 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <select id="HoldList" asp-for="@Model.SelectedHold" onchange="elementChanged('HoldList')" multiple style=" height: 350px; width: 450px">
+                    <select id="HoldList" asp-for="@Model.SelectedHoldAktivitet" onchange="elementChanged('HoldAktivitetList')" multiple style=" height: 350px; width: 450px">
                         @{
                             <option value="-1" hidden></option>
-                            foreach (var item in @Model.HoldList)
+                            foreach (var item in @Model.HoldAktivitetList)
                             {
                                 <option value="@item.Id">@item.Navn</option>
                             }

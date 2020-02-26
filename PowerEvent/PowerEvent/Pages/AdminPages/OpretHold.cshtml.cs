@@ -15,6 +15,9 @@ namespace PowerEvent
 
         [BindProperty]
         public int SelectedHold { get; set; }
+        
+        [BindProperty]
+        public int SelectedHoldAktivitet { get; set; }
 
         [BindProperty]
         public int SelectedAktivitet { get; set; }
@@ -34,6 +37,8 @@ namespace PowerEvent
         public List<Event> EventList { get; set; }
 
         public List<Hold> HoldList { get; set; }
+        
+        public List<Hold> HoldAktivitetList { get; set; }
 
         public List<EventAktivitet> EventAktivitetList { get; set; }
 
@@ -75,6 +80,7 @@ namespace PowerEvent
         public void OnGet()
         {
             SelectedHold = -1;
+            SelectedHoldAktivitet = -1;
             SelectedAktivitet = -1;
             SelectedEvent = -1;
             SelectedEventAktivitet = -1;
@@ -157,10 +163,14 @@ namespace PowerEvent
         {
             HoldList = DBAdapter.getHold();
         }
+        
+        private void loadHoldAktivitetList()
+        {
+            HoldList = DBAdapter.getHold(SelectedEvent, SelectedEventAktivitet);
+        }
 
         private void loadEventAktivitetList()
         {
-            //SKAL LAVES
             EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
         }
 
