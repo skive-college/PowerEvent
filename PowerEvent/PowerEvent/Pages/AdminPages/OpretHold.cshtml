@@ -95,7 +95,7 @@
             </select>
             <div class="row">
                 <div class="col">
-                    <select id="HoldList" asp-for="@Model.SelectedHoldAktivitet" onchange="elementChanged('HoldAktivitetList')" multiple style=" height: 350px; width: 450px">
+                    <select id="HoldAktivitetList" asp-for="@Model.SelectedHoldAktivitet" onchange="elementChanged('HoldAktivitetList')" multiple style=" height: 350px; width: 450px">
                         @{
                             if (@Model.SelectedEventAktivitet != -1)
                             {
@@ -129,6 +129,10 @@
             let HoldList = document.getElementById('HoldList');
             let HoldListValgt = HoldList.options[HoldList.selectedIndex].value;
             url.searchParams.set("HoldList", HoldListValgt);
+
+            let HoldAktivitetList = document.getElementById('HoldAktivitetList');
+            let HoldAktivitetListValgt = HoldAktivitetList.options[HoldAktivitetList.selectedIndex].value;
+            url.searchParams.set("HoldAktivitetList", HoldAktivitetListValgt);
 
             if (elementet == 'CmdGemHold') {
                 let TxtHold = document.getElementById('TxtHold').value;

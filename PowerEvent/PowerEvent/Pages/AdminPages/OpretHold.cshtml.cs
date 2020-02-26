@@ -86,16 +86,18 @@ namespace PowerEvent
             EventAktivitetList = new List<EventAktivitet>();
             EventList = DBAdapter.getEvent();
             loadHoldList();
-            loadHoldAktivitetList();
             checkScript();
+            
+
 
             if (SelectedEvent != -1)
             {
                 AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
-            }
-            else if (SelectedEvent != -1)
-            {
-                loadHoldAktivitetList();
+                if (SelectedEventAktivitet != -1)
+                {
+                    loadHoldAktivitetList();
+                }
+                
             }
 
             if (ValgtGuiElemement == "CmdGemHold")
@@ -142,12 +144,10 @@ namespace PowerEvent
 
         public void CmdAddEventAktivitet()
         {
-            if (SelectedEventAktivitet != -1 && SelectedEvent != -1)
+            if (SelectedEventAktivitet != -1)
             {
                 DBAdapter.addEventAktivitet(SelectedEvent, SelectedEventAktivitet);
-                loadHoldList();
                 loadHoldAktivitetList();
-                loadEventAktivitetList();
             }
         }
         public void CmdSletEventAktivitet()
@@ -155,8 +155,7 @@ namespace PowerEvent
             if (SelectedEventAktivitet != -1)
             {
                 DBAdapter.deleteEventAktivitet(SelectedEventAktivitet);
-                loadHoldList();
-                loadEventAktivitetList();
+                loadHoldAktivitetList();
                 SelectedEventAktivitet = -1;
             }
         }
@@ -169,7 +168,7 @@ namespace PowerEvent
         
         private void loadHoldAktivitetList()
         {
-            HoldList = DBAdapter.getHold(SelectedEvent, SelectedEventAktivitet);
+            HoldAktivitetList = DBAdapter.getHold(SelectedEvent, SelectedEventAktivitet);
         }
 
         private void loadEventAktivitetList()
@@ -184,6 +183,13 @@ namespace PowerEvent
             try
             {
                 SelectedHold = int.Parse(Request.Query["HoldList"]);
+            }
+            catch
+            {
+            }
+            try
+            {
+                SelectedHoldAktivitet = int.Parse(Request.Query["HoldAktivitetList"]);
             }
             catch
             {
