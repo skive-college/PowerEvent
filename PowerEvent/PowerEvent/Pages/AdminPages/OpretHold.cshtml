@@ -6,7 +6,7 @@
 
 <div class="container">
     <div class="row">
-        <p>Opret aktivitet:</p>
+        <p>Opret Hold:</p>
     </div>
     <div class="row">
         <input id="TxtHold" type="text" placeholder="Hold navn" />
@@ -39,41 +39,71 @@
         <br />
         <div class="col-12 col-lg-6">
             <div class="row">
-                <style> #EventList { width: 120px; } #EventList:focus { min-width: 120px; width: auto; } </style>
-                <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
-                    @{
-                        if (@Model.SelectedEvent == -1)
-                        {
-                            <option value="-1" style="width:300px;">Vælg et event</option>
-                        }
-                        foreach (var item in @Model.EventList)
-                        {
-                            <option value="@item.Id">@item.Navn</option>
-                        }
+                <style>
+                    #EventList {
+                        width: 120px;
                     }
-                </select>
-                <select id="EventAktivitetList" data-val="true" asp-for="@Model.SelectedEventAktivitet" onchange="elementChanged('EventAktivitetList')">
-                    @{
+
+                        #EventList:focus {
+                            min-width: 120px;
+                            width: auto;
+                        }
+                </style>
+
+            </div>
+            <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
+                @{
+                    if (@Model.SelectedEvent == -1)
+                    {
+                        <option value="-1">Vælg et event</option>
+                    }
+
+                    foreach (var item in @Model.EventList)
+                    {
+                        <option value="@item.Id">@item.Navn</option>
+                    }
+                }
+            </select>
+            <style>
+                #AktivitetList {
+                    width: 120px;
+                }
+
+                    #AktivitetList:focus {
+                        min-width: 120px;
+                        width: auto;
+                    }
+            </style>
+            <select id="EventAktivitetList" asp-for="@Model.SelectedEventAktivitet" onchange="elementChanged('EventAktivitetList')">
+                @{
+                    if (@Model.SelectedEvent == -1)
+                    {
+                        <option value="-1" hidden></option>
+                    }
+                    if (@Model.SelectedEvent != -1)
+                    {
                         if (@Model.SelectedEventAktivitet == -1)
                         {
-                            <option value="-1" style="width:300px;">Vælg et event</option>
+                            <option value="-1">Vælg en Aktivitet</option>
                         }
                         foreach (var item in @Model.EventAktivitetList)
                         {
-                            <option value="@item.Id">@item.</option>
+                            <option value="@item.Id">@Model.AktivitetList.Where(i => i.Id == item.AktivitetId).FirstOrDefault().Navn</option>
                         }
                     }
-                </select>
-
-            </div>
+                }
+            </select>
             <div class="row">
                 <div class="col">
                     <select id="HoldList" asp-for="@Model.SelectedHoldAktivitet" onchange="elementChanged('HoldAktivitetList')" multiple style=" height: 350px; width: 450px">
                         @{
-                            <option value="-1" hidden></option>
-                            foreach (var item in @Model.HoldAktivitetList)
+                            if (@Model.SelectedEventAktivitet != -1)
                             {
-                                <option value="@item.Id">@item.Navn</option>
+                                <option value="-1" hidden></option>
+                                foreach (var item in @Model.HoldAktivitetList)
+                                {
+                                    <option value="@item.Id">@item.Navn</option>
+                                }
                             }
                         }
                     </select>
