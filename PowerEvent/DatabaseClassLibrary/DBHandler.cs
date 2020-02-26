@@ -690,43 +690,76 @@ namespace DatabaseClassLibrary
 
         //___________________________________________________________________________________________________________Alt med Login ↓
 
-        //public static object validateLogin(string _brugernavn, string _kodeord)
-        //{
-        //    object retur;
-        //    Login l = validateLogin(_brugernavn, _kodeord);
-        //    return retur;
-        //}
+        public static List<object> getLogin(string _brugernavn, string _kodeord)
+        {
+            List<object> retur = new List<object>();
+            List<Login> loginList = getLoginIntern(_brugernavn, _kodeord);
+            if (loginList.Count != 0)
+            {
+                foreach (Login _Login in loginList)
+                {
+                    List<object> dScoreList = new List<object>();
+                    retur.Add(new { Id = _Login.Id, Brugernavn = _Login.Brugernavn, Kodeord = _Login.Kodeord, AdminType = _Login.AdminType, EventId = _Login.EventId, HoldId = _Login.HoldId }
+                );
+                }
+            }
+            return retur;
+        }
 
-        //public static Login validateLoginIntern(string _brugernavn, string _kodeord,)
-        //{
-        //    Login retur = new Login();
-        //    using (SqlConnection con = new SqlConnection(connectionString))
-        //    {
-        //        string sql = "Select _b.Id, _b.AdminType FROM Bruger _b WHERE _b.Brugernavn LIKE @Brugernavn AND _b.Kodeord LIKE @Kode";
+        public static List<Login> getLoginIntern(string _brugernavn, string _kodeord)
+        {
+            List<Login> retur = new List<Login>();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "Select _l.Id, _l.Brugernavn, _l.Kodeord, _l.AdminType, _l.EventId, _l.HoldId FROM Login _L";
+
+                if (_brugernavn != "" && _kodeord != "")
+                {
+                    sql += " WHERE _l.Brugernavn LIKE @Brugernavn AND _l.Kodeord LIKE @Kode";
+                }
+
+                con.Open();
+                SqlCommand cmd = new SqlCommand(sql, con);
+                if (_brugernavn != "" && _kodeord != "")
+                {
+                    cmd.Parameters.AddWithValue("@Brugernavn", _brugernavn);
+                    cmd.Parameters.AddWithValue("@Kode", _kodeord);
+                }
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    retur.Add(new Login() { Id = int.Parse(reader["Id"].ToString()), Brugernavn = reader["Brugernavn"].ToString(), Kodeord = reader["Kodeord"].ToString(), AdminType = int.Parse(reader["AdminType"].ToString()), EventId = int.Parse(reader["EventId"].ToString()), HoldId = int.Parse(reader["HoldId"].ToString()) }
+                    );
+                }
+                reader.Close();
+            }
+            return retur;
+        }
+
+        public static void addLogin(string _brugernavn, string _kodeord, int _adminType, int? _eventId = null, int? _holdId = null)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "INSERT INTO Login (Brugernavn, Kodeord, AdminType, EventId, HoldId) VALUES (@Brugernavn, @Kodeord, @AdminType, @EventId, @HoldId)";
+
+                con.Open();
+                SqlCommand cmd = new SqlCommand(sql, con);
+                cmd.Parameters.AddWithValue("@Brugernavn", _brugernavn);
+                cmd.Parameters.AddWithValue("@Kodeord", _kodeord);
+                cmd.Parameters.AddWithValue("@AdminType", _adminType);
+                cmd.Parameters.AddWithValue("@EventId", _eventId);
+                cmd.Parameters.AddWithValue("@HoldId", _holdId);
+
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
 
 
-        //        con.Open();
-        //        SqlCommand cmd = new SqlCommand(sql, con);
-        //        cmd.Parameters.AddWithValue("@Brugernavn", _brugernavn);
-        //        cmd.Parameters.AddWithValue("@Kode", _kodeord);
-
-        //        SqlDataReader reader = cmd.ExecuteReader();
-
-        //        while (reader.Read())
-        //        {
-        //            retur = new Login() { id =  }
-        //                    int.Parse(reader["HoldOrder"].ToString())
-        //                    );
-        //        }
-        //        reader.Close();
-        //    }
-        //    return retur;
-        //}
+        //___________________________________________________________________________________________________________Alt med Login ↑
 
 
-
-    //___________________________________________________________________________________________________________Alt med Login ↑
-
-
-}
+    }
 }
