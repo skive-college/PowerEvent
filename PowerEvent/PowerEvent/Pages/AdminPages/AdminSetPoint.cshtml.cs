@@ -130,11 +130,6 @@ namespace PowerEvent
                     EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
                     AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
                 }
-                if (EventAktivitetList.Count == 0)
-                {
-                    EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
-                    AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
-                }
                 if (SelectedEventAktivitet != -1)
                 {
                     OrderList = DBAdapter.getHoldOrder(SelectedEvent, SelectedEventAktivitet);

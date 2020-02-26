@@ -65,13 +65,17 @@ namespace PowerEvent
 
 
 
-        public string GenerateEncryptionKey()
+        public string GenerateEncryptionKey(string key = "")
         {
             string EncryptionKey = string.Empty;
+            if (key == "")
+            {
+                Random Robj = new Random();
+                int Rnumber = Robj.Next();
+                key = Convert.ToString(Rnumber);
+            }
 
-            Random Robj = new Random();
-            int Rnumber = Robj.Next();
-            EncryptionKey = "XYZ" + Convert.ToString(Rnumber);
+            EncryptionKey = "XYZ" + key;
 
             return EncryptionKey;
         }

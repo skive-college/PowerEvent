@@ -92,7 +92,7 @@ namespace PowerEvent
 
             if (SelectedEvent != -1)
             {
-                AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+                loadEventAktivitetList();
                 if (SelectedEventAktivitet != -1)
                 {
                     loadHoldAktivitetList();
