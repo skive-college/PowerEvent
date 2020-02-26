@@ -726,7 +726,7 @@ namespace DatabaseClassLibrary
                     cmd.Parameters.AddWithValue("@Kode", _kodeord);
                 }
 
-        //        SqlDataReader reader = cmd.ExecuteReader();
+                SqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
