@@ -20,9 +20,6 @@ namespace PowerEvent
         public int SelectedHoldAktivitet { get; set; }
 
         [BindProperty]
-        public int SelectedAktivitet { get; set; }
-
-        [BindProperty]
         public int SelectedEventAktivitet { get; set; }
 
         [BindProperty]
@@ -37,6 +34,8 @@ namespace PowerEvent
         public List<Event> EventList { get; set; }
 
         public List<Hold> HoldList { get; set; }
+
+        public List<Aktivitet> AktivitetList { get; set; }
         
         public List<Hold> HoldAktivitetList { get; set; }
 
@@ -53,18 +52,18 @@ namespace PowerEvent
                 {
                     if (EventAktivitetList.Count != 0)
                     {
-                        if (HoldList.Count == 0)
+                        if (AktivitetList.Count == 0)
                         {
-                            if (SelectedAktivitet != -1)
+                            if (SelectedEventAktivitet != -1)
                             {
                                 return DBAdapter.getAktivitet(SelectedEvent).Where(i => i.Id == EventAktivitetList.Where(i => i.Id == SelectedEventAktivitet).FirstOrDefault().AktivitetId).FirstOrDefault();
                             }
                         }
                         else
                         {
-                            if (SelectedAktivitet != -1)
+                            if (SelectedEventAktivitet != -1)
                             {
-                                //return HoldList.Where(i => i.Id == EventAktivitetList.Where(i => i.Id == SelectedEventAktivitet).FirstOrDefault().AktivitetId).FirstOrDefault();
+                                return AktivitetList.Where(i => i.Id == EventAktivitetList.Where(i => i.Id == SelectedEventAktivitet).FirstOrDefault().AktivitetId).FirstOrDefault();
                             }
                         }
                     }
@@ -81,19 +80,22 @@ namespace PowerEvent
         {
             SelectedHold = -1;
             SelectedHoldAktivitet = -1;
-            SelectedAktivitet = -1;
             SelectedEvent = -1;
             SelectedEventAktivitet = -1;
             HoldList = new List<Hold>();
             EventAktivitetList = new List<EventAktivitet>();
             EventList = DBAdapter.getEvent();
             loadHoldList();
+            loadHoldAktivitetList();
             checkScript();
 
             if (SelectedEvent != -1)
             {
-                HoldList = DBAdapter.getHold();
-                EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
+                AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+            }
+            else if (SelectedEvent != -1)
+            {
+                loadHoldAktivitetList();
             }
 
             if (ValgtGuiElemement == "CmdGemHold")
@@ -121,11 +123,11 @@ namespace PowerEvent
 
         public void CmdDeleteHold()
         {
-            if (SelectedAktivitet != -1)
+            if (SelectedHold != -1)
             {
-                DBAdapter.deleteHold(SelectedAktivitet);
+                DBAdapter.deleteHold(SelectedHold);
                 loadHoldList();
-                SelectedAktivitet = -1;
+                SelectedHold = -1;
             }
         }
 
@@ -140,10 +142,11 @@ namespace PowerEvent
 
         public void CmdAddEventAktivitet()
         {
-            if (SelectedAktivitet != -1 && SelectedEvent != -1)
+            if (SelectedEventAktivitet != -1 && SelectedEvent != -1)
             {
-                DBAdapter.addEventAktivitet(SelectedEvent, SelectedAktivitet);
+                DBAdapter.addEventAktivitet(SelectedEvent, SelectedEventAktivitet);
                 loadHoldList();
+                loadHoldAktivitetList();
                 loadEventAktivitetList();
             }
         }
@@ -171,6 +174,7 @@ namespace PowerEvent
 
         private void loadEventAktivitetList()
         {
+            AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
             EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
         }
 
