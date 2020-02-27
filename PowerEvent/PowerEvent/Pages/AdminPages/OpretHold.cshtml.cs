@@ -86,7 +86,6 @@ namespace PowerEvent
             EventList = DBAdapter.getEvent();
             loadHoldList();
             checkScript();
-            
 
 
             if (SelectedEvent != -1)
