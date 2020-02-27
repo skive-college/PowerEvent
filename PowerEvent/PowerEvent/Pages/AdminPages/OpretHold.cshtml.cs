@@ -172,15 +172,6 @@ namespace PowerEvent
             HoldAktivitetList = DBAdapter.getHoldAktivitet(HoldAktivitetList, SelectedEvent);
 
             HoldAktivitetList = HoldAktivitetList.Where(i => i.HoldAktiviteter.Where(i => i.EventAktivitetId == SelectedEventAktivitet).FirstOrDefault() != null).ToList();
-            //List<Hold> tempHoldList = new List<Hold>();
-            //foreach (var item in HoldAktivitetList)
-            //{
-            //    if (item.HoldAktiviteter.Where(i => i.EventAktivitetId == SelectedEventAktivitet).FirstOrDefault() != null)
-            //    {
-            //        tempHoldList.Add(item);
-            //    }
-            //}
-            //HoldAktivitetList = tempHoldList;
         }
 
         private void loadEventAktivitetList()
