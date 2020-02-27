@@ -29,6 +29,8 @@ namespace PowerEvent
 
         public string TxtFarve { get; set; }
 
+        public int txtHoldOrder { get; set; }
+
         public string ValgtGuiElemement { get; set; }
 
         public List<Event> EventList { get; set; }
@@ -144,9 +146,9 @@ namespace PowerEvent
 
         public void CmdAddEventAktivitet()
         {
-            if (SelectedEventAktivitet != -1)
+            if (SelectedEventAktivitet != -1 && txtHoldOrder != 0)
             {
-                DBAdapter.addEventAktivitet(SelectedEvent, SelectedEventAktivitet);
+                DBAdapter.addEventAktivitetHold(SelectedEventAktivitet, SelectedHold, txtHoldOrder);
                 loadHoldAktivitetList();
             }
         }
@@ -154,9 +156,9 @@ namespace PowerEvent
         {
             if (SelectedEventAktivitet != -1)
             {
-                DBAdapter.deleteEventAktivitet(SelectedEventAktivitet);
+                
                 loadHoldAktivitetList();
-                SelectedEventAktivitet = -1;
+                SelectedHold = -1;
             }
         }
 
@@ -217,6 +219,13 @@ namespace PowerEvent
             }
             try
             {
+                txtHoldOrder = int.Parse(Request.Query["TxtHoldOrder"]);
+            }
+            catch
+            {
+            }
+            try
+            {
                 SelectedEvent = int.Parse(Request.Query["EventList"]);
             }
             catch
@@ -244,6 +253,14 @@ namespace PowerEvent
                 {
                     saveTempDataEvent();
                     SelectedEventAktivitet = -1;
+                    SelectedHoldAktivitet = -1;
+                }
+            }
+            else if (ValgtGuiElemement == "EventAktivitetList")
+            {
+                if (SelectedEventAktivitet != -1)
+                {
+                    SelectedHoldAktivitet = -1;
                 }
             }
         }

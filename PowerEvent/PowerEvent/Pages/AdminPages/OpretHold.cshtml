@@ -128,6 +128,7 @@
             let url = new URL(location.href);
             url.searchParams.set("TxtHold", '');
             url.searchParams.set("TxtFarve", '');
+            url.searchParams.set("TxtHoldOrder", '');
 
             let HoldList = document.getElementById('HoldList');
             let HoldListValgt = HoldList.options[HoldList.selectedIndex].value;
@@ -142,8 +143,8 @@
             }
 
             if (elementet == 'CmdGemHold') {
-                let TxtHold = document.getElementById('TxtHold').value;
-                url.searchParams.set("TxtHold", TxtHold);
+                let TxtHoldOrder = document.getElementById('TxtHoldOrder').value;
+                url.searchParams.set("TxtHoldOrder", TxtHoldOrder);
 
                 let TxtFarve = document.getElementById('TxtFarve').value;
                 url.searchParams.set("TxtFarve", TxtFarve);
