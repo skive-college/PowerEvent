@@ -102,7 +102,6 @@
                                 <option value="-1" hidden></option>
                                 foreach (var item in @Model.HoldAktivitetList)
                                 {
-                                    //t.Where(i => i.Id == i.HoldAktiviteter.Where(i => i.EventAktivitetId == Model.SelectedEventAktivitet).FirstOrDefault().HoldId).FirstOrDefault()
                                     <option value="@item.Id">@item.Navn</option>
                                 }
                             }
