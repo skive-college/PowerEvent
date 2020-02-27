@@ -17,6 +17,9 @@ namespace PowerEvent
         public string ValgtGuiElemement { get; set; }
 
         public List<Event> EventList { get; set; }
+        public List<Deltager> DeltagerList { get; set; }
+
+        public List<Hold> HoldList{ get; set; }
 
 
 
@@ -24,9 +27,14 @@ namespace PowerEvent
         public void OnGet()
         {
             SelectedEvent = -1;
+            DeltagerList = new List<Deltager>();
+            HoldList = new List<Hold>();
             EventList = DBAdapter.getEvent();
 
             checkScript();
+
+                HoldList = DBAdapter.getHold(SelectedEvent);
+            
         }
 
         private void checkScript()
