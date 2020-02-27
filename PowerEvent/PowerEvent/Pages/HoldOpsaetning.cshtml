@@ -35,7 +35,7 @@
                 <div class="col-sm-5">
                     <form method="post">
                         <p>Spillers navn</p>
-                        <input type="text" name="Navn" asp-for="@Model.DeltagerNavn"/>
+                        <input type="text" asp-for="@Model.DeltagerNavn"/>
                         <input type="submit" value="Opret" formmethod="post" asp-page-handler="CmdSubmitNavn"/>
                     </form>
                         <select id="deltagerselect" style="min-width:150px" multiple>
