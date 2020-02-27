@@ -23,12 +23,8 @@ namespace PowerEvent.Pages
         [BindProperty]
         public int SelectedEventAktivitet { get; set; }
 
-        public int TempSelectedInfoId { get; set; }
-
         [BindProperty]
         public int SelectedEvent { get; set; }
-
-        
 
         public string TxtAktivitet { get; set; }
 
@@ -47,8 +43,6 @@ namespace PowerEvent.Pages
         public List<SelectListItem> TempPointTypeList { get; set; }
 
         public List<SelectListItem> HoldSportList { get; set; }
-
-        public List<SelectListItem> TempHoldSportList { get; set; }
 
         private Aktivitet valgtAktivitet;
 
@@ -130,13 +124,21 @@ namespace PowerEvent.Pages
 
             if (ValgtGuiElemement == "CmdGemAktivitet")
             {
-                CmdSaveAktivitet();
+                CmdGemAktivitet();
             }
-            else if (ValgtGuiElemement == "CmdSletAktivitet")
+            else if (ValgtGuiElemement == "CmdDeleteAktivitet")
             {
                 CmdDeleteAktivitet();
             }
-
+            else if (ValgtGuiElemement == "CmdAddEventAktivitet")
+            {
+                CmdAddEventAktivitet();
+            }
+            else if (ValgtGuiElemement == "CmdDeleteEventAktivitet")
+            {
+                CmdSletEventAktivitet();
+            }
+            
         }
         
         public void OnPost()
@@ -155,13 +157,33 @@ namespace PowerEvent.Pages
             }
         }
 
-        public void CmdSaveAktivitet()
+        public void CmdGemAktivitet()
         {
-            if (TxtAktivitet != "" && SelectedPointType != -1 && SelectedHoldSport != -1)
+            if (TxtAktivitet != "")
             {
                 DBAdapter.addAktivitet(TxtAktivitet, SelectedPointType, SelectedHoldSport);
                 loadAktivitetList();
                 setAktivitetList();
+            }
+        }
+        
+        public void CmdAddEventAktivitet()
+        {
+            if (SelectedAktivitet != -1 && SelectedEvent != -1)
+            {
+                DBAdapter.addEventAktivitet(SelectedEvent, SelectedAktivitet);
+                loadAktivitetList();
+                loadEventAktivitetList();
+            }
+        }
+        public void CmdSletEventAktivitet()
+        {
+            if (SelectedEventAktivitet != -1)
+            {
+                DBAdapter.deleteEventAktivitet(SelectedEventAktivitet);
+                loadAktivitetList();
+                loadEventAktivitetList();
+                SelectedEventAktivitet = -1;
             }
         }
 
@@ -208,6 +230,11 @@ namespace PowerEvent.Pages
         private void loadAktivitetList()
         {
             AktivitetList = DBAdapter.getAktivitet();
+        }
+        
+        private void loadEventAktivitetList()
+        {
+            EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
         }
 
 

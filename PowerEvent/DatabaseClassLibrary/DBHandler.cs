@@ -34,6 +34,33 @@ namespace DatabaseClassLibrary
             }
             return retur;
         }
+        
+        public static void addEventAktivitet(int _eventId, int _aktivitetId)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "INSERT INTO EventAktivitet (EventId, AktivitetId) Values(@EventId, @AktivitetId)";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@EventId", _eventId);
+                command.Parameters.AddWithValue("@AktivitetId", _aktivitetId);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static void deleteEventAktivitet(int _id)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "Delete From EventAktivitet WHERE id = @Id";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Id", _id);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
         //___________________________________________________________________________________________________________alt med Event ↑
 
         //___________________________________________________________________________________________________________alt med Aktivitet  ↓
@@ -390,6 +417,34 @@ namespace DatabaseClassLibrary
                 command.ExecuteNonQuery();
             }
         }
+
+        public static void addHold(string _holdNavn, string _farve)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "INSERT INTO Hold Values(@Navn, @Farve)";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Navn", _holdNavn);
+                command.Parameters.AddWithValue("@Farve", _farve);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static void deleteHold(int _id)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "Delete From Hold WHERE id = @Id";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Id", _id);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
         //___________________________________________________________________________________________________________alt med Hold ↑
 
         //___________________________________________________________________________________________________________alt med Deltagere ↓
@@ -631,5 +686,80 @@ namespace DatabaseClassLibrary
         }
 
         //___________________________________________________________________________________________________________Alt med Hold Order ↑
+
+
+        //___________________________________________________________________________________________________________Alt med Login ↓
+
+        public static List<object> getLogin(string _brugernavn, string _kodeord)
+        {
+            List<object> retur = new List<object>();
+            List<Login> loginList = getLoginIntern(_brugernavn, _kodeord);
+            if (loginList.Count != 0)
+            {
+                foreach (Login _Login in loginList)
+                {
+                    List<object> dScoreList = new List<object>();
+                    retur.Add(new { Id = _Login.Id, Brugernavn = _Login.Brugernavn, Kodeord = _Login.Kodeord, AdminType = _Login.AdminType, EventId = _Login.EventId, HoldId = _Login.HoldId }
+                );
+                }
+            }
+            return retur;
+        }
+
+        public static List<Login> getLoginIntern(string _brugernavn = null, string _kodeord = null)
+        {
+            List<Login> retur = new List<Login>();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "Select _l.Id, _l.Brugernavn, _l.Kodeord, _l.AdminType, _l.EventId, _l.HoldId FROM Login _L";
+
+                if (_brugernavn != "" && _kodeord != "")
+                {
+                    sql += " WHERE _l.Brugernavn LIKE @Brugernavn AND _l.Kodeord LIKE @Kode";
+                }
+
+                con.Open();
+                SqlCommand cmd = new SqlCommand(sql, con);
+                if (_brugernavn != "" && _kodeord != "")
+                {
+                    cmd.Parameters.AddWithValue("@Brugernavn", _brugernavn);
+                    cmd.Parameters.AddWithValue("@Kode", _kodeord);
+                }
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    retur.Add(new Login() { Id = int.Parse(reader["Id"].ToString()), Brugernavn = reader["Brugernavn"].ToString(), Kodeord = reader["Kodeord"].ToString(), AdminType = int.Parse(reader["AdminType"].ToString()), EventId = int.Parse(reader["EventId"].ToString()), HoldId = int.Parse(reader["HoldId"].ToString()) }
+                    );
+                }
+                reader.Close();
+            }
+            return retur;
+        }
+
+        public static void addLogin(string _brugernavn, string _kodeord, int _adminType, int? _eventId = null, int? _holdId = null)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "INSERT INTO Login (Brugernavn, Kodeord, AdminType, EventId, HoldId) VALUES (@Brugernavn, @Kodeord, @AdminType, @EventId, @HoldId)";
+
+                con.Open();
+                SqlCommand cmd = new SqlCommand(sql, con);
+                cmd.Parameters.AddWithValue("@Brugernavn", _brugernavn);
+                cmd.Parameters.AddWithValue("@Kodeord", _kodeord);
+                cmd.Parameters.AddWithValue("@AdminType", _adminType);
+                cmd.Parameters.AddWithValue("@EventId", _eventId);
+                cmd.Parameters.AddWithValue("@HoldId", _holdId);
+
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
+
+
+        //___________________________________________________________________________________________________________Alt med Login ↑
+
+
     }
 }

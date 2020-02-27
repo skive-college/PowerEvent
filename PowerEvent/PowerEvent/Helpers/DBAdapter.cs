@@ -2,7 +2,10 @@
 using PowerEvent.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace PowerEvent.Helpers
@@ -24,6 +27,16 @@ namespace PowerEvent.Helpers
                 eventList.Add(temp);
             }
             return eventList;
+        }
+
+        public static void addEventAktivitet(int _eventId, int _aktivitetId)
+        {
+            DBHandler.addEventAktivitet(_eventId, _aktivitetId);
+        }
+
+        public static void deleteEventAktivitet(int _id)
+        {
+            DBHandler.deleteEventAktivitet(_id);
         }
 
         //___________________________________________________________________________________________________________Alt med Event ↑
@@ -158,6 +171,15 @@ namespace PowerEvent.Helpers
             DBHandler.addHoldScore(_eventId, _eventAktivitetId, _holdOrder, _holdId, _score);
         }
 
+        public static void addHold(string _holdNavn, string _farve)
+        {
+            DBHandler.addHold(_holdNavn, _farve);
+        }
+
+        public static void deleteHold(int _id)
+        {
+            DBHandler.deleteHold(_id);
+        }
         //___________________________________________________________________________________________________________Alt med Hold ↑
 
         //___________________________________________________________________________________________________________Alt med Hold Order ↓
@@ -226,6 +248,98 @@ namespace PowerEvent.Helpers
         //___________________________________________________________________________________________________________Alt med Hold Order ↑
 
 
+        //___________________________________________________________________________________________________________Alt med Login ↓
+
+        public static List<Login> getLogin(string _brugernavn, string _kodeord, int _admintype, int? _eventId = null, int? _holdId = null)
+        {
+            List<object> dbLogin = DBHandler.getLogin(_brugernavn, _kodeord);
+            List<Login> retur = new List<Login>();
+
+            foreach (var _object in dbLogin)
+            {
+                Login tempLogin = new Login();
+                tempLogin.Id = adapt<int>("Id", _object);
+                tempLogin.Brugernavn = adapt<string>("Brugernavn", _object);
+                tempLogin.AdminType = adapt<int>("AdminType", _object);
+                tempLogin.EventId = adapt<int?>("EventId", _object);
+                tempLogin.HoldId = adapt<int?>("HoldId", _object);
+
+
+                string encryptedPassword = adapt<string>("Kodeord", _object);
+                string actualPassword = Decrypt(encryptedPassword, tempLogin.Brugernavn);
+                tempLogin.Kodeord = actualPassword;
+                retur.Add(tempLogin);
+            }
+            return retur;
+        }
+
+        public static void addLogin(string _brugernavn, string _kodeord, int _adminType, int? _eventId = null, int? _holdId = null)
+        {
+            string encryptionkey = GenerateEncryptionKey(_brugernavn);
+            string encrypedKode = Encrypt(_kodeord, encryptionkey);
+            DBHandler.addLogin(_brugernavn, encrypedKode, _adminType, _eventId, _holdId);
+        }
+
+
+
+        public static string GenerateEncryptionKey(string key = "")
+        {
+            string EncryptionKey = string.Empty;
+            if (key == "")
+            {
+                Random Robj = new Random();
+                int Rnumber = Robj.Next();
+                key = Convert.ToString(Rnumber);
+            }
+            
+            EncryptionKey = "XYZ" + key;
+
+            return EncryptionKey;
+        }
+
+        public static string Encrypt(string clearText, string EncryptionKey)
+        {
+            byte[] clearBytes = Encoding.Unicode.GetBytes(clearText);
+            using (Aes encryptor = Aes.Create())
+            {
+                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+                encryptor.Key = pdb.GetBytes(32);
+                encryptor.IV = pdb.GetBytes(16);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(clearBytes, 0, clearBytes.Length);
+                        cs.Close();
+                    }
+                    clearText = Convert.ToBase64String(ms.ToArray());
+                }
+            }
+            return clearText;
+        }
+
+        public static string Decrypt(string cipherText, string EncryptionKey)
+        {
+            byte[] cipherBytes = Convert.FromBase64String(cipherText);
+            using (Aes encryptor = Aes.Create())
+            {
+                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+                encryptor.Key = pdb.GetBytes(32);
+                encryptor.IV = pdb.GetBytes(16);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(cipherBytes, 0, cipherBytes.Length);
+                        cs.Close();
+                    }
+                    cipherText = Encoding.Unicode.GetString(ms.ToArray());
+                }
+            }
+            return cipherText;
+        }
+
+        //___________________________________________________________________________________________________________Alt med Login ↑
 
 
 
