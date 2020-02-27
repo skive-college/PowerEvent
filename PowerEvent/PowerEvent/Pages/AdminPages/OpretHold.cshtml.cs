@@ -107,7 +107,7 @@ namespace PowerEvent
             {
                 CmdDeleteHold();
             }
-            else if (ValgtGuiElemement == "CmdAddEventAktivitet")
+            else if (ValgtGuiElemement == "CmdAddEventAktivitetHold")
             {
                 CmdAddEventAktivitetHold();
             }
