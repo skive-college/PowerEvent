@@ -32,10 +32,9 @@ namespace PowerEvent
             EventList = DBAdapter.getEvent();
 
             checkScript();
-            if (DeltagerList.Count != 0)
-            {
+
                 HoldList = DBAdapter.getHold(SelectedEvent);
-            }
+            
         }
 
         private void checkScript()
