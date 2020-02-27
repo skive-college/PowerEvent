@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using PowerEvent.Helpers;
 using PowerEvent.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PowerEvent
 {
@@ -112,11 +109,11 @@ namespace PowerEvent
             }
             else if (ValgtGuiElemement == "CmdAddEventAktivitet")
             {
-                CmdAddEventAktivitet();
+                CmdAddEventAktivitetHold();
             }
             else if (ValgtGuiElemement == "CmdSletEventAktivitet")
             {
-                CmdSletEventAktivitet();
+                CmdSletEventAktivitetHold();
             }
         }
 
@@ -144,7 +141,7 @@ namespace PowerEvent
             }
         }
 
-        public void CmdAddEventAktivitet()
+        public void CmdAddEventAktivitetHold()
         {
             if (SelectedEventAktivitet != -1 && txtHoldOrder != 0)
             {
@@ -152,7 +149,7 @@ namespace PowerEvent
                 loadHoldAktivitetList();
             }
         }
-        public void CmdSletEventAktivitet()
+        public void CmdSletEventAktivitetHold()
         {
             if (SelectedEventAktivitet != -1)
             {
@@ -172,12 +169,24 @@ namespace PowerEvent
         {
             HoldAktivitetList = DBAdapter.getHold(SelectedEvent);
             HoldAktivitetList = DBAdapter.getHoldAktivitet(HoldAktivitetList, SelectedEvent);
-
             HoldAktivitetList = HoldAktivitetList.Where(i => i.HoldAktiviteter.Where(i => i.EventAktivitetId == SelectedEventAktivitet).FirstOrDefault() != null).ToList();
-            foreach (var item in HoldAktivitetList)
+            foreach (var _hold in HoldAktivitetList)
             {
-                item.HoldAktiviteter = item.HoldAktiviteter.Where(i => i.EventAktivitetId == SelectedEventAktivitet).ToList();
+                _hold.HoldAktiviteter = _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == SelectedEventAktivitet).ToList();
             }
+            List<Hold> tempHoldList = new List<Hold>();
+            foreach (var _hold in HoldAktivitetList)
+            {
+                foreach (var _aktivitet in _hold.HoldAktiviteter)
+                {
+                    Hold h = _hold;
+                    h.HoldAktiviteter = new List<EventAktivitetHold>();
+                    h.HoldAktiviteter.Add(_aktivitet);
+                    tempHoldList.Add(h);
+                }
+            }
+            tempHoldList = tempHoldList.OrderBy(i => i.HoldAktiviteter[0].HoldOrder).ThenBy(i => i.Navn).ToList();
+            HoldAktivitetList = tempHoldList;
         }
 
         private void loadEventAktivitetList()

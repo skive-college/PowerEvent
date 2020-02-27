@@ -100,12 +100,9 @@
                             if (@Model.SelectedEventAktivitet != -1)
                             {
                                 <option value="-1" hidden></option>
-                                foreach (var _hold in @Model.HoldAktivitetList.OrderBy(i => i.HoldAktiviteter.Where(i => i.EventAktivitetId == Model.SelectedEventAktivitet).FirstOrDefault().HoldOrder))
+                                foreach (var _hold in @Model.HoldAktivitetList)
                                 {
-                                    foreach (var _aktivitet in _hold.HoldAktiviteter)
-                                    {
-                                        <option value="@_hold.Id">@_aktivitet.HoldOrder. runde:  @_hold.Navn</option>
-                                    }
+                                    <option value="@_hold.Id">@_hold.HoldAktiviteter[0].HoldOrder. runde, Hold: @_hold.Navn</option>
                                 }
                             }
                         }
@@ -128,7 +125,7 @@
             let url = new URL(location.href);
             url.searchParams.set("TxtHold", '');
             url.searchParams.set("TxtFarve", '');
-            url.searchParams.set("TxtHoldOrder", '');
+            url.searchParams.set("TxtHoldOrder", TxtHoldOrder);
 
             let HoldList = document.getElementById('HoldList');
             let HoldListValgt = HoldList.options[HoldList.selectedIndex].value;
@@ -143,11 +140,15 @@
             }
 
             if (elementet == 'CmdGemHold') {
-                let TxtHoldOrder = document.getElementById('TxtHoldOrder').value;
-                url.searchParams.set("TxtHoldOrder", TxtHoldOrder);
+                let TxtHold = document.getElementById('TxtHold').value;
+                url.searchParams.set("TxtHold", TxtHold);
 
                 let TxtFarve = document.getElementById('TxtFarve').value;
                 url.searchParams.set("TxtFarve", TxtFarve);
+            }
+            if (elementet == 'CmdAddEventAktivitetHold') {
+                let TxtHoldOrder = document.getElementById('CmdAddEventAktivitetHold').value;
+                url.searchParams.set("CmdAddEventAktivitetHold", TxtHoldOrder);
             }
 
             let EventAktivitetList = document.getElementById('EventAktivitetList');
