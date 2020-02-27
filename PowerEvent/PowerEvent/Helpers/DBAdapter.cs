@@ -134,7 +134,6 @@ namespace PowerEvent.Helpers
                 }
             }
             return _holdList;
-
         }
 
         public static List<Hold> getHoldAktivitetScores(List<Hold> _holdList, int? _eventId = null, int? _holdOrder = null, int? _eventAktivitetId = null)
