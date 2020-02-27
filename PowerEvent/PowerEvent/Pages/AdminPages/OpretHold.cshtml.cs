@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using PowerEvent.Helpers;
 using PowerEvent.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PowerEvent
 {
@@ -28,6 +25,8 @@ namespace PowerEvent
         public string TxtHold { get; set; }
 
         public string TxtFarve { get; set; }
+
+        public int txtHoldOrder { get; set; }
 
         public string ValgtGuiElemement { get; set; }
 
@@ -110,11 +109,11 @@ namespace PowerEvent
             }
             else if (ValgtGuiElemement == "CmdAddEventAktivitet")
             {
-                CmdAddEventAktivitet();
+                CmdAddEventAktivitetHold();
             }
             else if (ValgtGuiElemement == "CmdSletEventAktivitet")
             {
-                CmdSletEventAktivitet();
+                CmdSletEventAktivitetHold();
             }
         }
 
@@ -142,21 +141,21 @@ namespace PowerEvent
             }
         }
 
-        public void CmdAddEventAktivitet()
+        public void CmdAddEventAktivitetHold()
         {
-            if (SelectedEventAktivitet != -1)
+            if (SelectedEventAktivitet != -1 && txtHoldOrder != 0)
             {
-                DBAdapter.addEventAktivitet(SelectedEvent, SelectedEventAktivitet);
+                DBAdapter.addEventAktivitetHold(SelectedEventAktivitet, SelectedHold, txtHoldOrder);
                 loadHoldAktivitetList();
             }
         }
-        public void CmdSletEventAktivitet()
+        public void CmdSletEventAktivitetHold()
         {
             if (SelectedEventAktivitet != -1)
             {
-                DBAdapter.deleteEventAktivitet(SelectedEventAktivitet);
+                
                 loadHoldAktivitetList();
-                SelectedEventAktivitet = -1;
+                SelectedHold = -1;
             }
         }
 
@@ -170,8 +169,24 @@ namespace PowerEvent
         {
             HoldAktivitetList = DBAdapter.getHold(SelectedEvent);
             HoldAktivitetList = DBAdapter.getHoldAktivitet(HoldAktivitetList, SelectedEvent);
-
             HoldAktivitetList = HoldAktivitetList.Where(i => i.HoldAktiviteter.Where(i => i.EventAktivitetId == SelectedEventAktivitet).FirstOrDefault() != null).ToList();
+            foreach (var _hold in HoldAktivitetList)
+            {
+                _hold.HoldAktiviteter = _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == SelectedEventAktivitet).ToList();
+            }
+            List<Hold> tempHoldList = new List<Hold>();
+            foreach (var _hold in HoldAktivitetList)
+            {
+                foreach (var _aktivitet in _hold.HoldAktiviteter)
+                {
+                    Hold h = _hold;
+                    h.HoldAktiviteter = new List<EventAktivitetHold>();
+                    h.HoldAktiviteter.Add(_aktivitet);
+                    tempHoldList.Add(h);
+                }
+            }
+            tempHoldList = tempHoldList.OrderBy(i => i.HoldAktiviteter[0].HoldOrder).ThenBy(i => i.Navn).ToList();
+            HoldAktivitetList = tempHoldList;
         }
 
         private void loadEventAktivitetList()
@@ -213,6 +228,13 @@ namespace PowerEvent
             }
             try
             {
+                txtHoldOrder = int.Parse(Request.Query["TxtHoldOrder"]);
+            }
+            catch
+            {
+            }
+            try
+            {
                 SelectedEvent = int.Parse(Request.Query["EventList"]);
             }
             catch
@@ -232,24 +254,24 @@ namespace PowerEvent
             if (SelectedEvent == -1)
             {
                 loadTempDataEvent();
-                if (SelectedEvent != -1)
-                {
-
-                }
             }
 
-            if (ValgtGuiElemement == "AktivitetList")
-            {
-
-            }
             else if (ValgtGuiElemement == "EventList")
             {
                 if (SelectedEvent != -1)
                 {
                     saveTempDataEvent();
+                    SelectedEventAktivitet = -1;
+                    SelectedHoldAktivitet = -1;
                 }
             }
-
+            else if (ValgtGuiElemement == "EventAktivitetList")
+            {
+                if (SelectedEventAktivitet != -1)
+                {
+                    SelectedHoldAktivitet = -1;
+                }
+            }
         }
 
 
