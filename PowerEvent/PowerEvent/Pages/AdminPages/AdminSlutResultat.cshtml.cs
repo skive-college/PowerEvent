@@ -17,9 +17,14 @@ namespace PowerEvent
         public string ValgtGuiElemement { get; set; }
 
         public List<Event> EventList { get; set; }
-        public List<Deltager> DeltagerList { get; set; }
 
         public List<Hold> HoldList{ get; set; }
+
+        public List<EventAktivitetHoldScore> ScoreList{ get; set; }
+
+        public List<Aktivitet> AktivitetList { get; set; }
+
+        public List<EventAktivitet> EventAktivitetList { get; set; }
 
 
 
@@ -27,14 +32,18 @@ namespace PowerEvent
         public void OnGet()
         {
             SelectedEvent = -1;
-            DeltagerList = new List<Deltager>();
+            AktivitetList = new List<Aktivitet>();
             HoldList = new List<Hold>();
+            ScoreList= new List<EventAktivitetHoldScore>();
+            EventAktivitetList = new List<EventAktivitet>();
             EventList = DBAdapter.getEvent();
-
             checkScript();
 
-                HoldList = DBAdapter.getHold(SelectedEvent);
-            
+            HoldList = DBAdapter.getHold(SelectedEvent);
+            HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent);
+            HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent);
+            AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+            EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
         }
 
         private void checkScript()
