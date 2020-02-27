@@ -111,7 +111,7 @@ namespace PowerEvent
             {
                 CmdAddEventAktivitetHold();
             }
-            else if (ValgtGuiElemement == "CmdSletEventAktivitet")
+            else if (ValgtGuiElemement == "CmdDeleteEventAktivitetHold")
             {
                 CmdSletEventAktivitetHold();
             }
