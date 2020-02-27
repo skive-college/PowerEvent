@@ -100,9 +100,12 @@
                             if (@Model.SelectedEventAktivitet != -1)
                             {
                                 <option value="-1" hidden></option>
-                                foreach (var item in @Model.HoldAktivitetList)
+                                foreach (var _hold in @Model.HoldAktivitetList.OrderBy(i => i.HoldAktiviteter.Where(i => i.EventAktivitetId == Model.SelectedEventAktivitet).FirstOrDefault().HoldOrder))
                                 {
-                                    <option value="@item.Id">@item.Navn</option>
+                                    foreach (var _aktivitet in _hold.HoldAktiviteter)
+                                    {
+                                        <option value="@_hold.Id">@_aktivitet.HoldOrder. runde:  @_hold.Navn</option>
+                                    }
                                 }
                             }
                         }
