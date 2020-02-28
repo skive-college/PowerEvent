@@ -101,7 +101,7 @@ namespace PowerEvent
             {
                 CmdSaveHold();
             }
-            else if (ValgtGuiElemement == "CmdSletAktivitet")
+            else if (ValgtGuiElemement == "CmdSletHold")
             {
                 CmdDeleteHold();
             }
@@ -134,6 +134,15 @@ namespace PowerEvent
         {
             if (TxtHold != "" && TxtFarve != "")
             {
+                if (TxtFarve.StartsWith("#"))
+                {
+
+                }
+                else
+                {
+                    TxtFarve = "#" + TxtFarve;
+                }
+
                 DBAdapter.addHold(TxtHold, TxtFarve);
                 loadHoldList();
             }
