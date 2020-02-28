@@ -95,7 +95,6 @@ namespace PowerEvent
                 {
                     loadHoldAktivitetList();
                 }
-                
             }
 
             if (ValgtGuiElemement == "CmdGemHold")
