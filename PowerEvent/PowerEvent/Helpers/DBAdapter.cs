@@ -247,6 +247,11 @@ namespace PowerEvent.Helpers
             DBHandler.addEventAktivitetHold(_eventAktivitetId, _holdId, _holdOrder);
         }
 
+        public static void deleteEventAktivitetHold(int _id)
+        {
+            DBHandler.deleteEventAktivitetHold(_id);
+        }
+
         //___________________________________________________________________________________________________________Alt med Hold Order ↑
 
 

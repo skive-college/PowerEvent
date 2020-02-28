@@ -702,6 +702,19 @@ namespace DatabaseClassLibrary
             }
         }
 
+        public static void deleteEventAktivitetHold(int _id)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "Delete From EventAktivitetHold WHERE id = @Id";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Id", _id);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
         //___________________________________________________________________________________________________________Alt med Hold Order ↑
 
 
