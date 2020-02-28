@@ -46,9 +46,6 @@
                 <div>
                     <table style=" height: auto; width: 100%;">
                         <tr>
-                            <th class="col"></th>
-                        </tr>
-                        <tr>
                             <td class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-weight: bold; font-size: 1.4em;">Hold</td>
                         </tr>
                         @{
@@ -62,30 +59,35 @@
                                     </tr>
                                 }
                             }
-
-                            //laver dynamisk et "table" til hvert Aktivitet
-                            foreach (var _eventAktivitet in Model.EventAktivitetList)
-                            {
-                                <tr>
-                                    <th class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em;">@Model.AktivitetList.Where(i => i.Id == @_eventAktivitet.AktivitetId).FirstOrDefault().Navn</th>
-                                </tr>
-                                
-                                //opretter score af hver Aktivitet
-                                @*foreach (var _score in @Model.ScoreList)
-                                {
-                                    if (_score.HoldScore == )
-                                    {
-                                        <tr>
-                                            <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center;">@_score.HoldScore</td>
-                                        </tr>
-                                    }
-                                }*@
-                                
-                            }
                         }
                     </table>
                 </div>
             </div>
+
+
+            //laver dynamisk et "table" til hvert Aktivitet
+            foreach (var _eventAktivitet in Model.EventAktivitetList)
+            {
+                <div class="col-6 col-md-3 col-lg-2">
+                    <br />
+                    <table style=" height: auto; width: 100%;">
+                        <tr>
+                            <th class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em;">@Model.AktivitetList.Where(i => i.Id == @_eventAktivitet.AktivitetId).FirstOrDefault().Navn</th>
+                        </tr>
+
+                        @*opretter score af hver Aktivitet*@
+                        @{ 
+                            foreach (var _hold in @Model.HoldList)
+                            {
+                                _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == _eventAktivitet.Id).ToList();
+                                    <tr>
+                                        <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center;">/td>
+                                   </tr>   
+                            }
+                        }
+                    </table>
+                </div>
+            }
         }
     </div>
 </div>
