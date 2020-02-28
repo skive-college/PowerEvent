@@ -4,5 +4,142 @@
     ViewData["Title"] = "ManageLogin";
 }
 
-<h1>ManageLogin</h1>
+<div class="container">
+    <div class="row">
+        <p>Opret Hold:</p>
+    </div>
+    <div class="row">
+        <input id="TxtHold" type="text" placeholder="Hold navn" />
+        <input id="TxtFarve" type="text" placeholder="Farve kode (HEX)" />
 
+        <input type="button" value="Gem" onclick="elementChanged('CmdGemHold')" />
+    </div>
+    <br />
+
+    <div class="row">
+        <div class="col-12 col-lg-6">
+            <div class="row">
+                <select id="HoldList" asp-for="@Model.SelectedHold" onchange="elementChanged('HoldList')" multiple style=" height: 350px; width: 450px">
+                    @{
+                        <option value="-1" hidden></option>
+                        foreach (var item in @Model.HoldList)
+                        {
+                            <option value="@item.Id">@item.Navn</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="row">
+                <input type="button" value="Slet" onclick="elementChanged('CmdSletHold')" />
+            </div>
+        </div>
+        <br />
+        <div class="col-12 col-lg-6">
+            <div class="row">
+                <style> #EventList { width: 120px; } #EventList:focus { min-width: 120px; width: auto; } </style>
+            </div>
+            <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
+                @{
+                    if (@Model.SelectedEvent == -1)
+                    {
+                        <option value="-1">Vælg et event</option>
+                    }
+
+                    foreach (var item in @Model.EventList)
+                    {
+                        <option value="@item.Id">@item.Navn</option>
+                    }
+                }
+            </select>
+            <style> #EventAktivitetList { width: 120px; } #EventAktivitetList:focus { min-width: 120px; width: auto; } </style>
+            <select id="EventAktivitetList" asp-for="@Model.SelectedEventAktivitet" onchange="elementChanged('EventAktivitetList')">
+                @{
+                    if (@Model.SelectedEvent == -1)
+                    {
+                        <option value="-1" hidden></option>
+                    }
+                    if (@Model.SelectedEvent != -1)
+                    {
+                        if (@Model.SelectedEventAktivitet == -1)
+                        {
+                            <option value="-1">Vælg en Aktivitet</option>
+                        }
+                        foreach (var item in @Model.EventAktivitetList)
+                        {
+                            <option value="@item.Id">@Model.AktivitetList.Where(i => i.Id == item.AktivitetId).FirstOrDefault().Navn</option>
+                        }
+                    }
+                }
+            </select>
+            <div class="row">
+                <div class="col">
+                    <select id="HoldAktivitetList" asp-for="@Model.SelectedHoldAktivitet" onchange="elementChanged('HoldAktivitetList')" multiple style=" height: 350px; width: 450px">
+                        @{
+                            if (@Model.SelectedEventAktivitet != -1)
+                            {
+                                <option value="-1" hidden></option>
+                                foreach (var _hold in @Model.HoldAktivitetList)
+                                {
+                                    <option value="@_hold.HoldAktiviteter[0].Id">@_hold.HoldAktiviteter[0].HoldOrder. runde, Hold: @_hold.Navn</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <input id="TxtHoldOrder" type="text" placeholder="Indtast holdOrder" />
+            <input type="button" value="Tilføj" onclick="elementChanged('CmdAddEventAktivitetHold')" />
+            <input type="button" value="Slet" onclick="elementChanged('CmdDeleteEventAktivitetHold')" />
+        </div>
+        <br />
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        function elementChanged(elementet)
+        {
+            let url = new URL(location.href);
+            url.searchParams.set("TxtHold", '');
+            url.searchParams.set("TxtFarve", '');
+            url.searchParams.set("CmdAddEventAktivitetHold", '');
+
+            let HoldList = document.getElementById('HoldList');
+            let HoldListValgt = HoldList.options[HoldList.selectedIndex].value;
+            url.searchParams.set("HoldList", HoldListValgt);
+            @{
+                if (Model.SelectedEventAktivitet != -1)
+                {
+                    @: let HoldAktivitetList = document.getElementById('HoldAktivitetList');
+                    @: let HoldAktivitetListValgt = HoldAktivitetList.options[HoldAktivitetList.selectedIndex].value;
+                    @: url.searchParams.set("HoldAktivitetList", HoldAktivitetListValgt);
+                }
+            }
+
+            if (elementet == 'CmdGemHold') {
+                let TxtHold = document.getElementById('TxtHold').value;
+                url.searchParams.set("TxtHold", TxtHold);
+
+                let TxtFarve = document.getElementById('TxtFarve').value;
+                url.searchParams.set("TxtFarve", TxtFarve);
+            }
+            if (elementet == 'CmdAddEventAktivitetHold') {
+                let TxtHoldOrder = document.getElementById('TxtHoldOrder').value;
+                url.searchParams.set("TxtHoldOrder", TxtHoldOrder);
+            }
+
+            let EventAktivitetList = document.getElementById('EventAktivitetList');
+            let EventAktivitetListValgt = EventAktivitetList.options[EventAktivitetList.selectedIndex].value;
+            url.searchParams.set("EventAktivitetList", EventAktivitetListValgt);
+
+            let EventList = document.getElementById('EventList');
+            let EventListValgt = EventList.options[EventList.selectedIndex].value;
+            url.searchParams.set("EventList", EventListValgt);
+
+            url.searchParams.set("ValgtGuiElemement", elementet);
+            location.href = url;
+        }
+    </script>
+}

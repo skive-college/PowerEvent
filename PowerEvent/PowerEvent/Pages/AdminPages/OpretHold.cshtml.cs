@@ -9,7 +9,6 @@ namespace PowerEvent
 {
     public class OpretHoldModel : PageModel
     {
-
         [BindProperty]
         public int SelectedHold { get; set; }
         
