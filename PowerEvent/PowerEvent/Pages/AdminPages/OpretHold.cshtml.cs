@@ -86,7 +86,6 @@ namespace PowerEvent
             EventList = DBAdapter.getEvent();
             loadHoldList();
             checkScript();
-            
 
 
             if (SelectedEvent != -1)
@@ -96,7 +95,6 @@ namespace PowerEvent
                 {
                     loadHoldAktivitetList();
                 }
-                
             }
 
             if (ValgtGuiElemement == "CmdGemHold")
@@ -107,11 +105,11 @@ namespace PowerEvent
             {
                 CmdDeleteHold();
             }
-            else if (ValgtGuiElemement == "CmdAddEventAktivitet")
+            else if (ValgtGuiElemement == "CmdAddEventAktivitetHold")
             {
                 CmdAddEventAktivitetHold();
             }
-            else if (ValgtGuiElemement == "CmdSletEventAktivitet")
+            else if (ValgtGuiElemement == "CmdDeleteEventAktivitetHold")
             {
                 CmdSletEventAktivitetHold();
             }
