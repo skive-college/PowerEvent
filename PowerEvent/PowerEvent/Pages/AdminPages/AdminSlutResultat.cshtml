@@ -75,7 +75,7 @@
                             <th class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em;">@Model.AktivitetList.Where(i => i.Id == @_eventAktivitet.AktivitetId).FirstOrDefault().Navn</th>
                         </tr>
 
-                        @*opretter score af hver Aktivitet*@
+                        @*opretter score af hvert hold*@
                         @{ 
                             foreach (var _hold in @Model.HoldList)
                             {
