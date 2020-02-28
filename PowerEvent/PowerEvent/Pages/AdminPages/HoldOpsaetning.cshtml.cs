@@ -14,7 +14,8 @@ namespace PowerEvent
         [BindProperty]
         public string DeltagerNavn { get; set; }
 
-        public int EventID { get; set; }
+        [TempData]
+        public int SelectedEvent { get; set; }
 
         public List<Event> EventList { get; set; }
 
@@ -25,22 +26,34 @@ namespace PowerEvent
 
         public void OnGet()
         {
-            EventID = 0;
-            if(Request.Query.Count != 0)
+            if (Request.Query.ContainsKey("Event"))
             {
-                EventID = int.Parse(Request.Query["Event"]);
-                DeltagerList = DBAdapter.getDeltagere(EventID);
+                SelectedEvent = int.Parse(Request.Query["Event"]);
+                DeltagerList = DBAdapter.getDeltagere(SelectedEvent);
                 HoldList = DBAdapter.getHold();
             }
-            EventList = DBAdapter.getEvent();
+            else
+            {
+                if (TempData.Peek("SelectedEvent") != null)
+                {
+                    DeltagerList = DBAdapter.getDeltagere(SelectedEvent);
+                    HoldList = DBAdapter.getHold();
+                }
+                else
+                {
+                    SelectedEvent = -1;
+                }
+            }
             
+            EventList = DBAdapter.getEvent();
         }
 
-        public void OnPostCmdSubmitNavn()
+        public void OnPostCmdSubmitDeltagerNavn()
         {
-            //DBAdapter.addDeltager(DeltagerNavn, EventID);
-            //DBAdapter.addDeltager("bs", 1);
+            TempData.Keep("SelectedEvent");
+            DBAdapter.addDeltager(DeltagerNavn, SelectedEvent);
             OnGet();
         }
+
     }
 }

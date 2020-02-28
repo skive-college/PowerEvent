@@ -8,28 +8,28 @@
 
 <p>Event:</p>
 <style> #EventList { width: 120px; } #EventList:focus { min-width: 120px; width: auto; } </style>
-<select id="EventList" onchange="eventListChanged()">
+<select id="EventList" asp-for="@Model.SelectedEvent" onchange="eventListChanged()">
     @{
-        if (Model.Request.Query.Count == 0)
+        if (Model.SelectedEvent == -1)
         {
             <option label="Vælg et event"></option>
         }
         foreach (var pevent in Model.EventList)
         {
-            if (pevent.Id == Model.EventID)
-            {
-                <option label="@pevent.Navn" value="@pevent.Id" selected></option>
-            }
-            else
-            {
+            //if (pevent.Id == Model.SelectedEvent)
+            //{
+            //    <option label="@pevent.Navn" value="@pevent.Id" selected></option>
+            //}
+            //else
+            //{
                 <option label="@pevent.Navn" value="@pevent.Id"></option>
-            }
+            //}
         }
     }
 </select>
 
 @{ 
-    if (Model.Request.Query.Count != 0)
+    if (Model.SelectedEvent != -1)
     {
         <div class="container">
             <div class="row">
@@ -37,16 +37,25 @@
                     <form method="post">
                         <p>Spillers navn</p>
                         <input type="text" asp-for="@Model.DeltagerNavn"/>
-                        <input type="submit" value="Opret" formmethod="post" asp-page-handler="CmdSubmitNavn"/>
+                        <input type="submit" value="Opret" formmethod="post" asp-page-handler="CmdSubmitDeltagerNavn"/>
                     </form>
-                        <select id="deltagerselect" style="min-width:150px" multiple>
+                    <select id="deltagerselect" style="min-width:150px; min-height:400px" multiple>
                         @{
                             foreach (var deltager in Model.DeltagerList)
                             {
-                                <option label="@deltager.Navn"></option>
+                                if (deltager.HoldId != null)
+                                {
+                                    string holdnavn = Model.HoldList.Find(x => x.Id == deltager.HoldId).Navn;
+                                    <option label="@(string.Format("{0} - {1}", deltager.Navn, holdnavn))" value="@deltager.Id"></option>
+                                }
+                                else
+                                {
+                                    <option label="@deltager.Navn" value="@deltager.Id"></option>
+                                }
                             }
                         }
-                        </select>
+                    </select>
+                    <button onclick="">Fjern</button>
                 </div>
                 <div class="col-sm-2">
                     <div>
@@ -66,7 +75,14 @@
                 <div class="col-sm-5">
                     <select disabled multiple style="min-width:300px">
                         @{
-        
+                            foreach (var deltager in Model.DeltagerList)
+                            {
+                                if (deltager.HoldId != null)
+                                {
+                                    string holdnavn = Model.HoldList.Find(x => x.Id == deltager.HoldId).Navn;
+                                    <option label="@(string.Format("{0} - {1}", deltager.Navn, holdnavn))"></option>
+                                }
+                            }
                         }
                     </select>
                 </div>
