@@ -75,14 +75,30 @@
                             <th class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em;">@Model.AktivitetList.Where(i => i.Id == @_eventAktivitet.AktivitetId).FirstOrDefault().Navn</th>
                         </tr>
 
-                        @*opretter score af hver Aktivitet*@
+                        @*opretter score af hvert hold*@
                         @{ 
                             foreach (var _hold in @Model.HoldList)
                             {
-                                _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == _eventAktivitet.Id).ToList();
-                                    <tr>
-                                        <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center;">/td>
-                                   </tr>   
+                                int totalScore = 0;
+                                int antalScores = 0;
+                                foreach (var _eventAktivitetHold in _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == _eventAktivitet.Id).ToList())
+                                {
+                                    foreach (var _score in _eventAktivitetHold.HoldScores)
+                                    {
+                                        totalScore += _score.HoldScore;
+                                        antalScores++;
+                                    }
+
+                                    //kode for at få gennemsnittet ↓↓
+
+                                    //if (antalScores != 0)
+                                    //{
+                                    //    totalScore = totalScore / antalScores;
+                                    //}
+                                }
+                                <tr>
+                                    <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-size: 1.4em;">@totalScore</td>
+                                </tr>   
                             }
                         }
                     </table>
