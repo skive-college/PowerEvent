@@ -10,13 +10,11 @@
     </div>
     <div class="row">
         <input id="TxtHold" type="text" placeholder="Hold navn" />
-        <input id="TxtFarve" type="text" placeholder="Farve kode (HEX)" />
+        <input id="TxtFarve" type="text" placeholder="HEX Farve kode (#ffffff)" />
 
         <input type="button" value="Gem" onclick="elementChanged('CmdGemHold')" />
     </div>
     <br />
-
-
 
     <div class="row">
         <div class="col-12 col-lg-6">
@@ -39,17 +37,7 @@
         <br />
         <div class="col-12 col-lg-6">
             <div class="row">
-                <style>
-                    #EventList {
-                        width: 120px;
-                    }
-
-                        #EventList:focus {
-                            min-width: 120px;
-                            width: auto;
-                        }
-                </style>
-
+                <style> #EventList { width: 120px; } #EventList:focus { min-width: 120px; width: auto; } </style>
             </div>
             <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
                 @{
@@ -64,16 +52,7 @@
                     }
                 }
             </select>
-            <style>
-                #EventAktivitetList {
-                    width: 120px;
-                }
-
-                    #EventAktivitetList:focus {
-                        min-width: 120px;
-                        width: auto;
-                    }
-            </style>
+            <style> #EventAktivitetList { width: 120px; } #EventAktivitetList:focus { min-width: 120px; width: auto; } </style>
             <select id="EventAktivitetList" asp-for="@Model.SelectedEventAktivitet" onchange="elementChanged('EventAktivitetList')">
                 @{
                     if (@Model.SelectedEvent == -1)
@@ -100,10 +79,9 @@
                             if (@Model.SelectedEventAktivitet != -1)
                             {
                                 <option value="-1" hidden></option>
-                                foreach (var item in @Model.HoldAktivitetList)
+                                foreach (var _hold in @Model.HoldAktivitetList)
                                 {
-                                    //t.Where(i => i.Id == i.HoldAktiviteter.Where(i => i.EventAktivitetId == Model.SelectedEventAktivitet).FirstOrDefault().HoldId).FirstOrDefault()
-                                    <option value="@item.Id">@item.Navn</option>
+                                    <option value="@_hold.HoldAktiviteter[0].Id">@_hold.HoldAktiviteter[0].HoldOrder. runde, Hold: @_hold.Navn</option>
                                 }
                             }
                         }
@@ -112,7 +90,7 @@
             </div>
             <input id="TxtHoldOrder" type="text" placeholder="Indtast holdOrder" />
             <input type="button" value="Tilføj" onclick="elementChanged('CmdAddEventAktivitetHold')" />
-            <input type="button" value="Slet" onclick="elementChanged('CmdDelteEventAktivitetHold')" />
+            <input type="button" value="Slet" onclick="elementChanged('CmdDeleteEventAktivitetHold')" />
         </div>
         <br />
     </div>
@@ -126,6 +104,7 @@
             let url = new URL(location.href);
             url.searchParams.set("TxtHold", '');
             url.searchParams.set("TxtFarve", '');
+            url.searchParams.set("CmdAddEventAktivitetHold", '');
 
             let HoldList = document.getElementById('HoldList');
             let HoldListValgt = HoldList.options[HoldList.selectedIndex].value;
@@ -146,6 +125,10 @@
                 let TxtFarve = document.getElementById('TxtFarve').value;
                 url.searchParams.set("TxtFarve", TxtFarve);
             }
+            if (elementet == 'CmdAddEventAktivitetHold') {
+                let TxtHoldOrder = document.getElementById('TxtHoldOrder').value;
+                url.searchParams.set("TxtHoldOrder", TxtHoldOrder);
+            }
 
             let EventAktivitetList = document.getElementById('EventAktivitetList');
             let EventAktivitetListValgt = EventAktivitetList.options[EventAktivitetList.selectedIndex].value;
@@ -160,4 +143,3 @@
         }
     </script>
 }
-

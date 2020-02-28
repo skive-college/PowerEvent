@@ -134,7 +134,6 @@ namespace PowerEvent.Helpers
                 }
             }
             return _holdList;
-
         }
 
         public static List<Hold> getHoldAktivitetScores(List<Hold> _holdList, int? _eventId = null, int? _holdOrder = null, int? _eventAktivitetId = null)
@@ -181,8 +180,6 @@ namespace PowerEvent.Helpers
             DBHandler.deleteHold(_id);
         }
         //___________________________________________________________________________________________________________Alt med Hold ↑
-
-        //___________________________________________________________________________________________________________Alt med Hold Order ↓
 
         public static void deleteHoldScore(int _id)
         {
@@ -243,6 +240,16 @@ namespace PowerEvent.Helpers
         {
            
             return DBHandler.getHoldOrder(_eventId, _aktivitetId);
+        }
+
+        public static void addEventAktivitetHold(int _eventAktivitetId, int _holdId, int _holdOrder)
+        {
+            DBHandler.addEventAktivitetHold(_eventAktivitetId, _holdId, _holdOrder);
+        }
+
+        public static void deleteEventAktivitetHold(int _id)
+        {
+            DBHandler.deleteEventAktivitetHold(_id);
         }
 
         //___________________________________________________________________________________________________________Alt med Hold Order ↑

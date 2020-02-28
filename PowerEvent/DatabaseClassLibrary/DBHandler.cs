@@ -685,6 +685,36 @@ namespace DatabaseClassLibrary
             return retur;
         }
 
+        public static void addEventAktivitetHold(int _eventAktivitetId, int _holdId, int _holdOrder)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "INSERT INTO EventAktivitetHold (EventAktivitetId, HoldId, HoldOrder) VALUES (@EventAktivitetId, @HoldId, @HoldOrder)";
+
+                con.Open();
+                SqlCommand cmd = new SqlCommand(sql, con);
+                cmd.Parameters.AddWithValue("@EventAktivitetId", _eventAktivitetId);
+                cmd.Parameters.AddWithValue("@HoldId", _holdId);
+                cmd.Parameters.AddWithValue("@HoldOrder", _holdOrder);
+
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
+
+        public static void deleteEventAktivitetHold(int _id)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "Delete From EventAktivitetHold WHERE id = @Id";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Id", _id);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
         //___________________________________________________________________________________________________________Alt med Hold Order ↑
 
 
