@@ -14,7 +14,7 @@ namespace PowerEvent
         [BindProperty]
         public int SelectedEvent { get; set; }
 
-        public int AntalVist { get; set; }
+        public int Vis { get; set; }
 
         public string ValgtGuiElemement { get; set; }
 
@@ -36,6 +36,7 @@ namespace PowerEvent
         public void OnGet()
         {
             SelectedEvent = -1;
+            Vis = 1;
             AktivitetList = new List<Aktivitet>();
             HoldList = new List<Hold>();
             ScoreList= new List<EventAktivitetHoldScore>();
@@ -49,6 +50,12 @@ namespace PowerEvent
             HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent);
             AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
             EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
+
+
+            if (ValgtGuiElemement == "CmdVis")
+            {
+                Vis++;
+            }
         }
 
         private void checkScript()
