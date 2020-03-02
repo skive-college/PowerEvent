@@ -3,103 +3,130 @@
 @{
     ViewData["Title"] = "ManageLogin";
 }
-
-<div class="container">
-    <div class="row">
-        <p>Opret Login:</p>
-    </div>
-    <div class="row">
-        <input id="TxtBrugernavn" type="text" placeholder="Brugernavn" />
-        <input id="TxtKodeord" type="text" placeholder="Manuelt kodeord" />
-        <input id="TxtKodeordRepeat" type="text" placeholder="Indtast kodeord igen" />
-        <input type="button" value="Tilfældig kode" onclick="elementChanged('cmdRndKode')" />
-        <style> #EventList { width: 120px; } #EventList:focus { min-width: 120px; width: auto; } </style>
-        <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
-            @{
-                if (@Model.SelectedEvent == -1)
-                {
-                    <option value="-1">Vælg et event</option>
-                }
-
-                foreach (var item in @Model.EventList)
-                {
-                    <option value="@item.Id">@item.Navn</option>
-                }
-            }
-        </select>
-        <input type="button" value="Opret" onclick="elementChanged('CmdOpretLogin')" />
-    </div>
-    <br />
-
-    <div class="row">
-        <div class="col-12 col-lg-6">
+@{
+    if (@Model.CurrentLogin != null)
+    {
+        <div class="container">
             <div class="row">
-                <select id="HoldList" asp-for="@Model.SelectedHold" onchange="elementChanged('HoldList')" multiple style=" height: 350px; width: 450px">
+                <p>Opret Login:</p>
+            </div>
+            <div class="row">
+                <input id="TxtBrugernavn" type="text" placeholder="Brugernavn" asp-for="TxtBrugernavn" />
+                <input id="TxtKodeord" type="text" placeholder="Manuelt kodeord" asp-for="TxtKodeord" />
+                <input id="TxtKodeordRepeat" type="text" placeholder="Indtast kodeord igen" asp-for="TxtKodeord" />
+                <input type="button" value="Tilfældig kode" onclick="elementChanged('CmdRndKode')" />
+
+                <style> #AdminTypeList { width: 120px; } #AdminTypeList:focus { min-width: 120px; width: auto; } </style>
+                <select id="AdminTypeList" data-val="true" asp-for="@Model.SelectedAdminType">
                     @{
-                        <option value="-1" hidden></option>
+                        if (@Model.SelectedAdminType == -1)
+                        {
+                            <option value="-1">Vælg en admintype</option>
+                        }
+
+                        foreach (var item in @Model.AdminTypeList)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    }
+                </select>
+                <style> #EventList { width: 120px; } #EventList:focus { min-width: 120px; width: auto; } </style>
+                <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
+                    @{
+                        if (@Model.SelectedEvent == -1)
+                        {
+                            <option value="-1">Vælg et event</option>
+                        }
+
+                        foreach (var item in @Model.EventList)
+                        {
+                            <option value="@item.Id">@item.Navn</option>
+                        }
+                    }
+                </select>
+                <style> #HoldList { width: 120px; } #HoldList:focus { min-width: 120px; width: auto; } </style>
+                <select id="HoldList" onchange="elementChanged('HoldList')" asp-for="@Model.SelectedHold">
+                    @{
+                        if (@Model.SelectedHold == -1)
+                        {
+                            <option value="-1">Vælg et Hold</option>
+                        }
+
                         foreach (var item in @Model.HoldList)
                         {
                             <option value="@item.Id">@item.Navn</option>
                         }
                     }
                 </select>
+                <input type="button" value="Opret" onclick="elementChanged('CmdOpretLogin')" />
             </div>
+            <br />
 
             <div class="row">
-                <input type="button" value="Slet" onclick="elementChanged('CmdSletHold')" />
+                <div class="col-12 col-lg-6">
+                    <div class="row">
+                        <select id="HoldList" asp-for="@Model.SelectedLogin" onchange="elementChanged('LoginList')" multiple style=" height: 350px; width: 450px">
+                            @{
+                                <option value="-1" hidden></option>
+                                foreach (var item in @Model.LoginList)
+                                {
+                                    <option value="@item.Id"> Event: @item.EventId. Hold: @item.HoldId. @item.Brugernavn, @item.Kodeord</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <input type="button" value="Slet" onclick="elementChanged('CmdSletLogin')" />
+                    </div>
+                </div>
+                <br />
+                <div class="col-12 col-lg-6">
+
+                </div>
+                <br />
             </div>
         </div>
-        <br />
-        <div class="col-12 col-lg-6">
-            
-        </div>
-        <br />
-    </div>
-</div>
 
-@section Scripts
+        @section Scripts
 {
-    <script>
-        function elementChanged(elementet)
-        {
-            let url = new URL(location.href);
-            url.searchParams.set("TxtHold", '');
-            url.searchParams.set("TxtFarve", '');
-            url.searchParams.set("CmdAddEventAktivitetHold", '');
+            <script>
+                function elementChanged(elementet) {
+                    let url = new URL(location.href);
+                    url.searchParams.set("TxtBrugernavn", '');
+                    url.searchParams.set("TxtKodeord", '');
+                    url.searchParams.set("TxtKodeordRepeat", '');
 
-            let HoldList = document.getElementById('HoldList');
-            let HoldListValgt = HoldList.options[HoldList.selectedIndex].value;
-            url.searchParams.set("HoldList", HoldListValgt);
-            @{
-                if (Model.SelectedEventAktivitet != -1)
-                {
-                    @: let HoldAktivitetList = document.getElementById('HoldAktivitetList');
-                    @: let HoldAktivitetListValgt = HoldAktivitetList.options[HoldAktivitetList.selectedIndex].value;
-                    @: url.searchParams.set("HoldAktivitetList", HoldAktivitetListValgt);
+                    let AdminTypeList = document.getElementById('AdminTypeList');
+                    let AdminTypeListValgt = AdminTypeList.options[AdminTypeList.selectedIndex].value;
+                    url.searchParams.set("AdminTypeList", AdminTypeListValgt);
+
+                    let EventList = document.getElementById('EventList');
+                    let EventListValgt = EventList.options[EventList.selectedIndex].value;
+                    url.searchParams.set("EventList", EventListValgt);
+
+                    let HoldList = document.getElementById('HoldList');
+                    let HoldListValgt = HoldList.options[HoldList.selectedIndex].value;
+                    url.searchParams.set("HoldList", HoldListValgt);
+
+                    if (elementet == 'CmdOpretLogin') {
+                        let TxtBrugernavn = document.getElementById('TxtBrugernavn').value;
+                        url.searchParams.set("TxtBrugernavn", TxtBrugernavn);
+
+                        let TxtKodeord = document.getElementById('TxtKodeord').value;
+                        url.searchParams.set("TxtKodeord", TxtKodeord);
+
+                        let TxtKodeordRepeat = document.getElementById('TxtKodeordRepeat').value;
+                        url.searchParams.set("TxtKodeordRepeat", TxtKodeordRepeat);
+                    }
+
+                    
+
+                    url.searchParams.set("ValgtGuiElemement", elementet);
+                    location.href = url;
                 }
-            }
-
-            if (elementet == 'CmdOpretLogin') {
-                let TxtBrugernavn = document.getElementById('TxtBrugernavn').value;
-                url.searchParams.set("TxtBrugernavn", TxtBrugernavn);
-
-                let TxtKodeord = document.getElementById('TxtKodeord').value;
-                url.searchParams.set("TxtKodeord", TxtKodeord);
-
-                let TxtKodeordRepeat = document.getElementById('TxtKodeordRepeat').value;
-                url.searchParams.set("TxtKodeordRepeat", TxtKodeordRepeat);
-            }
-
-            let EventAktivitetList = document.getElementById('EventAktivitetList');
-            let EventAktivitetListValgt = EventAktivitetList.options[EventAktivitetList.selectedIndex].value;
-            url.searchParams.set("EventAktivitetList", EventAktivitetListValgt);
-
-            let EventList = document.getElementById('EventList');
-            let EventListValgt = EventList.options[EventList.selectedIndex].value;
-            url.searchParams.set("EventList", EventListValgt);
-
-            url.searchParams.set("ValgtGuiElemement", elementet);
-            location.href = url;
+            </script>
         }
-    </script>
+
+    }
 }

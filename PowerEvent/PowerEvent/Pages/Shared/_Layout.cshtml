@@ -1,5 +1,6 @@
 ﻿@using PowerEvent.Models;
 @using PowerEvent.Helpers;
+@using Microsoft.AspNetCore.Mvc.RazorPages;
 
 <!DOCTYPE html>
 <html lang="en">
@@ -80,3 +81,14 @@
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+
+@{
+    public class layout : PageModel
+    {
+        public Login loadTempDataLogin()
+        {
+            return TempData.Peek<Login>("CurrentLogin");
+        }
+    }
+
+}
