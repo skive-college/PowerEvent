@@ -133,15 +133,17 @@ namespace PowerEvent
         {
             if (TxtHold != "" && TxtFarve != "")
             {
-                if (TxtFarve.StartsWith("#"))
-                {
-
-                }
-                else
+                if (!TxtFarve.StartsWith("#"))
                 {
                     TxtFarve = "#" + TxtFarve;
                 }
 
+                DBAdapter.addHold(TxtHold, TxtFarve);
+                loadHoldList();
+            }
+            else if (TxtHold != "" && TxtFarve == "")
+            {
+                TxtFarve = "#fff";
                 DBAdapter.addHold(TxtHold, TxtFarve);
                 loadHoldList();
             }

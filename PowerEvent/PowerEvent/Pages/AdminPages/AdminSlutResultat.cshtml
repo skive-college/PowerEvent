@@ -40,14 +40,20 @@
     </div>
     <div class="row">
         @{
-            //laver dynamisk et "table" til hvert hold der indeholde holdets deltagere
+//laver dynamisk et "table" til hvert hold der indeholde holdets deltagere
             <div class="col-6 col-md-3 col-lg-2">
                 <br />
                 <div>
                     <table style=" height: auto; width: 100%;">
-                        <tr>
-                            <td class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-weight: bold; font-size: 1.4em;">Hold</td>
-                        </tr>
+                        @{
+                            if (Model.SelectedEvent != -1)
+                            {
+                                <tr>
+                                    <td class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-weight: bold; font-size: 1.4em;">Hold</td>
+                                </tr>
+                            }
+                        }
+
                         @{
                             //opretter deltagerne af hver hold
                             foreach (var _hold in @Model.HoldList)
@@ -65,9 +71,9 @@
             </div>
 
 
-            //laver dynamisk et "table" til hvert Aktivitet
-            foreach (var _eventAktivitet in Model.EventAktivitetList)
-            {
+                            //laver dynamisk et "table" til hvert Aktivitet
+                            foreach (var _eventAktivitet in Model.EventAktivitetList)
+                            {
                 <div class="col-6 col-md-3 col-lg-2">
                     <br />
                     <table style=" height: auto; width: 100%;">
@@ -76,7 +82,7 @@
                         </tr>
 
                         @*opretter score af hvert hold*@
-                        @{ 
+                        @{
                             foreach (var _hold in @Model.HoldList)
                             {
                                 int totalScore = 0;
@@ -98,11 +104,45 @@
                                 }
                                 <tr>
                                     <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-size: 1.4em;">@totalScore</td>
-                                </tr>   
+                                </tr>
+
                             }
                         }
                     </table>
                 </div>
+                            }
+
+                            //laver dynamisk et "table" til hvert hold der indeholde holdets deltagere
+            <div class="col-6 col-md-3 col-lg-2">
+                <br />
+                <div>
+                    <table style=" height: auto; width: 100%;">
+                        @{
+                            if (Model.SelectedEvent != -1)
+                            {
+                                <tr>
+                                    <td class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-weight: bold; font-size: 1.4em;">Vinder</td>
+                                </tr>
+                            }
+                        }
+                        @{
+                            //opretter deltagerne af hver hold
+                            foreach (var _point in @Model.EventAktivitetHoldList)
+                            {
+                                if (_point.HoldId == _point.HoldId)
+                                {
+                                    <tr>
+                                        <td class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em;">@_point.Point</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </table>
+                </div>
+            </div>                            
+            if (Model.SelectedEvent != -1)
+            {
+                <input type="button" value="Vis" onclick="elementChanged('CmdVis')" />
             }
         }
     </div>
@@ -119,6 +159,10 @@
             let EventListValgt = EventList.options[EventList.selectedIndex].value;
             url.searchParams.set("EventList", EventListValgt);
 
+            if (elementet == 'CmdVis')
+            {
+
+            }
 
             url.searchParams.set("ValgtGuiElemement", elementet);
             location.href = url;
