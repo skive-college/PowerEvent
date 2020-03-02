@@ -6,32 +6,27 @@
 
 <div class="container">
     <div class="row">
-        <p>Opret Hold:</p>
+        <p>Opret Login:</p>
     </div>
     <div class="row">
         <input id="TxtBrugernavn" type="text" placeholder="Brugernavn" />
-        <input id="TxtKodeord" type="text" placeholder="Kodeord" />
-        <style> #EventAktivitetList { width: 120px; } #EventAktivitetList:focus { min-width: 120px; width: auto; } </style>
-        <select id="EventAktivitetList" asp-for="@Model.SelectedEventAktivitet" onchange="elementChanged('EventAktivitetList')">
+        <input id="TxtKodeord" type="text" placeholder="Manuelt kodeord" />
+        <input id="TxtKodeordRepeat" type="text" placeholder="Indtast kodeord igen" />
+        <input type="button" value="Tilfældig kode" onclick="elementChanged('cmdRndKode')" />
+        <style> #EventList { width: 120px; } #EventList:focus { min-width: 120px; width: auto; } </style>
+        <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
             @{
                 if (@Model.SelectedEvent == -1)
                 {
-                    <option value="-1" hidden></option>
+                    <option value="-1">Vælg et event</option>
                 }
-                if (@Model.SelectedEvent != -1)
+
+                foreach (var item in @Model.EventList)
                 {
-                    if (@Model.SelectedEventAktivitet == -1)
-                    {
-                        <option value="-1">Vælg en Aktivitet</option>
-                    }
-                    foreach (var item in @Model.EventAktivitetList)
-                    {
-                        <option value="@item.Id">@Model.AktivitetList.Where(i => i.Id == item.AktivitetId).FirstOrDefault().Navn</option>
-                    }
+                    <option value="@item.Id">@item.Navn</option>
                 }
             }
         </select>
-        <input type="button" value="Tilfældig kode" onclick="elementChanged('cmdRndKode')" />
         <input type="button" value="Opret" onclick="elementChanged('CmdOpretLogin')" />
     </div>
     <br />
@@ -56,38 +51,7 @@
         </div>
         <br />
         <div class="col-12 col-lg-6">
-            <div class="row">
-                <style> #EventList { width: 120px; } #EventList:focus { min-width: 120px; width: auto; } </style>
-            </div>
-            <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
-                @{
-                    if (@Model.SelectedEvent == -1)
-                    {
-                        <option value="-1">Vælg et event</option>
-                    }
-
-                    foreach (var item in @Model.EventList)
-                    {
-                        <option value="@item.Id">@item.Navn</option>
-                    }
-                }
-            </select>
-            <div class="row">
-                <div class="col">
-                    <select id="HoldAktivitetList" asp-for="@Model.SelectedHoldAktivitet" onchange="elementChanged('HoldAktivitetList')" multiple style=" height: 350px; width: 450px">
-                        @{
-                            if (@Model.SelectedEventAktivitet != -1)
-                            {
-                                <option value="-1" hidden></option>
-                                foreach (var _hold in @Model.HoldAktivitetList)
-                                {
-                                    <option value="@_hold.HoldAktiviteter[0].Id">@_hold.HoldAktiviteter[0].HoldOrder. runde, Hold: @_hold.Navn</option>
-                                }
-                            }
-                        }
-                    </select>
-                </div>
-            </div>
+            
         </div>
         <br />
     </div>
@@ -121,6 +85,9 @@
 
                 let TxtKodeord = document.getElementById('TxtKodeord').value;
                 url.searchParams.set("TxtKodeord", TxtKodeord);
+
+                let TxtKodeordRepeat = document.getElementById('TxtKodeordRepeat').value;
+                url.searchParams.set("TxtKodeordRepeat", TxtKodeordRepeat);
             }
 
             let EventAktivitetList = document.getElementById('EventAktivitetList');
