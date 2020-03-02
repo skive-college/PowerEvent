@@ -106,14 +106,6 @@ namespace PowerEvent
             {
                 CmdDeleteHold();
             }
-            else if (ValgtGuiElemement == "CmdAddEventAktivitetHold")
-            {
-                CmdAddEventAktivitetHold();
-            }
-            else if (ValgtGuiElemement == "CmdDeleteEventAktivitetHold")
-            {
-                CmdSletEventAktivitetHold();
-            }
         }
 
         public void OnPost()
@@ -137,24 +129,6 @@ namespace PowerEvent
             {
                 DBAdapter.addHold(TxtHold, TxtFarve);
                 loadHoldList();
-            }
-        }
-
-        public void CmdAddEventAktivitetHold()
-        {
-            if (SelectedEventAktivitet != -1 && txtHoldOrder != 0)
-            {
-                DBAdapter.addEventAktivitetHold(SelectedEventAktivitet, SelectedHold, txtHoldOrder);
-                loadHoldAktivitetList();
-            }
-        }
-        public void CmdSletEventAktivitetHold()
-        {
-            if (SelectedEventAktivitet != -1)
-            {
-                DBAdapter.deleteEventAktivitetHold(SelectedHoldAktivitet);
-                loadHoldAktivitetList();
-                SelectedHold = -1;
             }
         }
 

@@ -227,27 +227,18 @@ namespace DatabaseClassLibrary
             List<Hold> retur = new List<Hold>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = "SELECT distinct _h.Id, _h.Navn, _h.Farve";
-                sql += " FROM Hold _h";
-                if (_eventId != null)
-                {
-                    sql += ", EventDeltager _ed";
-                }
-                if (_holdOrder != null && _eventAktivitetId != null)
-                {
-                    sql += ", EventAktivitetHold _eah, EventAktivitet _ea";
-                }
+                string sql = "SELECT distinct _h.Id, _h.Navn, _h.Farve FROM Hold _h";
                 if (_eventId != null || _holdOrder != null && _eventAktivitetId != null)
                 {
-                    sql += " WHERE";
+                    sql += ", EventAktivitetHold _eah, EventAktivitet _ea WHERE _eah.HoldId = _h.Id AND _ea.Id = _eah.EventAktivitetId";
                 }
                 if (_eventId != null)
                 {
-                    sql += " _h.Id = _ed.HoldId AND _ed.EventId = @EventId";
+                    sql += " AND _ea.EventId = @EventId";
                 }
                 if (_holdOrder != null && _eventAktivitetId != null)
                 {
-                    sql += " AND _eah.HoldId = _h.Id AND _ea.Id = _eah.EventAktivitetId AND _ea.Id = @EventAktivitetId AND _eah.HoldOrder = @HoldOrder";
+                    sql += " AND _ea.Id = @EventAktivitetId AND _eah.HoldOrder = @HoldOrder";
                 }
                 con.Open();
                 SqlCommand cmd = new SqlCommand(sql, con);
