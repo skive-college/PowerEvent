@@ -222,11 +222,6 @@ namespace PowerEvent
             }
         }
 
-        private void saveTempDataLogin()
-        {
-            TempData.Set("CurrentLogin", CurrentLogin);
-        }
-
         private void loadTempDataLogin()
         {
             Login tempLogin = TempData.Peek<Login>("CurrentLogin");
