@@ -87,46 +87,44 @@
                 <br />
             </div>
         </div>
-
-        @section Scripts
-{
-            <script>
-                function elementChanged(elementet) {
-                    let url = new URL(location.href);
-                    url.searchParams.set("TxtBrugernavn", '');
-                    url.searchParams.set("TxtKodeord", '');
-                    url.searchParams.set("TxtKodeordRepeat", '');
-
-                    let AdminTypeList = document.getElementById('AdminTypeList');
-                    let AdminTypeListValgt = AdminTypeList.options[AdminTypeList.selectedIndex].value;
-                    url.searchParams.set("AdminTypeList", AdminTypeListValgt);
-
-                    let EventList = document.getElementById('EventList');
-                    let EventListValgt = EventList.options[EventList.selectedIndex].value;
-                    url.searchParams.set("EventList", EventListValgt);
-
-                    let HoldList = document.getElementById('HoldList');
-                    let HoldListValgt = HoldList.options[HoldList.selectedIndex].value;
-                    url.searchParams.set("HoldList", HoldListValgt);
-
-                    if (elementet == 'CmdOpretLogin') {
-                        let TxtBrugernavn = document.getElementById('TxtBrugernavn').value;
-                        url.searchParams.set("TxtBrugernavn", TxtBrugernavn);
-
-                        let TxtKodeord = document.getElementById('TxtKodeord').value;
-                        url.searchParams.set("TxtKodeord", TxtKodeord);
-
-                        let TxtKodeordRepeat = document.getElementById('TxtKodeordRepeat').value;
-                        url.searchParams.set("TxtKodeordRepeat", TxtKodeordRepeat);
-                    }
-
-                    
-
-                    url.searchParams.set("ValgtGuiElemement", elementet);
-                    location.href = url;
-                }
-            </script>
-        }
-
     }
+}
+
+@section Scripts
+{
+    <script>
+        function elementChanged(elementet) {
+            let url = new URL(location.href);
+            url.searchParams.set("TxtBrugernavn", '');
+            url.searchParams.set("TxtKodeord", '');
+            url.searchParams.set("TxtKodeordRepeat", '');
+
+            let AdminTypeList = document.getElementById('AdminTypeList');
+            let AdminTypeListValgt = AdminTypeList.options[AdminTypeList.selectedIndex].value;
+            url.searchParams.set("AdminTypeList", AdminTypeListValgt);
+
+            let EventList = document.getElementById('EventList');
+            let EventListValgt = EventList.options[EventList.selectedIndex].value;
+            url.searchParams.set("EventList", EventListValgt);
+
+            let HoldList = document.getElementById('HoldList');
+            let HoldListValgt = HoldList.options[HoldList.selectedIndex].value;
+            url.searchParams.set("HoldList", HoldListValgt);
+
+            if (elementet == 'CmdOpretLogin') {
+                let TxtBrugernavn = document.getElementById('TxtBrugernavn').value;
+                url.searchParams.set("TxtBrugernavn", TxtBrugernavn);
+
+                let TxtKodeord = document.getElementById('TxtKodeord').value;
+                url.searchParams.set("TxtKodeord", TxtKodeord);
+
+                let TxtKodeordRepeat = document.getElementById('TxtKodeordRepeat').value;
+                url.searchParams.set("TxtKodeordRepeat", TxtKodeordRepeat);
+            }
+
+
+            url.searchParams.set("ValgtGuiElemement", elementet);
+            location.href = url;
+        }
+    </script>
 }

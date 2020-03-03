@@ -23,6 +23,7 @@ namespace PowerEvent
 
         public string TxtPassword { get; set; }
 
+
         public IActionResult OnGet()
         {
             loadTempDataLogin();
