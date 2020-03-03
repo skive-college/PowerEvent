@@ -639,6 +639,33 @@ namespace DatabaseClassLibrary
                 command.ExecuteNonQuery();
             }
         }
+
+        public static void updateDeltager(int _id, int _holdid)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "UPDATE EventDeltager SET holdid = @HoldId WHERE id = @Id";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@HoldId", _holdid);
+                command.Parameters.AddWithValue("@Id", _id);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static void deleteDeltager(int _id)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "Delete From EventDeltager WHERE id = @Id";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Id", _id);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
         //___________________________________________________________________________________________________________alt med Deltagere ↑
 
         //___________________________________________________________________________________________________________Alt med Hold Order ↓

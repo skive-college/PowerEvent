@@ -14,6 +14,12 @@ namespace PowerEvent
         [BindProperty]
         public string DeltagerNavn { get; set; }
 
+        [BindProperty]
+        public int DeltagerID { get; set; }
+
+        [BindProperty]
+        public int HoldID { get; set; }
+
         [TempData]
         public int SelectedEvent { get; set; }
 
@@ -55,5 +61,18 @@ namespace PowerEvent
             OnGet();
         }
 
+        public void OnPostCmdRemoveDeltager()
+        {
+            TempData.Keep("SelectedEvent");
+            DBAdapter.deleteDeltager(DeltagerID);
+            OnGet();
+        }
+
+        public void OnPostCmdAddDeltagerToHold()
+        {
+            TempData.Keep("SelectedEvent");
+            DBAdapter.updateDeltager(DeltagerID, HoldID);
+            OnGet();
+        }
     }
 }

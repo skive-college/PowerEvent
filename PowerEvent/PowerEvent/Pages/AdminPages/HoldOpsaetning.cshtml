@@ -16,14 +16,7 @@
         }
         foreach (var pevent in Model.EventList)
         {
-            //if (pevent.Id == Model.SelectedEvent)
-            //{
-            //    <option label="@pevent.Navn" value="@pevent.Id" selected></option>
-            //}
-            //else
-            //{
                 <option label="@pevent.Navn" value="@pevent.Id"></option>
-            //}
         }
     }
 </select>
@@ -39,7 +32,7 @@
                         <input type="text" asp-for="@Model.DeltagerNavn"/>
                         <input type="submit" value="Opret" formmethod="post" asp-page-handler="CmdSubmitDeltagerNavn"/>
                     </form>
-                    <select id="deltagerselect" style="min-width:150px; min-height:400px" multiple>
+                    <select id="deltagerselect" style="min-width:150px; min-height:400px" multiple onchange="updateRemoveForm()">
                         @{
                             foreach (var deltager in Model.DeltagerList)
                             {
@@ -55,36 +48,29 @@
                             }
                         }
                     </select>
-                    <button onclick="">Fjern</button>
+                    <form method="post" id="removeplayer">
+                        <input type="number" hidden asp-for="@Model.DeltagerID" />
+                        <input type="submit" value="Fjern" formmethod="post" asp-page-handler="CmdRemoveDeltager" />
+                    </form>
                 </div>
                 <div class="col-sm-2">
                     <div>
-                        <select id="holdselect">
-                            @{ 
+                        <select id="holdselect" onchange="updateTeamForm()">
+                            @{
                                 foreach (var hold in Model.HoldList)
                                 {
                                     <option label="@hold.Navn" value="@hold.Id"></option>
                                 }
                             }
                         </select>
-                        <button onclick="">Random</button>
-                        <button onclick="">Tilføj</button>
+                        <form method="post" id="addplayertoteam">
+                            <input type="number" hidden asp-for="@Model.DeltagerID" />
+                            <input type="number" hidden asp-for="@Model.HoldID" />
+                            <input type="submit" value="Tilføj spiller" formmethod="post" asp-page-handler="CmdAddDeltagerToHold" />
+                        </form>
+                        <button onclick="">Tilfældige hold</button>
                     </div>
                     
-                </div>
-                <div class="col-sm-5">
-                    <select disabled multiple style="min-width:300px">
-                        @{
-                            foreach (var deltager in Model.DeltagerList)
-                            {
-                                if (deltager.HoldId != null)
-                                {
-                                    string holdnavn = Model.HoldList.Find(x => x.Id == deltager.HoldId).Navn;
-                                    <option label="@(string.Format("{0} - {1}", deltager.Navn, holdnavn))"></option>
-                                }
-                            }
-                        }
-                    </select>
                 </div>
             </div>
         </div>
@@ -97,10 +83,39 @@
         let items = list.children;
         let id = items.item(list.selectedIndex).getAttribute("value");
 
-        let url = new URL(location.href)
-        url.searchParams.set("Event", id)
-        location.href = url
+        let url = new URL(location.href);
+        url.searchParams.set("Event", id);
+        location.href = url;
     }
+
+    function updateRemoveForm() {
+        let playerindex = document.getElementById("deltagerselect").selectedIndex;
+        let playerelement = document.getElementById("deltagerselect").children[playerindex];
+        let player = playerelement.getAttribute("value");
+
+        document.getElementById("removeplayer").children[0].setAttribute("value", player)
+        document.getElementById("addplayertoteam").children[0].setAttribute("value", player)
+    }
+
+    function updateTeamForm() {
+        let teamindex = document.getElementById("holdselect").selectedIndex;
+        let holdelement = document.getElementById("holdselect").children[teamindex];
+        let hold = holdelement.getAttribute("value");
+
+        document.getElementById("addplayertoteam").children[1].setAttribute("value", hold)
+    }
+
+    function addPlayerToTeam() {
+        let playerindex = document.getElementById("deltagerselect").selectedIndex;
+        let playerelement = document.getElementById("deltagerselect").children[playerindex];
+        let player = playerelement.getAttribute("value");
+
+        let teamindex = document.getElementById("holdselect").selectedIndex;
+        let teamelement = document.getElementById("holdselect").children[teamindex];
+        let team = teamelement.getAttribute("value");
+    }
+
+
 
 </script>
 
