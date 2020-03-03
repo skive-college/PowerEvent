@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using PowerEvent.Helpers;
 using PowerEvent.Models;
 
@@ -11,23 +12,27 @@ namespace PowerEvent
 {
     public class ManageLoginModel : PageModel
     {
-        [BindProperty]
-        public int SelectedHold { get; set; }
+        public Login CurrentLogin { get; set; }
 
         [BindProperty]
-        public int SelectedHoldAktivitet { get; set; }
+        public int SelectedLogin { get; set; }
 
         [BindProperty]
-        public int SelectedEventAktivitet { get; set; }
+        public int SelectedAdminType { get; set; }
 
         [BindProperty]
         public int SelectedEvent { get; set; }
 
-        public string TxtHold { get; set; }
+        [BindProperty]
+        public int SelectedHold { get; set; }
 
-        public string TxtFarve { get; set; }
+        [BindProperty]
+        public string TxtBrugernavn { get; set; }
 
-        public int txtHoldOrder { get; set; }
+        [BindProperty]
+        public string TxtKodeord { get; set; }
+
+        public string TxtKodeordRepeat { get; set; }
 
         public string ValgtGuiElemement { get; set; }
 
@@ -35,84 +40,56 @@ namespace PowerEvent
 
         public List<Hold> HoldList { get; set; }
 
-        public List<Aktivitet> AktivitetList { get; set; }
+        public List<SelectListItem> AdminTypeList { get; set; }
 
-        public List<Hold> HoldAktivitetList { get; set; }
-
-        public List<EventAktivitet> EventAktivitetList { get; set; }
+        public List<Login> LoginList { get; set; }
 
 
-        private Aktivitet valgtAktivitet;
-
-        public Aktivitet ValgtAktivitet
+        public IActionResult OnGet()
         {
-            get
+            loadTempDataLogin();
+            if (CurrentLogin == null)
             {
-                if (valgtAktivitet == null)
+                return Redirect("/Index");
+            }
+            else
+            {
+                SelectedLogin = -1;
+                SelectedEvent = -1;
+                SelectedHold = -1;
+                SelectedAdminType = -1;
+                LoginList = new List<Login>();
+                HoldList = new List<Hold>();
+                EventList = DBAdapter.getEvent();
+
+                AdminTypeList = new List<SelectListItem>()
+            {
+            new SelectListItem { Value = "0", Text = "Hold" },
+            new SelectListItem { Value = "1", Text = "Admin" },
+            new SelectListItem { Value = "2", Text = "SuperAdmin" }
+            };
+
+                loadLoginList();
+                checkScript();
+
+                if (SelectedEvent != -1)
                 {
-                    if (EventAktivitetList.Count != 0)
-                    {
-                        if (AktivitetList.Count == 0)
-                        {
-                            if (SelectedEventAktivitet != -1)
-                            {
-                                return DBAdapter.getAktivitet(SelectedEvent).Where(i => i.Id == EventAktivitetList.Where(i => i.Id == SelectedEventAktivitet).FirstOrDefault().AktivitetId).FirstOrDefault();
-                            }
-                        }
-                        else
-                        {
-                            if (SelectedEventAktivitet != -1)
-                            {
-                                return AktivitetList.Where(i => i.Id == EventAktivitetList.Where(i => i.Id == SelectedEventAktivitet).FirstOrDefault().AktivitetId).FirstOrDefault();
-                            }
-                        }
-                    }
+                    HoldList = DBAdapter.getHold(SelectedEvent);
                 }
-                return new Aktivitet();
-            }
-            set
-            {
-                valgtAktivitet = value;
-            }
-        }
 
-        public void OnGet()
-        {
-            SelectedHold = -1;
-            SelectedHoldAktivitet = -1;
-            SelectedEvent = -1;
-            SelectedEventAktivitet = -1;
-            HoldList = new List<Hold>();
-            EventAktivitetList = new List<EventAktivitet>();
-            EventList = DBAdapter.getEvent();
-            loadHoldList();
-            checkScript();
-
-
-            if (SelectedEvent != -1)
-            {
-                loadEventAktivitetList();
-                if (SelectedEventAktivitet != -1)
+                if (ValgtGuiElemement == "CmdOpretLogin")
                 {
-                    loadHoldAktivitetList();
+                    CmdSaveLogin();
                 }
-            }
+                else if (ValgtGuiElemement == "CmdSletLogin")
+                {
+                    CmdDeleteLogin();
+                }
+                else if (ValgtGuiElemement == "CmdRndKode")
+                {
 
-            if (ValgtGuiElemement == "CmdGemHold")
-            {
-                CmdSaveHold();
-            }
-            else if (ValgtGuiElemement == "CmdSletAktivitet")
-            {
-                CmdDeleteHold();
-            }
-            else if (ValgtGuiElemement == "CmdAddEventAktivitetHold")
-            {
-                CmdAddEventAktivitetHold();
-            }
-            else if (ValgtGuiElemement == "CmdDeleteEventAktivitetHold")
-            {
-                CmdSletEventAktivitetHold();
+                }
+                return this.Page();
             }
         }
 
@@ -121,113 +98,75 @@ namespace PowerEvent
 
         }
 
-        public void CmdDeleteHold()
+        public void CmdDeleteLogin()
         {
-            if (SelectedHold != -1)
+            if (SelectedLogin != -1)
             {
-                DBAdapter.deleteHold(SelectedHold);
-                loadHoldList();
-                SelectedHold = -1;
+
+                loadLoginList();
+                SelectedLogin = -1;
             }
         }
 
-        public void CmdSaveHold()
+        public void CmdSaveLogin()
         {
-            if (TxtHold != "" && TxtFarve != "")
+            if (TxtBrugernavn != "" && TxtKodeord != "" && TxtKodeord == TxtKodeordRepeat)
             {
-                DBAdapter.addHold(TxtHold, TxtFarve);
-                loadHoldList();
-            }
-        }
-
-        public void CmdAddEventAktivitetHold()
-        {
-            if (SelectedEventAktivitet != -1 && txtHoldOrder != 0)
-            {
-                DBAdapter.addEventAktivitetHold(SelectedEventAktivitet, SelectedHold, txtHoldOrder);
-                loadHoldAktivitetList();
-            }
-        }
-        public void CmdSletEventAktivitetHold()
-        {
-            if (SelectedEventAktivitet != -1)
-            {
-                DBAdapter.deleteEventAktivitetHold(SelectedHoldAktivitet);
-                loadHoldAktivitetList();
-                SelectedHold = -1;
-            }
-        }
-
-
-        private void loadHoldList()
-        {
-            HoldList = DBAdapter.getHold();
-        }
-
-        private void loadHoldAktivitetList()
-        {
-            HoldAktivitetList = DBAdapter.getHold(SelectedEvent);
-            HoldAktivitetList = DBAdapter.getHoldAktivitet(HoldAktivitetList, SelectedEvent);
-            HoldAktivitetList = HoldAktivitetList.Where(i => i.HoldAktiviteter.Where(i => i.EventAktivitetId == SelectedEventAktivitet).FirstOrDefault() != null).ToList();
-            foreach (var _hold in HoldAktivitetList)
-            {
-                _hold.HoldAktiviteter = _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == SelectedEventAktivitet).ToList();
-            }
-            List<Hold> tempHoldList = new List<Hold>();
-            foreach (var _hold in HoldAktivitetList)
-            {
-                foreach (var _aktivitet in _hold.HoldAktiviteter)
+                int? tempEventId = null;
+                if (SelectedEvent != -1)
                 {
-                    Hold h = _hold;
-                    h.HoldAktiviteter = new List<EventAktivitetHold>();
-                    h.HoldAktiviteter.Add(_aktivitet);
-                    tempHoldList.Add(h);
+                    tempEventId = SelectedEvent;
                 }
+                int? tempHoldId = null;
+                if (SelectedHold != -1)
+                {
+                    tempHoldId = SelectedHold;
+                }
+                DBAdapter.addLogin(TxtBrugernavn, TxtKodeord, SelectedAdminType, tempEventId, tempHoldId);
+                loadLoginList();
             }
-            tempHoldList = tempHoldList.OrderBy(i => i.HoldAktiviteter[0].HoldOrder).ThenBy(i => i.Navn).ToList();
-            HoldAktivitetList = tempHoldList;
         }
 
-        private void loadEventAktivitetList()
+
+        private void loadLoginList()
         {
-            AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
-            EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
+            int? tempEventId = null;
+            if (SelectedEvent != -1)
+            {
+                tempEventId = SelectedEvent;
+            }
+            //LoginList = DBAdapter.getLogin(CurrentLogin.Brugernavn, CurrentLogin.Kodeord, tempEventId);
         }
+
 
 
         private void checkScript()
         {
+            
             try
             {
-                SelectedHold = int.Parse(Request.Query["HoldList"]);
+                TxtBrugernavn = Request.Query["TxtBrugernavn"];
             }
             catch
             {
             }
             try
             {
-                SelectedHoldAktivitet = int.Parse(Request.Query["HoldAktivitetList"]);
+                TxtKodeord = Request.Query["TxtKodeord"];
             }
             catch
             {
             }
             try
             {
-                TxtHold = Request.Query["TxtHold"];
+                TxtKodeordRepeat = Request.Query["TxtKodeordRepeat"];
             }
             catch
             {
             }
             try
             {
-                TxtFarve = Request.Query["TxtFarve"];
-            }
-            catch
-            {
-            }
-            try
-            {
-                txtHoldOrder = int.Parse(Request.Query["TxtHoldOrder"]);
+                SelectedAdminType = int.Parse(Request.Query["AdminTypeList"]);
             }
             catch
             {
@@ -241,36 +180,22 @@ namespace PowerEvent
             }
             try
             {
-                SelectedEventAktivitet = int.Parse(Request.Query["EventAktivitetList"]);
+                SelectedLogin = int.Parse(Request.Query["HoldList"]);
             }
             catch
             {
             }
 
 
+
             ValgtGuiElemement = Request.Query["ValgtGuiElemement"];
 
-            if (SelectedEvent == -1)
+
+            if (ValgtGuiElemement == "EventList")
             {
-                loadTempDataEvent();
+
             }
 
-            else if (ValgtGuiElemement == "EventList")
-            {
-                if (SelectedEvent != -1)
-                {
-                    saveTempDataEvent();
-                    SelectedEventAktivitet = -1;
-                    SelectedHoldAktivitet = -1;
-                }
-            }
-            else if (ValgtGuiElemement == "EventAktivitetList")
-            {
-                if (SelectedEventAktivitet != -1)
-                {
-                    SelectedHoldAktivitet = -1;
-                }
-            }
         }
 
 
@@ -289,5 +214,20 @@ namespace PowerEvent
                 SelectedEvent = tempEventList[0];
             }
         }
+
+        private void saveTempDataLogin()
+        {
+            TempData.Set("CurrentLogin", CurrentLogin);
+        }
+
+        private void loadTempDataLogin()
+        {
+            Login tempLogin = TempData.Peek<Login>("CurrentLogin");
+            if (tempLogin != null)
+            {
+                CurrentLogin = tempLogin;
+            }
+        }
+
     }
 }

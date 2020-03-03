@@ -227,27 +227,18 @@ namespace DatabaseClassLibrary
             List<Hold> retur = new List<Hold>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = "SELECT distinct _h.Id, _h.Navn, _h.Farve";
-                sql += " FROM Hold _h";
-                if (_eventId != null)
-                {
-                    sql += ", EventDeltager _ed";
-                }
-                if (_holdOrder != null && _eventAktivitetId != null)
-                {
-                    sql += ", EventAktivitetHold _eah, EventAktivitet _ea";
-                }
+                string sql = "SELECT distinct _h.Id, _h.Navn, _h.Farve FROM Hold _h";
                 if (_eventId != null || _holdOrder != null && _eventAktivitetId != null)
                 {
-                    sql += " WHERE";
+                    sql += ", EventAktivitetHold _eah, EventAktivitet _ea WHERE _eah.HoldId = _h.Id AND _ea.Id = _eah.EventAktivitetId";
                 }
                 if (_eventId != null)
                 {
-                    sql += " _h.Id = _ed.HoldId AND _ed.EventId = @EventId";
+                    sql += " AND _ea.EventId = @EventId";
                 }
                 if (_holdOrder != null && _eventAktivitetId != null)
                 {
-                    sql += " AND _eah.HoldId = _h.Id AND _ea.Id = _eah.EventAktivitetId AND _ea.Id = @EventAktivitetId AND _eah.HoldOrder = @HoldOrder";
+                    sql += " AND _ea.Id = @EventAktivitetId AND _eah.HoldOrder = @HoldOrder";
                 }
                 con.Open();
                 SqlCommand cmd = new SqlCommand(sql, con);
@@ -742,15 +733,17 @@ namespace DatabaseClassLibrary
             }
         }
 
+
+
         //___________________________________________________________________________________________________________Alt med Hold Order ↑
 
 
         //___________________________________________________________________________________________________________Alt med Login ↓
 
-        public static List<object> getLogin(string _brugernavn, string _kodeord)
+        public static List<object> getLogin(int? _eventId = null)
         {
             List<object> retur = new List<object>();
-            List<Login> loginList = getLoginIntern(_brugernavn, _kodeord);
+            List<Login> loginList = getLoginIntern(_eventId);
             if (loginList.Count != 0)
             {
                 foreach (Login _Login in loginList)
@@ -763,25 +756,21 @@ namespace DatabaseClassLibrary
             return retur;
         }
 
-        public static List<Login> getLoginIntern(string _brugernavn = null, string _kodeord = null)
+        private static List<Login> getLoginIntern(int? _eventId = null)
         {
             List<Login> retur = new List<Login>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 string sql = "Select _l.Id, _l.Brugernavn, _l.Kodeord, _l.AdminType, _l.EventId, _l.HoldId FROM Login _L";
 
-                if (_brugernavn != "" && _kodeord != "")
+                if (_eventId != null)
                 {
-                    sql += " WHERE _l.Brugernavn LIKE @Brugernavn AND _l.Kodeord LIKE @Kode";
+                    sql += "WHERE l.EventId = @EventId";
                 }
 
                 con.Open();
                 SqlCommand cmd = new SqlCommand(sql, con);
-                if (_brugernavn != "" && _kodeord != "")
-                {
-                    cmd.Parameters.AddWithValue("@Brugernavn", _brugernavn);
-                    cmd.Parameters.AddWithValue("@Kode", _kodeord);
-                }
+                cmd.Parameters.AddWithValue("@EventId", _eventId);
 
                 SqlDataReader reader = cmd.ExecuteReader();
 
@@ -799,20 +788,96 @@ namespace DatabaseClassLibrary
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = "INSERT INTO Login (Brugernavn, Kodeord, AdminType, EventId, HoldId) VALUES (@Brugernavn, @Kodeord, @AdminType, @EventId, @HoldId)";
+                string sql = "INSERT INTO Login (Brugernavn, Kodeord, AdminType";
+                if (_eventId != null && _holdId != null)
+                {
+                    sql += ", EventId, HoldId";
+                }
+                sql += ") VALUES(@Brugernavn, @Kodeord, @AdminType";
+                if (_eventId != null && _holdId != null)
+                {
+                    sql += ", @EventId, @HoldId";
+                }
+                sql += ")";
 
                 con.Open();
                 SqlCommand cmd = new SqlCommand(sql, con);
                 cmd.Parameters.AddWithValue("@Brugernavn", _brugernavn);
                 cmd.Parameters.AddWithValue("@Kodeord", _kodeord);
                 cmd.Parameters.AddWithValue("@AdminType", _adminType);
-                cmd.Parameters.AddWithValue("@EventId", _eventId);
-                cmd.Parameters.AddWithValue("@HoldId", _holdId);
+                if (_eventId != null && _holdId != null)
+                {
+                    cmd.Parameters.AddWithValue("@EventId", _eventId);
+                    cmd.Parameters.AddWithValue("@HoldId", _holdId);
+                }
 
                 cmd.ExecuteNonQuery();
                 con.Close();
             }
         }
+
+        public static object verifyLogin(string _brugernavn, string _kodeord)
+        {
+            object retur = new object();
+            Login dbLogin = verifyLoginIntern(_brugernavn, _kodeord);
+            if (dbLogin != new Login())
+            {
+                retur = new { Id = dbLogin.Id, Brugernavn = dbLogin.Brugernavn, Kodeord = dbLogin.Kodeord, AdminType = dbLogin.AdminType, EventId = dbLogin.EventId, HoldId = dbLogin.HoldId };
+            }
+            return retur;
+        }
+
+        private static Login verifyLoginIntern(string _brugernavn, string _kodeord)
+        {
+            Login retur = new Login();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "Select _l.Id, _l.Brugernavn, _l.Kodeord, _l.AdminType, _l.EventId, _l.HoldId FROM Login _L WHERE _l.Brugernavn LIKE @Brugernavn AND _l.Kodeord LIKE @Kode";
+
+                con.Open();
+                SqlCommand cmd = new SqlCommand(sql, con);
+                cmd.Parameters.AddWithValue("@Brugernavn", _brugernavn);
+                cmd.Parameters.AddWithValue("@Kode", _kodeord);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    //int tempId = int.Parse(reader["Id"].ToString());
+                    //string tempBrugernavn = reader["Brugernavn"].ToString();
+                    //string tempKodeord = reader["Kodeord"].ToString();
+
+                    int tempAdminType = int.Parse(reader["AdminType"].ToString());
+                    int? tempEventId = null;
+                    int? tempHoldId = null;
+                    try
+                    {
+                        tempEventId = int.Parse(reader["EventId"].ToString());
+                    }
+                    catch
+                    {
+                    }
+                    try
+                    {
+                        tempHoldId = int.Parse(reader["HoldId"].ToString());
+                    }
+                    catch
+                    {
+                    }
+                    try
+                    {
+                        retur = new Login() { Id = int.Parse(reader["Id"].ToString()), Brugernavn = reader["Brugernavn"].ToString(), Kodeord = reader["Kodeord"].ToString(), AdminType = tempAdminType, EventId = tempEventId, HoldId = tempHoldId };
+                    }
+                    catch
+                    {
+                    }
+                }
+                reader.Close();
+            }
+            return retur;
+        }
+
+
 
 
         //___________________________________________________________________________________________________________Alt med Login ↑
