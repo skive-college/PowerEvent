@@ -68,7 +68,7 @@ namespace PowerEvent
 
                 AdminTypeList = new List<SelectListItem>()
                 {
-                new SelectListItem { Value = "0", Text = "Hold" },
+                new SelectListItem { Value = "0", Text = "Bruger" },
                 new SelectListItem { Value = "1", Text = "Admin" },
                 new SelectListItem { Value = "2", Text = "SuperAdmin" }
                 };
@@ -91,24 +91,36 @@ namespace PowerEvent
                 }
                 else if (ValgtGuiElemement == "CmdRndKode")
                 {
-
+                    string tempKode = "";
+                    for (int i = 0; i < 8; i++)
+                    {
+                        tempKode += GetLetter();
+                    }
+                    TxtKodeord = tempKode;
+                    TxtKodeordRepeat = tempKode;
                 }
                 return this.Page();
             }
         }
-
-        public void OnPost()
+        
+        public char GetLetter()
         {
-
+            string chars = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            Random rand = new Random();
+            int num = rand.Next(0, chars.Length - 1);
+            return chars[num];
         }
 
         public void CmdDeleteLogin()
         {
             if (SelectedLogin != -1)
             {
-
-                loadLoginList();
-                SelectedLogin = -1;
+                if (LoginList.Where(i => i.Id == SelectedLogin).FirstOrDefault().AdminType <= CurrentLogin.AdminType)
+                {
+                    DBAdapter.deleteLogin(SelectedLogin);
+                    loadLoginList();
+                    SelectedLogin = -1;
+                }
             }
         }
 
@@ -142,7 +154,7 @@ namespace PowerEvent
             {
                 tempEventId = SelectedEvent;
             }
-            //LoginList = DBAdapter.getLogin(CurrentLogin.Brugernavn, CurrentLogin.Kodeord, tempEventId);
+            LoginList = DBAdapter.getLogin(tempEventId);
         }
 
 
@@ -187,11 +199,19 @@ namespace PowerEvent
             }
             try
             {
-                SelectedLogin = int.Parse(Request.Query["HoldList"]);
+                SelectedHold = int.Parse(Request.Query["HoldList"]);
             }
             catch
             {
             }
+            try
+            {
+                SelectedLogin = int.Parse(Request.Query["LoginList"]);
+            }
+            catch
+            {
+            }
+
 
 
 

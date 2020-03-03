@@ -4,144 +4,178 @@
     ViewData["Title"] = "OpretAktivitet";
 }
 
-    <div class="container">
-        <div class="row">
-            <p>Opret aktivitet:</p>
-        </div>
-        <div class="row">
-            <input id="TxtAktivitet" type="text" placeholder="Aktivitet" />
-            <style> #PointTypeList { width: 140px; } #PointTypeList:focus { min-width: 140px; width: auto; } </style>
-            <select id="PointTypeList" asp-for="@Model.SelectedPointType">
-                @{
-                    if (Model.SelectedPointType == -1)
-                    {
-                        <option value="-1">Vælg PointType</option>
-                    }
-                    foreach (var item in @Model.PointTypeList)
-                    {
-                        <option value="@item.Value">@item.Text</option>
-                    }
-                }
-            </select>
-            <style> #HoldSportList { width: 140px; } #HoldSportList:focus { min-width: 140px; width: auto; } </style>
-            <select id="HoldSportList" asp-for="@Model.SelectedHoldSport">
-                @{
-                    if (Model.SelectedHoldSport == -1)
-                    {
-                        <option value="-1">Vælg HoldSport</option>
-                    }
-                    foreach (var item in @Model.HoldSportList)
-                    {
-                        <option value="@item.Value">@item.Text</option>
-                    }
-                }
-            </select>
-            <input type="button" value="Gem" onclick="elementChanged('CmdGemAktivitet')"/>
-        </div>
-        <br />
-
-
-
-        <div class="row">
-            <div class="col-12 col-lg-6">
-                <div class="row">
-                    <select id="AktivitetList" asp-for="@Model.SelectedAktivitet" onchange="elementChanged('AktivitetList')" multiple style=" height: 350px; width: 450px">
-                        @{
-                            <option value="-1" hidden></option>
-                            foreach (var item in @Model.GuiAktivitetList)
-                            {
-                                <option value="@item.Value">@item.Text</option>
-                            }
-                        }
-                    </select>
-                </div>
-
-                <div class="row">
-                <input type="button" value="Slet" onclick="elementChanged('CmdDeleteAktivitet')" />
-                </div>
+@{
+    if (@Model.CurrentLogin != null && Model.CurrentLogin.Id != 0)
+    {
+        <div class="container">
+            <div class="row">
+                <p>Opret aktivitet:</p>
             </div>
-            <br/>
-            <div class="col-12 col-lg-6">
-                <div class="row">
-                    <style>
-                        #EventList {
-                            width: 120px;
-                        }
+            <div class="row">
+                <input id="TxtAktivitet" type="text" placeholder="Aktivitet" />
+                <style>
+                    #PointTypeList {
+                        width: 140px;
+                    }
 
-                            #EventList:focus {
-                                min-width: 120px;
-                                width: auto;
-                            }
-                    </style>
-                    <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
-                        @{
-                            if (@Model.SelectedEvent == -1)
-                            {
-                                <option value="-1" style="width:300px;">Vælg et event</option>
-                            }
-                            foreach (var item in @Model.EventList)
-                            {
-                                <option value="@item.Id">@item.Navn</option>
-                            }
+                        #PointTypeList:focus {
+                            min-width: 140px;
+                            width: auto;
                         }
-                    </select>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <select id="EventAktivitetList" asp-for="@Model.SelectedEventAktivitet" onchange="elementChanged('EventAktivitetList')" multiple style=" height: 350px; width: 450px">
+                </style>
+                <select id="PointTypeList" asp-for="@Model.SelectedPointType">
+                    @{
+                        if (Model.SelectedPointType == -1)
+                        {
+                            <option value="-1">Vælg PointType</option>
+                        }
+                        foreach (var item in @Model.PointTypeList)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    }
+                </select>
+                <style>
+                    #HoldSportList {
+                        width: 140px;
+                    }
+
+                        #HoldSportList:focus {
+                            min-width: 140px;
+                            width: auto;
+                        }
+                </style>
+                <select id="HoldSportList" asp-for="@Model.SelectedHoldSport">
+                    @{
+                        if (Model.SelectedHoldSport == -1)
+                        {
+                            <option value="-1">Vælg HoldSport</option>
+                        }
+                        foreach (var item in @Model.HoldSportList)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    }
+                </select>
+                <input type="button" value="Gem" onclick="elementChanged('CmdGemAktivitet')" />
+            </div>
+            <br />
+
+
+
+            <div class="row">
+                <div class="col-12 col-lg-6">
+                    <div class="row">
+                        <select id="AktivitetList" asp-for="@Model.SelectedAktivitet" onchange="elementChanged('AktivitetList')" multiple style=" height: 350px; width: 450px">
                             @{
                                 <option value="-1" hidden></option>
-                                foreach (var item in @Model.EventAktivitetList)
+                                foreach (var item in @Model.GuiAktivitetList)
                                 {
-                                    <option value="@item.Id">@Model.AktivitetList.Where(i => i.Id == item.AktivitetId).FirstOrDefault().Navn</option>
+                                    <option value="@item.Value">@item.Text</option>
                                 }
                             }
                         </select>
                     </div>
+
+                    <div class="row">
+                        <input type="button" value="Slet" onclick="elementChanged('CmdDeleteAktivitet')" />
+                    </div>
                 </div>
-                <input type="button" value="Tilføj" onclick="elementChanged('CmdAddEventAktivitet')" />
-                <input type="button" value="Slet" onclick="elementChanged('CmdDeleteEventAktivitet')" />
+                <br />
+                <div class="col-12 col-lg-6">
+                    <div class="row">
+                        <style>
+                            #EventList {
+                                width: 120px;
+                            }
+
+                                #EventList:focus {
+                                    min-width: 120px;
+                                    width: auto;
+                                }
+                        </style>
+                        <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
+                            @{
+                                if (@Model.SelectedEvent == -1)
+                                {
+                                    <option value="-1" style="width:300px;">Vælg et event</option>
+                                }
+                                foreach (var item in @Model.EventList)
+                                {
+                                    <option value="@item.Id">@item.Navn</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <select id="EventAktivitetList" asp-for="@Model.SelectedEventAktivitet" onchange="elementChanged('EventAktivitetList')" multiple style=" height: 350px; width: 450px">
+                                @{
+                                    <option value="-1" hidden></option>
+                                    foreach (var item in @Model.EventAktivitetList)
+                                    {
+                                        <option value="@item.Id">@Model.AktivitetList.Where(i => i.Id == item.AktivitetId).FirstOrDefault().Navn</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <input type="button" value="Tilføj" onclick="elementChanged('CmdAddEventAktivitet')" />
+                    <input type="button" value="Slet" onclick="elementChanged('CmdDeleteEventAktivitet')" />
+                </div>
+                <br />
             </div>
-            <br/>
         </div>
-    </div>
 
-@section Scripts
-{
-    <script>
-        function elementChanged(elementet)
+
+        @section Scripts
         {
-            let url = new URL(location.href);
-            url.searchParams.set("TxtAktivitet", '');
-            
-            let PointTypeList = document.getElementById('PointTypeList');
-            let PointTypeListValgt = PointTypeList.options[PointTypeList.selectedIndex].value;
-            url.searchParams.set("PointTypeList", PointTypeListValgt);
+            <script>
+                function elementChanged(elementet) {
+                    let url = new URL(location.href);
+                    url.searchParams.set("TxtAktivitet", '');
 
-            let HoldSportList = document.getElementById('HoldSportList');
-            let HoldSportListValgt = HoldSportList.options[HoldSportList.selectedIndex].value;
-            url.searchParams.set("HoldSportList", HoldSportListValgt);
+                    let PointTypeList = document.getElementById('PointTypeList');
+                    let PointTypeListValgt = PointTypeList.options[PointTypeList.selectedIndex].value;
+                    url.searchParams.set("PointTypeList", PointTypeListValgt);
 
-            let AktivitetList = document.getElementById('AktivitetList');
-            let AktivitetListValgt = AktivitetList.options[AktivitetList.selectedIndex].value;
-            url.searchParams.set("AktivitetList", AktivitetListValgt);
+                    let HoldSportList = document.getElementById('HoldSportList');
+                    let HoldSportListValgt = HoldSportList.options[HoldSportList.selectedIndex].value;
+                    url.searchParams.set("HoldSportList", HoldSportListValgt);
 
-            if (elementet == 'CmdGemAktivitet') {
-                let valgtAktivitet = document.getElementById('TxtAktivitet').value;
-                url.searchParams.set("TxtAktivitet", valgtAktivitet);
-            }
+                    let AktivitetList = document.getElementById('AktivitetList');
+                    let AktivitetListValgt = AktivitetList.options[AktivitetList.selectedIndex].value;
+                    url.searchParams.set("AktivitetList", AktivitetListValgt);
 
-            let EventAktivitetList = document.getElementById('EventAktivitetList');
-            let EventAktivitetListValgt = EventAktivitetList.options[EventAktivitetList.selectedIndex].value;
-            url.searchParams.set("EventAktivitetList", EventAktivitetListValgt);
+                    if (elementet == 'CmdGemAktivitet') {
+                        let valgtAktivitet = document.getElementById('TxtAktivitet').value;
+                        url.searchParams.set("TxtAktivitet", valgtAktivitet);
+                    }
 
-            let EventList = document.getElementById('EventList');
-            let EventListValgt = EventList.options[EventList.selectedIndex].value;
-            url.searchParams.set("EventList", EventListValgt);
+                    let EventAktivitetList = document.getElementById('EventAktivitetList');
+                    let EventAktivitetListValgt = EventAktivitetList.options[EventAktivitetList.selectedIndex].value;
+                    url.searchParams.set("EventAktivitetList", EventAktivitetListValgt);
+
+                    let EventList = document.getElementById('EventList');
+                    let EventListValgt = EventList.options[EventList.selectedIndex].value;
+                    url.searchParams.set("EventList", EventListValgt);
 
 
-            url.searchParams.set("ValgtGuiElemement", elementet);
-            location.href = url;
+                    url.searchParams.set("ValgtGuiElemement", elementet);
+                    location.href = url;
+                }
+            </script>
         }
-    </script>
+
+        @section NavMenu
+        {
+            @{
+                if (Model.CurrentLogin != null && Model.CurrentLogin.Id != 0)
+                {
+                    <partial name="_TopNavMenuPartialView" />
+                }
+            }
+        }
+
+    }
 }

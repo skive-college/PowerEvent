@@ -10,6 +10,7 @@ namespace PowerEvent.Pages
 {
     public class opretAktivit : PageModel
     {
+        public Login CurrentLogin { get; set; }
 
         [BindProperty]
         public int SelectedPointType { get; set; }
@@ -78,67 +79,79 @@ namespace PowerEvent.Pages
             }
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            SelectedPointType = -1;
-            SelectedHoldSport = -1;
-            SelectedAktivitet = -1;
-            SelectedEvent = -1;
-            SelectedEventAktivitet = -1;
-            AktivitetList = new List<Aktivitet>();
-            EventAktivitetList = new List<EventAktivitet>();
-            EventList = DBAdapter.getEvent();
+            loadTempDataLogin();
+            if (CurrentLogin != null)
+            {
+                CurrentLogin = DBAdapter.verifyLogin(CurrentLogin.Brugernavn, CurrentLogin.Kodeord);
+            }
+            if (CurrentLogin == null || CurrentLogin.Id == 0 || CurrentLogin.AdminType == 0)
+            {
+                return Redirect("/Index");
+            }
+            else
+            {
+                SelectedPointType = -1;
+                SelectedHoldSport = -1;
+                SelectedAktivitet = -1;
+                SelectedEvent = -1;
+                SelectedEventAktivitet = -1;
+                AktivitetList = new List<Aktivitet>();
+                EventAktivitetList = new List<EventAktivitet>();
+                EventList = DBAdapter.getEvent();
 
-            //loadTempDataTempPointTypeList();
-            //loadTempDataTempHoldSportList();
-            loadAktivitetList();
-            setAktivitetList();
+                //loadTempDataTempPointTypeList();
+                //loadTempDataTempHoldSportList();
+                loadAktivitetList();
+                setAktivitetList();
 
-            //---------------------------------------------------------
+                //---------------------------------------------------------
 
-            PointTypeList = new List<SelectListItem>()
+                PointTypeList = new List<SelectListItem>()
             {
             new SelectListItem { Value = "3", Text = "MaxSec" },
             new SelectListItem { Value = "2", Text = "MinSec" },
             new SelectListItem { Value = "1", Text = "MaxPoint" },
             new SelectListItem { Value = "0", Text = "MinPoint" }
             };
-            //saveTempDataPointType();
+                //saveTempDataPointType();
 
-            //-----------------------------------------------------------
+                //-----------------------------------------------------------
 
-            HoldSportList = new List<SelectListItem>()
+                HoldSportList = new List<SelectListItem>()
             {
             new SelectListItem { Value = "0", Text = "Hold point" },
             new SelectListItem { Value = "1", Text = "Deltager point" },
             };
-            //saveTempDataHoldSport();
+                //saveTempDataHoldSport();
 
-            checkScript();
+                checkScript();
 
-            if (SelectedEvent != -1)
-            {
-                AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
-                EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
-            }
+                if (SelectedEvent != -1)
+                {
+                    AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+                    EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
+                }
 
-            if (ValgtGuiElemement == "CmdGemAktivitet")
-            {
-                CmdGemAktivitet();
+                if (ValgtGuiElemement == "CmdGemAktivitet")
+                {
+                    CmdGemAktivitet();
+                }
+                else if (ValgtGuiElemement == "CmdDeleteAktivitet")
+                {
+                    CmdDeleteAktivitet();
+                }
+                else if (ValgtGuiElemement == "CmdAddEventAktivitet")
+                {
+                    CmdAddEventAktivitet();
+                }
+                else if (ValgtGuiElemement == "CmdDeleteEventAktivitet")
+                {
+                    CmdSletEventAktivitet();
+                }
             }
-            else if (ValgtGuiElemement == "CmdDeleteAktivitet")
-            {
-                CmdDeleteAktivitet();
-            }
-            else if (ValgtGuiElemement == "CmdAddEventAktivitet")
-            {
-                CmdAddEventAktivitet();
-            }
-            else if (ValgtGuiElemement == "CmdDeleteEventAktivitet")
-            {
-                CmdSletEventAktivitet();
-            }
-            
+            return this.Page();
         }
         
         public void OnPost()
@@ -323,6 +336,15 @@ namespace PowerEvent.Pages
             if (tempEventList != null)
             {
                 SelectedEvent = tempEventList[0];
+            }
+        }
+
+        private void loadTempDataLogin()
+        {
+            Login tempLogin = TempData.Peek<Login>("CurrentLogin");
+            if (tempLogin != null)
+            {
+                CurrentLogin = tempLogin;
             }
         }
 

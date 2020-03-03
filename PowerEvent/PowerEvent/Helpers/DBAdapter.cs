@@ -267,29 +267,26 @@ namespace PowerEvent.Helpers
 
         //___________________________________________________________________________________________________________Alt med Login ↓
 
-        public static List<Login> getLogin(string _brugernavn, string _kodeord, int? _eventId = null)
+        public static List<Login> getLogin(int? _eventId = null)
         {
             List<Login> retur = new List<Login>();
-            if (verifyLogin(_brugernavn, _kodeord) != new Login())
+            List<object> dbLogin = DBHandler.getLogin();
+            foreach (var _object in dbLogin)
             {
-                List<object> dbLogin = DBHandler.getLogin();
-                
-
-                foreach (var _object in dbLogin)
-                {
-                    Login tempLogin = new Login();
-                    tempLogin.Id = adapt<int>("Id", _object);
-                    tempLogin.Brugernavn = adapt<string>("Brugernavn", _object);
-                    tempLogin.AdminType = adapt<int>("AdminType", _object);
-                    tempLogin.EventId = adapt<int?>("EventId", _object);
-                    tempLogin.HoldId = adapt<int?>("HoldId", _object);
+                Login tempLogin = new Login();
+                tempLogin.Id = adapt<int>("Id", _object);
+                tempLogin.Brugernavn = adapt<string>("Brugernavn", _object);
+                tempLogin.AdminType = adapt<int>("AdminType", _object);
+                tempLogin.EventId = adapt<int?>("EventId", _object);
+                tempLogin.HoldId = adapt<int?>("HoldId", _object);
 
 
-                    string encryptedPassword = adapt<string>("Kodeord", _object);
-                    string actualPassword = Decrypt(encryptedPassword, tempLogin.Brugernavn);
-                    tempLogin.Kodeord = actualPassword;
-                    retur.Add(tempLogin);
-                }
+                string encryptedPassword = adapt<string>("Kodeord", _object);
+
+                string encryptionkey = GenerateEncryptionKey(tempLogin.Brugernavn);
+                string actualPassword = Decrypt(encryptedPassword, encryptionkey);
+                tempLogin.Kodeord = actualPassword;
+                retur.Add(tempLogin);
             }
             return retur;
         }
@@ -299,6 +296,11 @@ namespace PowerEvent.Helpers
             string encryptionkey = GenerateEncryptionKey(_brugernavn);
             string encrypedKode = Encrypt(_kodeord, encryptionkey);
             DBHandler.addLogin(_brugernavn, encrypedKode, _adminType, _eventId, _holdId);
+        }
+
+        public static void deleteLogin(int _id)
+        {
+            DBHandler.deleteLogin(_id);
         }
 
         public static Login verifyLogin(string _brugernavn, string _kodeord)

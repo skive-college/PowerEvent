@@ -761,7 +761,7 @@ namespace DatabaseClassLibrary
             List<Login> retur = new List<Login>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = "Select _l.Id, _l.Brugernavn, _l.Kodeord, _l.AdminType, _l.EventId, _l.HoldId FROM Login _L";
+                string sql = "Select _l.Id, _l.Brugernavn, _l.Kodeord, _l.AdminType, _l.EventId, _l.HoldId FROM Login _l";
 
                 if (_eventId != null)
                 {
@@ -770,13 +770,33 @@ namespace DatabaseClassLibrary
 
                 con.Open();
                 SqlCommand cmd = new SqlCommand(sql, con);
-                cmd.Parameters.AddWithValue("@EventId", _eventId);
 
+                if (_eventId != null)
+                {
+                    cmd.Parameters.AddWithValue("@EventId", _eventId);
+                }
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    retur.Add(new Login() { Id = int.Parse(reader["Id"].ToString()), Brugernavn = reader["Brugernavn"].ToString(), Kodeord = reader["Kodeord"].ToString(), AdminType = int.Parse(reader["AdminType"].ToString()), EventId = int.Parse(reader["EventId"].ToString()), HoldId = int.Parse(reader["HoldId"].ToString()) }
+                    int tempAdminType = int.Parse(reader["AdminType"].ToString());
+                    int? tempEventId = null;
+                    int? tempHoldId = null;
+                    try
+                    {
+                        tempEventId = int.Parse(reader["EventId"].ToString());
+                    }
+                    catch
+                    {
+                    }
+                    try
+                    {
+                        tempHoldId = int.Parse(reader["HoldId"].ToString());
+                    }
+                    catch
+                    {
+                    }
+                    retur.Add(new Login() { Id = int.Parse(reader["Id"].ToString()), Brugernavn = reader["Brugernavn"].ToString(), Kodeord = reader["Kodeord"].ToString(), AdminType = tempAdminType, EventId = tempEventId, HoldId = tempHoldId }
                     );
                 }
                 reader.Close();
@@ -813,6 +833,19 @@ namespace DatabaseClassLibrary
 
                 cmd.ExecuteNonQuery();
                 con.Close();
+            }
+        }
+
+        public static void deleteLogin(int _id)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "Delete From Login WHERE Id = @Id";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Id", _id);
+                con.Open();
+                command.ExecuteNonQuery();
             }
         }
 

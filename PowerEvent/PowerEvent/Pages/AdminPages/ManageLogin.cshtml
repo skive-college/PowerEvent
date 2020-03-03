@@ -83,12 +83,38 @@
             <div class="row">
                 <div class="col-12 col-lg-6">
                     <div class="row">
-                        <select id="HoldList" asp-for="@Model.SelectedLogin" onchange="elementChanged('LoginList')" multiple style=" height: 350px; width: 450px">
+                        <select id="LoginList" asp-for="@Model.SelectedLogin" onchange="elementChanged('LoginList')" multiple style=" height: 350px; width: 450px">
                             @{
                                 <option value="-1" hidden></option>
                                 foreach (var item in @Model.LoginList)
                                 {
-                                    <option value="@item.Id"> Event: @item.EventId. Hold: @item.HoldId. @item.Brugernavn, @item.Kodeord</option>
+                                    <option value="@item.Id">@item.Brugernavn. Kode: @item.Kodeord. 
+                                        @{
+                                            string _adminType = "";
+                                            if (item.AdminType == 0)
+                                            {
+                                                _adminType = "Bruger";
+                                            }
+                                            if (item.AdminType == 1)
+                                            {
+                                                _adminType = "Admin";
+                                            }
+                                            else if (item.AdminType == 2)
+                                            {
+                                                _adminType = "SuperAdmin";
+                                            }
+                                            @:Type: @_adminType
+                                            if (item.EventId != null)
+                                            {
+                                                @: Event: @item.EventId.
+                                            }
+
+                                            if (item.HoldId != null)
+                                            {
+                                                @:Hold: @item.HoldId.
+                                            }
+                                        }
+                                    </option>
                                 }
                             }
                         </select>
@@ -127,6 +153,11 @@
                     let HoldList = document.getElementById('HoldList');
                     let HoldListValgt = HoldList.options[HoldList.selectedIndex].value;
                     url.searchParams.set("HoldList", HoldListValgt);
+
+                    let LoginList = document.getElementById('LoginList');
+                    let LoginListValgt = LoginList.options[LoginList.selectedIndex].value;
+                    url.searchParams.set("LoginList", LoginListValgt);
+
 
                     if (elementet == 'CmdOpretLogin') {
                         let TxtBrugernavn = document.getElementById('TxtBrugernavn').value;
