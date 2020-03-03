@@ -14,6 +14,8 @@ namespace PowerEvent.Pages
 {
     public class Oversigt : PageModel
     {
+        public Login CurrentLogin { get; set; }
+
         //value på det valgte element i "select" list i GUI. skal være en "BindProperty".
         [BindProperty]
         public int SelectedEvent { get; set; }
@@ -27,25 +29,32 @@ namespace PowerEvent.Pages
         public string ValgtGuiElemement { get; set; }
 
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            SelectedEvent = -1;
-            DeltagerList = new List<Deltager>();
-            HoldListe = new List<Hold>();
-            EventList = DBAdapter.getEvent();
-
-            checkScript();
-            if (DeltagerList.Count != 0)
+            loadTempDataLogin();
+            if (CurrentLogin != null)
             {
-                HoldListe = DBAdapter.getHold(SelectedEvent);
+                CurrentLogin = DBAdapter.verifyLogin(CurrentLogin.Brugernavn, CurrentLogin.Kodeord);
+            }
+            if (CurrentLogin == null || CurrentLogin.Id == 0 || CurrentLogin.AdminType == 0)
+            {
+                return Redirect("/Index");
+            }
+            else
+            {
+                SelectedEvent = -1;
+                DeltagerList = new List<Deltager>();
+                HoldListe = new List<Hold>();
+                EventList = DBAdapter.getEvent();
+
+                checkScript();
+                if (DeltagerList.Count != 0)
+                {
+                    HoldListe = DBAdapter.getHold(SelectedEvent);
+                }
+                return this.Page();
             }
         }
-
-        public void OnPost()
-        {
-
-        }
-
 
 
         //on click for select element script. navn = select elementets "navn"
@@ -96,6 +105,14 @@ namespace PowerEvent.Pages
             }
         }
 
+        private void loadTempDataLogin()
+        {
+            Login tempLogin = TempData.Peek<Login>("CurrentLogin");
+            if (tempLogin != null)
+            {
+                CurrentLogin = tempLogin;
+            }
+        }
 
     }
 }

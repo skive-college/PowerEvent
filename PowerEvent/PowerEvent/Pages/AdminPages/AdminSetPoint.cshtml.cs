@@ -12,6 +12,8 @@ namespace PowerEvent
 {
     public class AdminSetPointModel : PageModel
     {
+        public Login CurrentLogin { get; set; }
+
         public int? TxtScore { get; set; }
 
         [BindProperty]
@@ -107,69 +109,82 @@ namespace PowerEvent
         public List<int> OrderList { get; set; }
 
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            SelectedEvent = -1;
-            SelectedEventAktivitet = -1;
-            SelectedOrder = -1;
-            TxtScore = null;
-            guiSelectedListReset();
-            AktivitetList = new List<Aktivitet>();
-            EventAktivitetList = new List<EventAktivitet>();
-            HoldList = new List<Hold>();
-            DeltagerList = new List<Deltager>();
-            EventList = DBAdapter.getEvent();
-            OrderList = new List<int>();
-
-            checkScript();
-            if (SelectedEvent != -1)
+            loadTempDataLogin();
+            if (CurrentLogin != null)
             {
-                loadTempDataEvent();
+                CurrentLogin = DBAdapter.verifyLogin(CurrentLogin.Brugernavn, CurrentLogin.Kodeord);
+            }
+            if (CurrentLogin == null || CurrentLogin.Id == 0 || CurrentLogin.AdminType == 0)
+            {
+                return Redirect("/Index");
+            }
+            else
+            {
+                SelectedEvent = -1;
+                SelectedEventAktivitet = -1;
+                SelectedOrder = -1;
+                TxtScore = null;
+                guiSelectedListReset();
+                AktivitetList = new List<Aktivitet>();
+                EventAktivitetList = new List<EventAktivitet>();
+                HoldList = new List<Hold>();
+                DeltagerList = new List<Deltager>();
+                EventList = DBAdapter.getEvent();
+                OrderList = new List<int>();
+
+                checkScript();
                 if (SelectedEvent != -1)
                 {
-                    EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
-                    AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
-                }
-                if (SelectedEventAktivitet != -1)
-                {
-                    OrderList = DBAdapter.getHoldOrder(SelectedEvent, SelectedEventAktivitet);
-                    if (SelectedOrder != -1)
+                    loadTempDataEvent();
+                    if (SelectedEvent != -1)
                     {
-                        HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedEventAktivitet);
-                        HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
-                        HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
-                        if (SelectedHold != -1)
+                        EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
+                        AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+                    }
+                    if (SelectedEventAktivitet != -1)
+                    {
+                        OrderList = DBAdapter.getHoldOrder(SelectedEvent, SelectedEventAktivitet);
+                        if (SelectedOrder != -1)
                         {
-                            if (ValgtAktivitet.HoldSport == 1)
+                            HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                            HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                            HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                            if (SelectedHold != -1)
                             {
-                                DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedEventAktivitet, SelectedHold);
+                                if (ValgtAktivitet.HoldSport == 1)
+                                {
+                                    DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedEventAktivitet, SelectedHold);
+                                }
                             }
                         }
                     }
-                }
-                if (ValgtGuiElemement == "CmdAddPoint" || ValgtGuiElemement == "CmdDeletePoint")
-                {
-                    if (ValgtGuiElemement == "CmdAddPoint")
+                    if (ValgtGuiElemement == "CmdAddPoint" || ValgtGuiElemement == "CmdDeletePoint")
                     {
-                        CmdAddPoint();
-                    }
-                    else if (ValgtGuiElemement == "CmdDeletePoint")
-                    {
-                        CmdDeletePoint();
-                    }
-                    if (ValgtAktivitet.HoldSport == 0)
-                    {
-                        HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedEventAktivitet);
-                        HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
-                        HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                        if (ValgtGuiElemement == "CmdAddPoint")
+                        {
+                            CmdAddPoint();
+                        }
+                        else if (ValgtGuiElemement == "CmdDeletePoint")
+                        {
+                            CmdDeletePoint();
+                        }
+                        if (ValgtAktivitet.HoldSport == 0)
+                        {
+                            HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                            HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                            HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
 
-                    }
-                    else if (ValgtAktivitet.HoldSport == 1)
-                    {
-                         DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedEventAktivitet, SelectedHold);
+                        }
+                        else if (ValgtAktivitet.HoldSport == 1)
+                        {
+                            DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedEventAktivitet, SelectedHold);
+                        }
                     }
                 }
             }
+            return this.Page();
         }
 
         public void OnPost()
@@ -355,6 +370,15 @@ namespace PowerEvent
             if (tempEventList != null)
             {
                 SelectedEvent = tempEventList[0];
+            }
+        }
+
+        private void loadTempDataLogin()
+        {
+            Login tempLogin = TempData.Peek<Login>("CurrentLogin");
+            if (tempLogin != null)
+            {
+                CurrentLogin = tempLogin;
             }
         }
 

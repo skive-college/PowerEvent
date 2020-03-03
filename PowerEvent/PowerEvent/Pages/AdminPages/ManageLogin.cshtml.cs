@@ -48,7 +48,11 @@ namespace PowerEvent
         public IActionResult OnGet()
         {
             loadTempDataLogin();
-            if (CurrentLogin == null)
+            if (CurrentLogin != null)
+            {
+                CurrentLogin = DBAdapter.verifyLogin(CurrentLogin.Brugernavn, CurrentLogin.Kodeord);
+            }
+            if (CurrentLogin == null || CurrentLogin.Id == 0 || CurrentLogin.AdminType == 0)
             {
                 return Redirect("/Index");
             }
@@ -63,11 +67,11 @@ namespace PowerEvent
                 EventList = DBAdapter.getEvent();
 
                 AdminTypeList = new List<SelectListItem>()
-            {
-            new SelectListItem { Value = "0", Text = "Hold" },
-            new SelectListItem { Value = "1", Text = "Admin" },
-            new SelectListItem { Value = "2", Text = "SuperAdmin" }
-            };
+                {
+                new SelectListItem { Value = "0", Text = "Hold" },
+                new SelectListItem { Value = "1", Text = "Admin" },
+                new SelectListItem { Value = "2", Text = "SuperAdmin" }
+                };
 
                 loadLoginList();
                 checkScript();
@@ -110,20 +114,23 @@ namespace PowerEvent
 
         public void CmdSaveLogin()
         {
-            if (TxtBrugernavn != "" && TxtKodeord != "" && TxtKodeord == TxtKodeordRepeat)
+            if (TxtBrugernavn != "" && TxtKodeord != "" && TxtKodeord == TxtKodeordRepeat && SelectedAdminType <= CurrentLogin.AdminType)
             {
-                int? tempEventId = null;
-                if (SelectedEvent != -1)
+                if (SelectedAdminType == 0 && SelectedEvent != -1 && SelectedHold != -1 || SelectedAdminType > 0)
                 {
-                    tempEventId = SelectedEvent;
+                    int? tempEventId = null;
+                    if (SelectedEvent != -1)
+                    {
+                        tempEventId = SelectedEvent;
+                    }
+                    int? tempHoldId = null;
+                    if (SelectedHold != -1)
+                    {
+                        tempHoldId = SelectedHold;
+                    }
+                    DBAdapter.addLogin(TxtBrugernavn, TxtKodeord, SelectedAdminType, tempEventId, tempHoldId);
+                    loadLoginList();
                 }
-                int? tempHoldId = null;
-                if (SelectedHold != -1)
-                {
-                    tempHoldId = SelectedHold;
-                }
-                DBAdapter.addLogin(TxtBrugernavn, TxtKodeord, SelectedAdminType, tempEventId, tempHoldId);
-                loadLoginList();
             }
         }
 
@@ -213,11 +220,6 @@ namespace PowerEvent
             {
                 SelectedEvent = tempEventList[0];
             }
-        }
-
-        private void saveTempDataLogin()
-        {
-            TempData.Set("CurrentLogin", CurrentLogin);
         }
 
         private void loadTempDataLogin()
