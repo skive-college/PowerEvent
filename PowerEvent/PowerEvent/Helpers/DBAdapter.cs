@@ -221,6 +221,11 @@ namespace PowerEvent.Helpers
             DBHandler.addDeltager(_navn, _eventId);
         }
 
+        public static void updateDeltager(int _id, int _holdid)
+        {
+            DBHandler.updateDeltager(_id, _holdid);
+        }
+
 
         public static void addDeltagerScore(int _eventId, int _aktivitetId, int _holdId, int _deltagerId, int _score)
         {
@@ -230,6 +235,11 @@ namespace PowerEvent.Helpers
         public static void deleteDeltagerScore(int _id)
         {
             DBHandler.deleteDeltagerScore(_id);
+        }
+
+        public static void deleteDeltager(int _id)
+        {
+            DBHandler.deleteDeltager(_id);
         }
 
         //___________________________________________________________________________________________________________Alt med Deltager ↑
