@@ -34,11 +34,16 @@ namespace PowerEvent
                 if (TxtUsername != "" && TxtPassword != "")
                 {
                     CurrentLogin = DBAdapter.verifyLogin(TxtUsername, TxtPassword);
-                    if (CurrentLogin != new Login())
+                    if (CurrentLogin.Id != 0)
                     {
                         saveTempDataLogin();
                     }
                 }
+            }
+            if (ValgtGuiElemement == "cmdLogud")
+            {
+                CurrentLogin = null;
+                saveTempDataLogin();
             }
             return this.Page();
         }

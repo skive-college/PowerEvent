@@ -297,17 +297,19 @@ namespace PowerEvent.Helpers
             string encrypedKode = Encrypt(_kodeord, encryptionkey);
 
             object dbLogin = DBHandler.verifyLogin(_brugernavn, encrypedKode);
+
             Login retur = new Login();
-            if (dbLogin != new object())
+
+            retur.Id = adapt<int>("Id", dbLogin);
+            retur.Brugernavn = adapt<string>("Brugernavn", dbLogin);
+            retur.AdminType = adapt<int>("AdminType", dbLogin);
+            retur.EventId = adapt<int?>("EventId", dbLogin);
+            retur.HoldId = adapt<int?>("HoldId", dbLogin);
+
+
+            string encryptedPassword = adapt<string>("Kodeord", dbLogin);
+            if (encryptedPassword != null)
             {
-                retur.Id = adapt<int>("Id", dbLogin);
-                retur.Brugernavn = adapt<string>("Brugernavn", dbLogin);
-                retur.AdminType = adapt<int>("AdminType", dbLogin);
-                retur.EventId = adapt<int?>("EventId", dbLogin);
-                retur.HoldId = adapt<int?>("HoldId", dbLogin);
-
-
-                string encryptedPassword = adapt<string>("Kodeord", dbLogin);
                 string actualPassword = Decrypt(encryptedPassword, encryptionkey);
                 retur.Kodeord = actualPassword;
             }

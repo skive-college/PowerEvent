@@ -791,12 +791,8 @@ namespace DatabaseClassLibrary
 
         public static object verifyLogin(string _brugernavn, string _kodeord)
         {
-            object retur = new object();
             Login dbLogin = verifyLoginIntern(_brugernavn, _kodeord);
-            if (dbLogin != new Login())
-            {
-                retur = new { Id = dbLogin.Id, Brugernavn = dbLogin.Brugernavn, Kodeord = dbLogin.Kodeord, AdminType = dbLogin.AdminType, EventId = dbLogin.EventId, HoldId = dbLogin.HoldId };
-            }
+            object retur = new { Id = dbLogin.Id, Brugernavn = dbLogin.Brugernavn, Kodeord = dbLogin.Kodeord, AdminType = dbLogin.AdminType, EventId = dbLogin.EventId, HoldId = dbLogin.HoldId };
             return retur;
         }
 

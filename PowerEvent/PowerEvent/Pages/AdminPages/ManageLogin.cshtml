@@ -4,7 +4,7 @@
     ViewData["Title"] = "ManageLogin";
 }
 @{
-    if (@Model.CurrentLogin != null)
+    if (@Model.CurrentLogin != null && Model.CurrentLogin.Id != 0)
     {
         <div class="container">
             <div class="row">
@@ -30,7 +30,16 @@
                         }
                     }
                 </select>
-                <style> #EventList { width: 120px; } #EventList:focus { min-width: 120px; width: auto; } </style>
+                <style>
+                    #EventList {
+                        width: 120px;
+                    }
+
+                        #EventList:focus {
+                            min-width: 120px;
+                            width: auto;
+                        }
+                </style>
                 <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
                     @{
                         if (@Model.SelectedEvent == -1)
@@ -44,7 +53,16 @@
                         }
                     }
                 </select>
-                <style> #HoldList { width: 120px; } #HoldList:focus { min-width: 120px; width: auto; } </style>
+                <style>
+                    #HoldList {
+                        width: 120px;
+                    }
+
+                        #HoldList:focus {
+                            min-width: 120px;
+                            width: auto;
+                        }
+                </style>
                 <select id="HoldList" onchange="elementChanged('HoldList')" asp-for="@Model.SelectedHold">
                     @{
                         if (@Model.SelectedHold == -1)
@@ -127,4 +145,13 @@
             location.href = url;
         }
     </script>
+}
+
+@section NavMenu {
+    @{
+        if (Model.CurrentLogin != null && Model.CurrentLogin.Id != 0)
+        {
+            <partial name="_TopNavMenuPartialView" />
+        }
+    }
 }
