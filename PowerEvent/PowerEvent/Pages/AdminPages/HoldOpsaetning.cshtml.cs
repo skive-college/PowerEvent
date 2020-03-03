@@ -42,6 +42,7 @@ namespace PowerEvent
             {
                 if (TempData.Peek("SelectedEvent") != null)
                 {
+                    TempData.Keep("SelectedEvent");
                     DeltagerList = DBAdapter.getDeltagere(SelectedEvent);
                     HoldList = DBAdapter.getHold();
                 }
@@ -56,22 +57,26 @@ namespace PowerEvent
 
         public void OnPostCmdSubmitDeltagerNavn()
         {
-            TempData.Keep("SelectedEvent");
             DBAdapter.addDeltager(DeltagerNavn, SelectedEvent);
             OnGet();
         }
 
         public void OnPostCmdRemoveDeltager()
         {
-            TempData.Keep("SelectedEvent");
             DBAdapter.deleteDeltager(DeltagerID);
             OnGet();
         }
 
         public void OnPostCmdAddDeltagerToHold()
         {
-            TempData.Keep("SelectedEvent");
-            DBAdapter.updateDeltager(DeltagerID, HoldID);
+            if(HoldID != -1)
+            {
+                DBAdapter.updateDeltager(DeltagerID, HoldID);
+            }
+            else
+            {
+                DBAdapter.updateDeltager(DeltagerID, null);
+            }
             OnGet();
         }
     }

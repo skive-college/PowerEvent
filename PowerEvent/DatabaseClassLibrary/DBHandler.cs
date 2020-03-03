@@ -640,7 +640,7 @@ namespace DatabaseClassLibrary
             }
         }
 
-        public static void updateDeltager(int _id, int _holdid)
+        public static void updateDeltager(int _id, int? _holdid)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
