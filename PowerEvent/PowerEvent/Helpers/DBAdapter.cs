@@ -221,7 +221,7 @@ namespace PowerEvent.Helpers
             DBHandler.addDeltager(_navn, _eventId);
         }
 
-        public static void updateDeltager(int _id, int _holdid)
+        public static void updateDeltager(int _id, int? _holdid)
         {
             DBHandler.updateDeltager(_id, _holdid);
         }
