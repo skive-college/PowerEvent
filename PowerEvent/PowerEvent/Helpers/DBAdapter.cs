@@ -270,7 +270,7 @@ namespace PowerEvent.Helpers
         public static List<Login> getLogin(int? _eventId = null)
         {
             List<Login> retur = new List<Login>();
-            List<object> dbLogin = DBHandler.getLogin();
+            List<object> dbLogin = DBHandler.getLogin(_eventId);
             foreach (var _object in dbLogin)
             {
                 Login tempLogin = new Login();

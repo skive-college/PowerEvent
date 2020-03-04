@@ -21,6 +21,9 @@ namespace PowerEvent
         public int SelectedAdminType { get; set; }
 
         [BindProperty]
+        public int SelectedOpretloginEvent { get; set; }
+
+        [BindProperty]
         public int SelectedEvent { get; set; }
 
         [BindProperty]
@@ -60,10 +63,14 @@ namespace PowerEvent
             {
                 SelectedLogin = -1;
                 SelectedEvent = -1;
+                SelectedOpretloginEvent = -1;
                 SelectedHold = -1;
                 SelectedAdminType = -1;
                 LoginList = new List<Login>();
                 HoldList = new List<Hold>();
+
+                checkScript();
+
                 EventList = DBAdapter.getEvent();
 
                 AdminTypeList = new List<SelectListItem>()
@@ -74,11 +81,10 @@ namespace PowerEvent
                 };
 
                 loadLoginList();
-                checkScript();
 
-                if (SelectedEvent != -1)
+                if (SelectedOpretloginEvent != -1)
                 {
-                    HoldList = DBAdapter.getHold(SelectedEvent);
+                    HoldList = DBAdapter.getHold(SelectedOpretloginEvent);
                 }
 
                 if (ValgtGuiElemement == "CmdOpretLogin")
@@ -128,12 +134,12 @@ namespace PowerEvent
         {
             if (TxtBrugernavn != "" && TxtKodeord != "" && TxtKodeord == TxtKodeordRepeat && SelectedAdminType <= CurrentLogin.AdminType)
             {
-                if (SelectedAdminType == 0 && SelectedEvent != -1 && SelectedHold != -1 || SelectedAdminType > 0)
+                if (SelectedAdminType == 0 && SelectedOpretloginEvent != -1 && SelectedHold != -1 || SelectedAdminType > 0)
                 {
                     int? tempEventId = null;
-                    if (SelectedEvent != -1)
+                    if (SelectedOpretloginEvent != -1)
                     {
-                        tempEventId = SelectedEvent;
+                        tempEventId = SelectedOpretloginEvent;
                     }
                     int? tempHoldId = null;
                     if (SelectedHold != -1)
@@ -150,7 +156,7 @@ namespace PowerEvent
         private void loadLoginList()
         {
             int? tempEventId = null;
-            if (SelectedEvent != -1)
+            if (SelectedEvent != -1 && SelectedEvent != 0)
             {
                 tempEventId = SelectedEvent;
             }
@@ -161,7 +167,6 @@ namespace PowerEvent
 
         private void checkScript()
         {
-            
             try
             {
                 TxtBrugernavn = Request.Query["TxtBrugernavn"];
@@ -192,6 +197,13 @@ namespace PowerEvent
             }
             try
             {
+                SelectedOpretloginEvent = int.Parse(Request.Query["OpretLoginEventList"]);
+            }
+            catch
+            {
+            }
+            try
+            {
                 SelectedEvent = int.Parse(Request.Query["EventList"]);
             }
             catch
@@ -212,15 +224,20 @@ namespace PowerEvent
             {
             }
 
-
-
+            if (SelectedEvent == -1)
+            {
+                loadTempDataEvent();
+            }
 
             ValgtGuiElemement = Request.Query["ValgtGuiElemement"];
 
-
             if (ValgtGuiElemement == "EventList")
             {
-
+                if (SelectedEvent != -1)
+                {
+                    saveTempDataEvent();
+                }
+                SelectedLogin = -1;
             }
 
         }

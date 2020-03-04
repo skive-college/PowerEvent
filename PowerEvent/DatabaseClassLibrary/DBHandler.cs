@@ -765,7 +765,7 @@ namespace DatabaseClassLibrary
 
                 if (_eventId != null)
                 {
-                    sql += "WHERE l.EventId = @EventId";
+                    sql += " WHERE _l.EventId = @EventId";
                 }
 
                 con.Open();

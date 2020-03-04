@@ -30,19 +30,10 @@
                         }
                     }
                 </select>
-                <style>
-                    #EventList {
-                        width: 120px;
-                    }
-
-                        #EventList:focus {
-                            min-width: 120px;
-                            width: auto;
-                        }
-                </style>
-                <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
+                <style> #OpretLoginEventList { width: 120px; } #OpretLoginEventList:focus { min-width: 120px; width: auto; } </style>
+                <select id="OpretLoginEventList" data-val="true" asp-for="@Model.SelectedOpretloginEvent" onchange="elementChanged('OpretLoginEventList')">
                     @{
-                        if (@Model.SelectedEvent == -1)
+                        if (@Model.SelectedOpretloginEvent == -1)
                         {
                             <option value="-1">Vælg et event</option>
                         }
@@ -53,16 +44,7 @@
                         }
                     }
                 </select>
-                <style>
-                    #HoldList {
-                        width: 120px;
-                    }
-
-                        #HoldList:focus {
-                            min-width: 120px;
-                            width: auto;
-                        }
-                </style>
+                <style> #HoldList { width: 120px; } #HoldList:focus { min-width: 120px; width: auto; } </style>
                 <select id="HoldList" onchange="elementChanged('HoldList')" asp-for="@Model.SelectedHold">
                     @{
                         if (@Model.SelectedHold == -1)
@@ -81,6 +63,18 @@
             <br />
 
             <div class="row">
+                <style> #EventList { width: 120px; } #EventList:focus { min-width: 120px; width: auto; } </style>
+                <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
+                    @{
+                        <option value="0">Intet event</option>
+                        foreach (var item in @Model.EventList)
+                        {
+                            <option value="@item.Id">@item.Navn</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="row">
                 <div class="col-12 col-lg-6">
                     <div class="row">
                         <select id="LoginList" asp-for="@Model.SelectedLogin" onchange="elementChanged('LoginList')" multiple style=" height: 350px; width: 450px">
@@ -88,25 +82,26 @@
                                 <option value="-1" hidden></option>
                                 foreach (var item in @Model.LoginList)
                                 {
-                                    <option value="@item.Id">@item.Brugernavn. Kode: @item.Kodeord. 
+                                    <option value="@item.Id">
+                                        @item.Brugernavn. Kode: @item.Kodeord.
                                         @{
                                             string _adminType = "";
                                             if (item.AdminType == 0)
                                             {
-                                                _adminType = "Bruger";
+                                                _adminType = "Bruger. ";
                                             }
                                             if (item.AdminType == 1)
                                             {
-                                                _adminType = "Admin";
+                                                _adminType = "Admin. ";
                                             }
                                             else if (item.AdminType == 2)
                                             {
-                                                _adminType = "SuperAdmin";
+                                                _adminType = "SuperAdmin. ";
                                             }
                                             @:Type: @_adminType
                                             if (item.EventId != null)
                                             {
-                                                @: Event: @item.EventId.
+                                                @:Event: @item.EventId.
                                             }
 
                                             if (item.HoldId != null)
@@ -119,14 +114,31 @@
                             }
                         </select>
                     </div>
-
                     <div class="row">
                         <input type="button" value="Slet" onclick="elementChanged('CmdSletLogin')" />
                     </div>
                 </div>
-                <br />
                 <div class="col-12 col-lg-6">
+                    @{
+                        PowerEvent.Models.Login _login = new Models.Login();
+                        if (Model.LoginList.Count != 0 && Model.SelectedLogin != -1)
+                        {
+                            _login = @Model.LoginList.Where(i => i.Id == Model.SelectedLogin).First();
+                        }
+                        <div class="row">
+                            <div>
+                                <p class="col">Brugernavn: </p>
+                                <p class="col">Kodeord: </p>
+                            </div>
+                            <div>
+                                <input disabled type="text" value="@_login.Brugernavn" class="col" />
+                                <input disabled type="text" value="@_login.Kodeord" class="col" />
+                            </div>
+                        </div>
+                        <input type="button" value="Kopier" onclick="copyToClipboard('Hold(Brugernavn): @_login.Brugernavn. Kodeord: @_login.Kodeord')" style="background-color: lightgray;" />
 
+                        @*<input type="button" value="Kopier alle fra event" onclick="copyToClipboard('alle')" style="background-color: lightgray;" />*@
+                    }
                 </div>
                 <br />
             </div>
@@ -145,6 +157,10 @@
                     let AdminTypeList = document.getElementById('AdminTypeList');
                     let AdminTypeListValgt = AdminTypeList.options[AdminTypeList.selectedIndex].value;
                     url.searchParams.set("AdminTypeList", AdminTypeListValgt);
+
+                    let OpretLoginEventList = document.getElementById('OpretLoginEventList');
+                    let OpretLoginEventListValgt = OpretLoginEventList.options[OpretLoginEventList.selectedIndex].value;
+                    url.searchParams.set("OpretLoginEventList", OpretLoginEventListValgt);
 
                     let EventList = document.getElementById('EventList');
                     let EventListValgt = EventList.options[EventList.selectedIndex].value;
@@ -173,6 +189,22 @@
 
                     url.searchParams.set("ValgtGuiElemement", elementet);
                     location.href = url;
+                }
+
+                function copyToClipboard(message)
+                {
+                    var msg = message;
+                    @*if (msg == 'alle') {
+                        @{ 
+                            string text = "";
+                            foreach (var _login in Model.LoginList)
+                            {
+                                text += "Hold(Brugernavn): " + @_login.Brugernavn + ". Kodeord: " + @_login.Kodeord + ". ";
+                            }
+                            @:msg == @text;
+                        }
+                    }*@
+                    navigator.clipboard.writeText(msg);
                 }
             </script>
         }
