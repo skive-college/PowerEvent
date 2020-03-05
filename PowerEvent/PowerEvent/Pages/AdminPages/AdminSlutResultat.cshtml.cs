@@ -11,6 +11,9 @@ namespace PowerEvent
 {
     public class AdminSlutResultatModel : PageModel
     {
+        public Login CurrentLogin { get; set; }
+
+
         [BindProperty]
         public int SelectedEvent { get; set; }
 
@@ -33,29 +36,43 @@ namespace PowerEvent
 
 
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            SelectedEvent = -1;
-            Vis = 1;
-            AktivitetList = new List<Aktivitet>();
-            HoldList = new List<Hold>();
-            ScoreList= new List<EventAktivitetHoldScore>();
-            EventAktivitetHoldList = new List<EventAktivitetHold>();
-            EventAktivitetList = new List<EventAktivitet>();
-            EventList = DBAdapter.getEvent();
-            checkScript();
-
-            HoldList = DBAdapter.getHold(SelectedEvent);
-            HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent);
-            HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent);
-            AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
-            EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
-
-
-            if (ValgtGuiElemement == "CmdVis")
+            loadTempDataLogin();
+            if (CurrentLogin != null)
             {
-                Vis++;
+                CurrentLogin = DBAdapter.verifyLogin(CurrentLogin.Brugernavn, CurrentLogin.Kodeord);
             }
+            if (CurrentLogin == null || CurrentLogin.Id == 0 || CurrentLogin.AdminType == 0)
+            {
+                return Redirect("/Index");
+            }
+            else
+            {
+                SelectedEvent = -1;
+                Vis = 1;
+                AktivitetList = new List<Aktivitet>();
+                HoldList = new List<Hold>();
+                ScoreList = new List<EventAktivitetHoldScore>();
+                EventAktivitetHoldList = new List<EventAktivitetHold>();
+                EventAktivitetList = new List<EventAktivitet>();
+                EventList = DBAdapter.getEvent();
+                checkScript();
+
+                HoldList = DBAdapter.getHold(SelectedEvent);
+                HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent);
+                HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent);
+                AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+                EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
+
+
+                if (ValgtGuiElemement == "CmdVis")
+                {
+                    Vis++;
+                }
+                return this.Page();
+            }
+
         }
 
         private void checkScript()
@@ -103,6 +120,13 @@ namespace PowerEvent
                 SelectedEvent = tempEventList[0];
             }
         }
-
+        private void loadTempDataLogin()
+        {
+            Login tempLogin = TempData.Peek<Login>("CurrentLogin");
+            if (tempLogin != null)
+            {
+                CurrentLogin = tempLogin;
+            }
+        }
     }
 }

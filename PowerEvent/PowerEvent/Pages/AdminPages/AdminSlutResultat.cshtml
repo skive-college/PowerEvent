@@ -13,7 +13,16 @@
     </div>
 
     <div class="row">
-        <style> #EventList { width: 120px; } #EventList:focus { min-width: 120px; width: auto; } </style>
+        <style>
+            #EventList {
+                width: 120px;
+            }
+
+                #EventList:focus {
+                    min-width: 120px;
+                    width: auto;
+                }
+        </style>
         <!-- {asp-for="Model.SelectedEvent"} laver SelectedEvent int om til "value" property på det valgte element -->
         <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
             @{
@@ -66,78 +75,78 @@
 
 
             //-------------------------------------------------------------FOR   VIRKER IKKE!!!!
-            for (int i = 1; i < Model.Vis; i--)
+
+            //laver dynamisk et "table" til hvert Aktivitet
+            foreach (var _eventAktivitet in Model.EventAktivitetList)
             {
-                //laver dynamisk et "table" til hvert Aktivitet
-                foreach (var _eventAktivitet in Model.EventAktivitetList)
-                {
-                    <div class="col-6 col-md-3 col-lg-2">
-                        <br />
-                        <table style=" height: auto; width: 100%;">
-                            <tr>
-                                <th class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em;">@Model.AktivitetList.Where(i => i.Id == @_eventAktivitet.AktivitetId).FirstOrDefault().Navn</th>
-                            </tr>
-
-                            @*opretter score af hvert hold*@
-                            @{
-                                foreach (var _hold in @Model.HoldList)
-                                {
-                                    int totalScore = 0;
-                                    int antalScores = 0;
-                                    foreach (var _eventAktivitetHold in _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == _eventAktivitet.Id).ToList())
-                                    {
-                                        foreach (var _score in _eventAktivitetHold.HoldScores)
-                                        {
-                                            totalScore += _score.HoldScore;
-                                            antalScores++;
-                                        }
-
-                                        //kode for at få gennemsnittet ↓↓
-
-                                        if (antalScores != 0)
-                                        {
-                                            totalScore = totalScore / antalScores;
-                                        }
-                                    }
-                                    <tr>
-                                        <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-size: 1.4em;">@totalScore</td>
-                                    </tr>
-
-                                }
-                            }
-                        </table>
-                    </div>
-                }
-
-                //laver dynamisk et "table" til hvert hold der indeholde holdets deltagere
                 <div class="col-6 col-md-3 col-lg-2">
                     <br />
-                    <div>
-                        <table style=" height: auto; width: 100%;">
-                            @{
-                                if (Model.SelectedEvent != -1)
+                    <table style=" height: auto; width: 100%;">
+                        <tr>
+                            <th class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em;">@Model.AktivitetList.Where(i => i.Id == @_eventAktivitet.AktivitetId).FirstOrDefault().Navn</th>
+                        </tr>
+
+                        @*opretter score af hvert hold*@
+                        @{
+                            foreach (var _hold in @Model.HoldList)
+                            {
+                                int totalScore = 0;
+                                int antalScores = 0;
+                                foreach (var _eventAktivitetHold in _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == _eventAktivitet.Id).ToList())
+                                {
+                                    foreach (var _score in _eventAktivitetHold.HoldScores)
+                                    {
+                                        totalScore += _score.HoldScore;
+                                        antalScores++;
+                                    }
+
+                                    //kode for at få gennemsnittet ↓↓
+
+                                    if (antalScores != 0)
+                                    {
+                                        totalScore = totalScore / antalScores;
+                                    }
+                                }
+                                <tr>
+                                    <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-size: 1.4em;">@totalScore</td>
+                                </tr>
+
+                            }
+                        }
+                    </table>
+                </div>
+            }
+
+            //laver dynamisk et "table" til hvert hold der indeholde holdets deltagere
+            <div class="col-6 col-md-3 col-lg-2">
+                <br />
+                <div>
+                    <table style=" height: auto; width: 100%;">
+                        @{
+                            if (Model.SelectedEvent != -1)
+                            {
+                                <tr>
+                                    <td class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-weight: bold; font-size: 1.4em;">Vinder</td>
+                                </tr>
+                            }
+                        }
+                        @{
+                            //opretter deltagerne af hver hold
+                            foreach (var _point in @Model.EventAktivitetHoldList)
+                            {
+                                if (_point.HoldId == _point.HoldId)
                                 {
                                     <tr>
-                                        <td class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-weight: bold; font-size: 1.4em;">Vinder</td>
+                                        <td class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em;">@_point.Point</td>
                                     </tr>
                                 }
                             }
-                            @{
-                                //opretter deltagerne af hver hold
-                                foreach (var _point in @Model.EventAktivitetHoldList)
-                                {
-                                    if (_point.HoldId == _point.HoldId)
-                                    {
-                                        <tr>
-                                            <td class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em;">@_point.Point</td>
-                                        </tr>
-                                    }
-                                }
-                            }
-                        </table>
-                    </div>
+                        }
+                    </table>
                 </div>
-            }
+            </div>
+        }
+        @{
             if (Model.SelectedEvent != -1)
             {
                 <input type="button" value="Vis" onclick="elementChanged('CmdVis')" />
@@ -157,8 +166,7 @@
             let EventListValgt = EventList.options[EventList.selectedIndex].value;
             url.searchParams.set("EventList", EventListValgt);
 
-            if (elementet == 'CmdVis')
-            {
+            if (elementet == 'CmdVis') {
 
             }
 
@@ -166,4 +174,14 @@
             location.href = url;
         }
     </script>
+}
+
+@section NavMenu
+        {
+    @{
+        if (Model.CurrentLogin != null && Model.CurrentLogin.Id != 0)
+        {
+            <partial name="_TopNavMenuPartialView" />
+        }
+    }
 }
