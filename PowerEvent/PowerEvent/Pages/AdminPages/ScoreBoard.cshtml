@@ -3,14 +3,18 @@
 @{
     ViewData["Title"] = "ScoreBoard";
 }
-<div container>
-    <div class="text-center">
-        <h1>ScoreBoard @Model.EventName</h1>
-        <div class="row justify-content-md-center">
-            <style>
-                #EventList {
-                    width: 120px;
-                }
+
+@{
+    if (@Model.CurrentLogin != null && Model.CurrentLogin.Id != 0)
+    {
+        <div container>
+            <div class="text-center">
+                <h1>ScoreBoard @Model.EventName</h1>
+                <div class="row justify-content-md-center">
+                    <style>
+                        #EventList {
+                            width: 120px;
+                        }
 
                     #EventList:focus {
                         min-width: 120px;
@@ -158,3 +162,15 @@
     </script>
 }
 
+        @section NavMenu
+        {
+            @{
+                if (Model.CurrentLogin != null && Model.CurrentLogin.Id != 0)
+                {
+                    <partial name="_TopNavMenuPartialView" />
+                }
+            }
+        }
+
+    }
+}

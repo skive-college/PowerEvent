@@ -280,12 +280,15 @@ namespace PowerEvent.Helpers
                 tempLogin.EventId = adapt<int?>("EventId", _object);
                 tempLogin.HoldId = adapt<int?>("HoldId", _object);
 
+                if (tempLogin.AdminType == 0)
+                {
+                    string encryptedPassword = adapt<string>("Kodeord", _object);
 
-                string encryptedPassword = adapt<string>("Kodeord", _object);
-
-                string encryptionkey = GenerateEncryptionKey(tempLogin.Brugernavn);
-                string actualPassword = Decrypt(encryptedPassword, encryptionkey);
-                tempLogin.Kodeord = actualPassword;
+                    string encryptionkey = GenerateEncryptionKey(tempLogin.Brugernavn);
+                    string actualPassword = Decrypt(encryptedPassword, encryptionkey);
+                    tempLogin.Kodeord = actualPassword;
+                }
+                
                 retur.Add(tempLogin);
             }
             return retur;

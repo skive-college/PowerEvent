@@ -16,16 +16,7 @@
             </div>
 
             <div class="row">
-                <style>
-                    #EventList {
-                        width: 120px;
-                    }
-
-                        #EventList:focus {
-                            min-width: 120px;
-                            width: auto;
-                        }
-                </style>
+                <style> #EventList { width: 120px; } #EventList:focus { min-width: 120px; width: auto; } </style>
                 <!-- {asp-for="Model.SelectedEvent"} laver SelectedEvent int om til "value" property på det valgte element -->
                 <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
                     @{

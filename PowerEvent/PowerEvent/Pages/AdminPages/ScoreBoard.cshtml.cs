@@ -11,6 +11,8 @@ namespace PowerEvent
 {
     public class ScoreBoardModel : PageModel
     {
+        public Login CurrentLogin { get; set; }
+
         [BindProperty]
         public int SelectedEvent { get; set; }
 
@@ -132,5 +134,15 @@ namespace PowerEvent
                 SelectedEvent = tempEventList[0];
             }
         }
+
+        private void loadTempDataLogin()
+        {
+            Login tempLogin = TempData.Peek<Login>("CurrentLogin");
+            if (tempLogin != null)
+            {
+                CurrentLogin = tempLogin;
+            }
+        }
+
     }
 }

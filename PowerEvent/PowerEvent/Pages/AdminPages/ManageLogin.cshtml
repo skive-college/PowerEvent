@@ -83,11 +83,12 @@
                                 foreach (var item in @Model.LoginList)
                                 {
                                     <option value="@item.Id">
-                                        @item.Brugernavn. Kode: @item.Kodeord.
+                                        @item.Brugernavn. 
                                         @{
                                             string _adminType = "";
                                             if (item.AdminType == 0)
                                             {
+                                                @:Kode: @item.Kodeord.
                                                 _adminType = "Bruger. ";
                                             }
                                             if (item.AdminType == 1)
@@ -135,7 +136,13 @@
                                 <input disabled type="text" value="@_login.Kodeord" class="col" />
                             </div>
                         </div>
-                        <input type="button" value="Kopier" onclick="copyToClipboard('Hold(Brugernavn): @_login.Brugernavn. Kodeord: @_login.Kodeord')" style="background-color: lightgray;" />
+                        string _bruger = "";
+                        _bruger = "Hold(Brugernavn): " + @_login.Brugernavn + ".";
+                        if (_login.AdminType == 0 && _login.Kodeord != null && _login.Kodeord != "")
+                        {
+                            _bruger += " Kodeord: " + @_login.Kodeord;
+                        }
+                        <input type="button" value="Kopier" onclick="copyToClipboard('@_bruger')" style="background-color: lightgray;" />
 
                         @*<input type="button" value="Kopier alle fra event" onclick="copyToClipboard('alle')" style="background-color: lightgray;" />*@
                     }
@@ -221,4 +228,3 @@
 
     }
 }
-
