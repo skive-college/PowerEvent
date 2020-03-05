@@ -11,6 +11,8 @@ namespace PowerEvent
 {
     public class ScoreBoardModel : PageModel
     {
+        public Login CurrentLogin { get; set; }
+
         [BindProperty]
         public int SelectedEvent { get; set; }
 
@@ -20,14 +22,27 @@ namespace PowerEvent
         public string EventName { get; set; }
         public string TeamEt { get; set; }
         public string TeamTo { get; set; }
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            EventName = "test";
-            TeamEt = "teamet";
-            TeamTo = "teamto";
-            SelectedEvent = -1;
-            EventList = DBAdapter.getEvent();
-            checkScript();
+            loadTempDataLogin();
+            if (CurrentLogin != null)
+            {
+                CurrentLogin = DBAdapter.verifyLogin(CurrentLogin.Brugernavn, CurrentLogin.Kodeord);
+            }
+            if (CurrentLogin == null || CurrentLogin.Id == 0 || CurrentLogin.AdminType == 0)
+            {
+                return Redirect("/Index");
+            }
+            else
+            {
+                EventName = "test";
+                TeamEt = "teamet";
+                TeamTo = "teamto";
+                SelectedEvent = -1;
+                EventList = DBAdapter.getEvent();
+                checkScript();
+            }
+            return this.Page();
         }
 
         private void checkScript()
@@ -75,5 +90,15 @@ namespace PowerEvent
                 SelectedEvent = tempEventList[0];
             }
         }
+
+        private void loadTempDataLogin()
+        {
+            Login tempLogin = TempData.Peek<Login>("CurrentLogin");
+            if (tempLogin != null)
+            {
+                CurrentLogin = tempLogin;
+            }
+        }
+
     }
 }
