@@ -450,13 +450,11 @@ namespace DatabaseClassLibrary
             {
                 List<object> dScoreList = new List<object>();
                 //konverterer List<DBDeltagerScore> til List<object>
-                if (_eventAktivitetId != null)
+
+                foreach (DBDeltagerScore _dScore in _deltager.ScoreList)
                 {
-                    foreach (DBDeltagerScore _dScore in _deltager.ScoreList)
-                    {
-                        object o = new { _dScore.Id, _dScore.Score };
-                        dScoreList.Add(o);
-                    }
+                    object o = new { Id = _dScore.Id, EventAktivitetId = _dScore.EventAktivitetId , Score = _dScore.Score };
+                    dScoreList.Add(o);
                 }
                 retur.Add(new { Id = _deltager.Id, Navn = _deltager.Navn, HoldId = _deltager.HoldId, EventId = _deltager.EventId, ScoreList = dScoreList }
                     );
@@ -534,18 +532,15 @@ namespace DatabaseClassLibrary
             }
 
             //får alle scores for deltagere i den angivne "EventAktivitet" og tilføjer dem til de relevante deltagere
-            if (_eventAktivitetId != null)
+            List<DBDeltagerScore> scoreList = new List<DBDeltagerScore>();
+            scoreList = getDeltagerScores(_eventId, _eventAktivitetId, _deltagerId);
+            foreach (Deltager _deltager in deltagerList)
             {
-                List<DBDeltagerScore> scoreList = new List<DBDeltagerScore>();
-                scoreList = getDeltagerScores(_eventId, _eventAktivitetId);
-                foreach (Deltager _deltager in deltagerList)
+                _deltager.ScoreList = new List<DBDeltagerScore>();
+                _deltager.ScoreList.AddRange(scoreList.Where(i => i.DeltagerId == _deltager.Id).ToList());
+                if (_deltager.ScoreList != null)
                 {
-                    _deltager.ScoreList = new List<DBDeltagerScore>();
-                    _deltager.ScoreList.AddRange(scoreList.Where(i => i.DeltagerId == _deltager.Id).ToList());
-                    if (_deltager.ScoreList != null)
-                    {
-                        scoreList.RemoveAll(i => i.DeltagerId == _deltager.Id);
-                    }
+                    scoreList.RemoveAll(i => i.DeltagerId == _deltager.Id);
                 }
             }
             return deltagerList;
@@ -557,7 +552,11 @@ namespace DatabaseClassLibrary
             List<DBDeltagerScore> retur = new List<DBDeltagerScore>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = "SELECT * FROM EventAktivitetDeltager _ead, EventAktivitet _ea WHERE _ead.EventAktivitetId = _ea.Id AND _ea.EventId = @EventId AND _ea.Id = @EventAktivitetId";
+                string sql = "SELECT * FROM EventAktivitetDeltager _ead, EventAktivitet _ea WHERE _ead.EventAktivitetId = _ea.Id AND _ea.EventId = @EventId";
+                if (_eventAktivitetId != null)
+                {
+                    sql += " AND _ea.Id = @EventAktivitetId";
+                }
                 if (_deltagerId != null)
                 {
                     sql += " AND _ead.Id = @DeltagerId";
@@ -567,7 +566,10 @@ namespace DatabaseClassLibrary
                 SqlCommand cmd = new SqlCommand(sql, con);
 
                 cmd.Parameters.AddWithValue("@EventId", _eventId);
-                cmd.Parameters.AddWithValue("@EventAktivitetId", _eventAktivitetId);
+                if (_eventAktivitetId != null)
+                {
+                    cmd.Parameters.AddWithValue("@EventAktivitetId", _eventAktivitetId);
+                }
                 if (_deltagerId != null)
                 {
                     cmd.Parameters.AddWithValue("@DeltagerId", _deltagerId);
@@ -578,12 +580,9 @@ namespace DatabaseClassLibrary
 
                 while (reader.Read())
                 {
-                    if (_eventAktivitetId != null)
-                    {
-                        retur.Add(
-                            new DBDeltagerScore{ Id = int.Parse(reader["Id"].ToString()), DeltagerId = int.Parse(reader["DeltagerId"].ToString()), EventAktivitetId = int.Parse(reader["EventAktivitetId"].ToString()), Score = int.Parse(reader["Score"].ToString()) }
-                        );
-                    }
+                    retur.Add(
+                        new DBDeltagerScore{ Id = int.Parse(reader["Id"].ToString()), DeltagerId = int.Parse(reader["DeltagerId"].ToString()), EventAktivitetId = int.Parse(reader["EventAktivitetId"].ToString()), Score = int.Parse(reader["Score"].ToString()) }
+                    );
                 }
                 reader.Close();
             }

@@ -16,7 +16,6 @@ namespace PowerEvent
         [BindProperty]
         public int SelectedEvent { get; set; }
 
-        [TempData]
         public int Vis { get; set; }
 
         public string ValgtGuiElemement { get; set; }
@@ -70,11 +69,17 @@ namespace PowerEvent
 
                 if (ValgtGuiElemement == "CmdVis")
                 {
+                    loadTempDataVis();
                     if (Vis < EventAktivitetList.Count)
                     {
                         Vis++;
                     }
-                    TempData.Keep("Vis");
+                    saveTempDataVis();
+                }
+                else
+                {
+                    Vis = 0;
+                    saveTempDataVis();
                 }
                 if (Vis > 0)
                 {
@@ -111,7 +116,7 @@ namespace PowerEvent
                                         {
                                             foreach (var _score in _deltager.ScoreList)
                                             {
-                                                if (_score.Score != null)
+                                                if (_score.Score != null && _score.EventAktivitetId == _eventAktivitetHold.EventAktivitetId)
                                                 {
                                                     totalScore += _score.Score;
                                                     antalScores++;
@@ -252,6 +257,19 @@ namespace PowerEvent
             {
                 CurrentLogin = tempLogin;
             }
+        }
+
+        private void loadTempDataVis()
+        {
+            int.TryParse(TempData.Get<string>("Vis"), out int tempVis);
+            Vis = tempVis;
+        }
+
+        private void saveTempDataVis()
+        {
+            List<int> tempEventList = new List<int>();
+            tempEventList.Add(SelectedEvent);
+            TempData.Set("Vis", Vis.ToString());
         }
 
     }

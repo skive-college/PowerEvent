@@ -199,20 +199,18 @@ namespace PowerEvent.Helpers
                 tempdeltager.Navn = adapt<string>("Navn", _object);
                 tempdeltager.HoldId = adapt<int?>("HoldId", _object);
                 tempdeltager.EventId = adapt<int>("EventId", _object);
-                if (_aktivitetId != null)
+
+                List<object> o = adapt<List<object>>("ScoreList", _object);
+                foreach (object _score in o)
                 {
-                    List<object> o = adapt<List<object>>("ScoreList", _object);
-                    foreach (object _score in o)
-                    {
-                        DeltagerScore ds = new DeltagerScore();
-                        ds.Id = adapt<int>("Id", _score);
-                        ds.Score = adapt<int>("Score", _score);
-                        tempdeltager.ScoreList.Add(ds);
-                    }
+                    DeltagerScore ds = new DeltagerScore();
+                    ds.Id = adapt<int>("Id", _score);
+                    ds.EventAktivitetId = adapt<int>("EventAktivitetId", _score);
+                    ds.Score = adapt<int>("Score", _score);
+                    tempdeltager.ScoreList.Add(ds);
                 }
                 retur.Add(tempdeltager);
             }
-
             return retur;
         }
 
