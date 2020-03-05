@@ -11,6 +11,7 @@ namespace PowerEvent.Models
 
         public string Navn { get; set; }
 
+        //0 = MinPoint. 1 = MaxPoint, 2 = MinSec. 3 = MaxSec.
         public int PointType { get; set; }
 
         // 0 = holdsport, 1 = deltagersport

@@ -473,12 +473,12 @@ namespace DatabaseClassLibrary
 
                 if (_eventAktivitetId != null)
                 {
-                    sql += ", EventAktivitetDeltager _ead, EventAktivitet _ea";
+                    sql += ", EventAktivitet _ea";
                 }
                 sql += " WHERE";
                 if (_eventAktivitetId != null)
                 {
-                    sql += " _ead.EventAktivitetId = _ea.Id AND _ead.DeltagerId = _ed.Id AND _ea.Id = @EventAktivitetId AND";
+                    sql += " _ea.Id = @EventAktivitetId AND";
                 }
                 sql += " _ed.EventId = @EventId";
 
