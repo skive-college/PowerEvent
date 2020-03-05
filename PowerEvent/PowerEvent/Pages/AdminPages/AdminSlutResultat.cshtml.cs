@@ -34,8 +34,6 @@ namespace PowerEvent
         public List<EventAktivitet> EventAktivitetList { get; set; }
 
 
-
-
         public IActionResult OnGet()
         {
             loadTempDataLogin();
