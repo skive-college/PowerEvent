@@ -43,38 +43,51 @@ namespace PowerEvent
         public string TeamTo { get; set; }
 
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            EventName = "test";
-            TeamEt = "teamet";
-            TeamTo = "teamto";
-            SelectedEvent = -1;
-
-            HoldList = new List<Hold>();
-            DeltagerList = new List<Deltager>();
-            EventList = DBAdapter.getEvent();
-
-
-            checkScript();
-            if (SelectedEvent != -1)
+            loadTempDataLogin();
+            if (CurrentLogin != null)
             {
-                loadTempDataEvent();
+                CurrentLogin = DBAdapter.verifyLogin(CurrentLogin.Brugernavn, CurrentLogin.Kodeord);
+            }
+            if (CurrentLogin == null || CurrentLogin.Id == 0 || CurrentLogin.AdminType == 0)
+            {
+                return Redirect("/Index");
+            }
+            else
+            {
+                EventName = "test";
+                TeamEt = "teamet";
+                TeamTo = "teamto";
+                SelectedEvent = -1;
+
+                HoldList = new List<Hold>();
+                DeltagerList = new List<Deltager>();
+                EventList = DBAdapter.getEvent();
+
+
+                checkScript();
                 if (SelectedEvent != -1)
                 {
-                    EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
-                    AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
-                }
-                if (SelectedEventAktivitet != -1)
-                {
-                    OrderList = DBAdapter.getHoldOrder(SelectedEvent, SelectedEventAktivitet);
-                    if (SelectedOrder != -1)
+                    loadTempDataEvent();
+                    if (SelectedEvent != -1)
                     {
-                        HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedEventAktivitet);
-                        HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
-                        HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                        EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
+                        AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+                    }
+                    if (SelectedEventAktivitet != -1)
+                    {
+                        OrderList = DBAdapter.getHoldOrder(SelectedEvent, SelectedEventAktivitet);
+                        if (SelectedOrder != -1)
+                        {
+                            HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                            HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                            HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                        }
                     }
                 }
             }
+            return this.Page();
         }
 
         private void checkScript()
