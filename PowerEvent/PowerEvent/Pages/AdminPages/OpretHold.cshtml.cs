@@ -9,6 +9,8 @@ namespace PowerEvent
 {
     public class OpretHoldModel : PageModel
     {
+        public Login CurrentLogin { get; set; }
+
         [BindProperty]
         public int SelectedHold { get; set; }
         
@@ -74,50 +76,60 @@ namespace PowerEvent
             }
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            SelectedHold = -1;
-            SelectedHoldAktivitet = -1;
-            SelectedEvent = -1;
-            SelectedEventAktivitet = -1;
-            HoldList = new List<Hold>();
-            EventAktivitetList = new List<EventAktivitet>();
-            EventList = DBAdapter.getEvent();
-            loadHoldList();
-            checkScript();
-
-
-            if (SelectedEvent != -1)
+            loadTempDataLogin();
+            if (CurrentLogin != null)
             {
-                loadEventAktivitetList();
-                if (SelectedEventAktivitet != -1)
+                CurrentLogin = DBAdapter.verifyLogin(CurrentLogin.Brugernavn, CurrentLogin.Kodeord);
+            }
+            if (CurrentLogin == null || CurrentLogin.Id == 0 || CurrentLogin.AdminType == 0)
+            {
+                return Redirect("/Index");
+            }
+            else
+            {
+                SelectedHold = -1;
+                SelectedHoldAktivitet = -1;
+                SelectedEvent = -1;
+                SelectedEventAktivitet = -1;
+                HoldList = new List<Hold>();
+                EventAktivitetList = new List<EventAktivitet>();
+                EventList = DBAdapter.getEvent();
+                loadHoldList();
+                checkScript();
+
+
+
+                if (SelectedEvent != -1)
                 {
-                    loadHoldAktivitetList();
+                    loadEventAktivitetList();
+                    if (SelectedEventAktivitet != -1)
+                    {
+                        loadHoldAktivitetList();
+                    }
+                }
+
+                if (ValgtGuiElemement == "CmdGemHold")
+                {
+                    CmdSaveHold();
+                }
+                else if (ValgtGuiElemement == "CmdSletHold")
+                {
+                    CmdDeleteHold();
+                }
+                else if (ValgtGuiElemement == "CmdAddEventAktivitetHold")
+                {
+                    CmdAddEventAktivitetHold();
+                }
+                else if (ValgtGuiElemement == "CmdDeleteEventAktivitetHold")
+                {
+                    CmdSletEventAktivitetHold();
                 }
             }
-
-            if (ValgtGuiElemement == "CmdGemHold")
-            {
-                CmdSaveHold();
-            }
-            else if (ValgtGuiElemement == "CmdSletHold")
-            {
-                CmdDeleteHold();
-            }
-            else if (ValgtGuiElemement == "CmdAddEventAktivitetHold")
-            {
-                CmdAddEventAktivitetHold();
-            }
-            else if (ValgtGuiElemement == "CmdDeleteEventAktivitetHold")
-            {
-                CmdSletEventAktivitetHold();
-            }
+            return this.Page();
         }
 
-        public void OnPost()
-        {
-
-        }
 
         public void CmdDeleteHold()
         {
@@ -298,5 +310,15 @@ namespace PowerEvent
                 SelectedEvent = tempEventList[0];
             }
         }
+
+        private void loadTempDataLogin()
+        {
+            Login tempLogin = TempData.Peek<Login>("CurrentLogin");
+            if (tempLogin != null)
+            {
+                CurrentLogin = tempLogin;
+            }
+        }
+
     }
 }
