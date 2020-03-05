@@ -17,12 +17,11 @@
                         width: auto;
                     }
             </style>
-            <!-- {asp-for="Model.SelectedEvent"} laver SelectedEvent int om til "value" property på det valgte element -->
             <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
                 @{
                     if (@Model.SelectedEvent == -1)
                     {
-                        <option value="-1" style="width:300px;">Vælg et event</option>
+                        <option value="-1">Vælg et event</option>
                     }
 
                     foreach (var item in @Model.EventList)
@@ -31,126 +30,131 @@
                     }
                 }
             </select>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <p>Team : @Model.TeamEt</p>
-            </div>
-            <div class="col-sm-6">
-                <p>Team : @Model.TeamTo</p>
+            <style>
+                #AktivitetList {
+                    width: 120px;
+                }
 
-            </div>
-        </div>
-    </div>
-    <div class="row justify-content-md-center">
-        <div class="col-md">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Navn</th>
-                        <th scope="col">1. Score</th>
-                        <th scope="col">2. Score</th>
-                        <th scope="col">3. Score</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>Name1</th>
-                        <th>Name1Score1</th>
-                        <th>Name1Score2</th>
-                        <th>Name1Score3</th>
-                    </tr>
-                    <tr>
-                        <th>Name2</th>
-                        <th>Name2Score1</th>
-                        <th>Name2Score2</th>
-                        <th>Name2Score3</th>
-                    </tr>
-                    <tr>
-                        <th>Name3</th>
-                        <th>Name3Score1</th>
-                        <th>Name3Score2</th>
-                        <th>Name3Score3</th>
-                    </tr>
-                    <tr>
-                        <th>Name4</th>
-                        <th>Name4Score1</th>
-                        <th>Name4Score2</th>
-                        <th>Name4Score3</th>
-                    </tr>
-                    <tr>
-                        <th>Name5</th>
-                        <th>Name5Score1</th>
-                        <th>Name5Score2</th>
-                        <th>Name5Score3</th>
-                    </tr>
-                </tbody>
-            </table>
+                    #AktivitetList:focus {
+                        min-width: 120px;
+                        width: auto;
+                    }
+            </style>
+            <select id="AktivitetList" asp-for="@Model.SelectedEventAktivitet" onchange="elementChanged('AktivitetList')">
+                @{
+                    if (@Model.SelectedEvent == -1)
+                    {
+                        <option value="-1" hidden></option>
+                    }
+                    if (@Model.SelectedEvent != -1)
+                    {
+                        if (@Model.SelectedEventAktivitet == -1)
+                        {
+                            <option value="-1">Vælg en Aktivitet</option>
+                        }
+                        foreach (var item in @Model.EventAktivitetList)
+                        {
+                            <option value="@item.Id">@Model.AktivitetList.Where(i => i.Id == item.AktivitetId).FirstOrDefault().Navn</option>
+                        }
+                    }
+                }
+            </select>
+            <select id="OrderList" asp-for="@Model.SelectedOrder" onchange="elementChanged('OrderList')">
+                @{
+                    <option value="-1" hidden></option>
+                    if (@Model.SelectedEvent != -1 && Model.SelectedEventAktivitet != -1)
+                    {
+                        if (@Model.SelectedOrder == -1)
+                        {
+                            <option value="-1">Vælg en runde</option>
+                        }
+                        foreach (var item in @Model.OrderList)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    }
+                }
+
+            </select>
+            <br />
         </div>
 
 
 
-        <div class="col-md">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Navn</th>
-                        <th scope="col">1. Score</th>
-                        <th scope="col">2. Score</th>
-                        <th scope="col">3. Score</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>T2Name1</th>
-                        <th>T2Name1Score1</th>
-                        <th>T2Name1Score2</th>
-                        <th>T2Name1Score3</th>
-                    </tr>
-                    <tr>
-                        <th>T2Name2</th>
-                        <th>T2Name2Score1</th>
-                        <th>T2Name2Score2</th>
-                        <th>T2Name2Score3</th>
-                    </tr>
-                    <tr>
-                        <th>T2Name3</th>
-                        <th>T2Name3Score1</th>
-                        <th>T2Name3Score2</th>
-                        <th>T2Name3Score3</th>
-                    </tr>
-                    <tr>
-                        <th>T2Name4</th>
-                        <th>T2Name4Score1</th>
-                        <th>T2Name4Score2</th>
-                        <th>T2Name4Score3</th>
-                    </tr>
-                    <tr>
-                        <th>T2Name5</th>
-                        <th>T2Name5Score1</th>
-                        <th>T2Name5Score2</th>
-                        <th>T2Name5Score3</th>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="row" style="font-weight: bolder; font-size: 1.4em;">
+            @{
+                if (@Model.SelectedEvent != -1 && Model.SelectedOrder != -1)
+                {
+                    foreach (var item in Model.HoldList)
+                    {
+                        <div class="col-sm-6">
+                            <p>Team : @item.Navn</p>
+                        </div>
+                    }
+                }
+            }
+
         </div>
     </div>
+    
+    @{
+        if (@Model.SelectedEvent != -1 && Model.SelectedOrder != -1)
+        {
+            foreach (var item in Model.HoldList)
+            {
+                <div class="row justify-content-md-center">
+                    <div class="col-md">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Navn</th>
+                                    <th scope="col">Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var itemD in Model.DeltagerList)
+                                    {
+                                        <tr>
+                                            @{
+                                                foreach (var itemsD in @Model.DeltagerList)
+                                                {
+                                                    <th>@itemsD.Navn, @itemsD.ScoreList</th>
+                                                }
+                                            }
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        }
+    }
 </div>
 @section Scripts
-{
+        {
     <script>
-        function elementChanged(elementet) {
-            let url = new URL(location.href);
+            function elementChanged(elementet)
+            {
+                let url = new URL(location.href);
 
-            //lav nedenstående 3 linjer for hver "select" liste
-            let EventList = document.getElementById('EventList');
-            let EventListValgt = EventList.options[EventList.selectedIndex].value;
-            url.searchParams.set("EventList", EventListValgt);
+                let EventList = document.getElementById('EventList');
+                let EventListValgt = EventList.options[EventList.selectedIndex].value;
+                url.searchParams.set("EventList", EventListValgt);
 
+                let AktivitetList = document.getElementById('AktivitetList');
+                let AktivitetListValgt = AktivitetList.options[AktivitetList.selectedIndex].value;
+                url.searchParams.set("AktivitetList", AktivitetListValgt);
 
-            url.searchParams.set("ValgtGuiElemement", elementet);
-            location.href = url;
-        }
+                let OrderList = document.getElementById('OrderList');
+                let OrderListValgt = OrderList.options[OrderList.selectedIndex].value;
+                url.searchParams.set("OrderList", OrderListValgt);
+
+                url.searchParams.set("ValgtGuiElemement", elementet);
+                location.href = url;
+            }
     </script>
 }
 

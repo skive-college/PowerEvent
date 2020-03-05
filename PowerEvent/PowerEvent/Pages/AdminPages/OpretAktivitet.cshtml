@@ -76,10 +76,14 @@
                             }
                         </select>
                     </div>
-
-                    <div class="row">
-                        <input type="button" value="Slet" onclick="elementChanged('CmdDeleteAktivitet')" />
-                    </div>
+                    @{
+                        if (@Model.CurrentLogin != null && Model.CurrentLogin.AdminType == 2)
+                        {
+                            <div class="row">
+                                <input type="button" value="Slet" onclick="elementChanged('CmdDeleteAktivitet')" />
+                            </div>
+                        }
+                    }
                 </div>
                 <br />
                 <div class="col-12 col-lg-6">

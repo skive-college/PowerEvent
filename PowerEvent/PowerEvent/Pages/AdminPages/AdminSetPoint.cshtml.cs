@@ -132,7 +132,6 @@ namespace PowerEvent
                 HoldList = new List<Hold>();
                 DeltagerList = new List<Deltager>();
                 EventList = DBAdapter.getEvent();
-                OrderList = new List<int>();
 
                 checkScript();
                 if (SelectedEvent != -1)

@@ -14,27 +14,89 @@ namespace PowerEvent
         [BindProperty]
         public int SelectedEvent { get; set; }
 
+        [BindProperty]
+        public int SelectedOrder { get; set; }
+
+        [BindProperty]
+        public int SelectedEventAktivitet { get; set; }
+
+        public List<int> OrderList { get; set; }
+
+        public List<Aktivitet> AktivitetList { get; set; }
+
+        public List<EventAktivitet> EventAktivitetList { get; set; }
+
+        public List<Hold> HoldList { get; set; }
+
+        public List<Deltager> DeltagerList { get; set; }
+
         public string ValgtGuiElemement { get; set; }
 
         public List<Event> EventList { get; set; }
+
         public string EventName { get; set; }
+
         public string TeamEt { get; set; }
+
         public string TeamTo { get; set; }
+
+
         public void OnGet()
         {
             EventName = "test";
             TeamEt = "teamet";
             TeamTo = "teamto";
             SelectedEvent = -1;
+
+            HoldList = new List<Hold>();
+            DeltagerList = new List<Deltager>();
             EventList = DBAdapter.getEvent();
+
+
             checkScript();
+            if (SelectedEvent != -1)
+            {
+                loadTempDataEvent();
+                if (SelectedEvent != -1)
+                {
+                    EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
+                    AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+                }
+                if (SelectedEventAktivitet != -1)
+                {
+                    OrderList = DBAdapter.getHoldOrder(SelectedEvent, SelectedEventAktivitet);
+                    if (SelectedOrder != -1)
+                    {
+                        HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                        HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                        HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                    }
+                }
+            }
         }
 
         private void checkScript()
         {
-            try 
+            //on click for select element script. navn = select elementets "navn"
+            ValgtGuiElemement = Request.Query["ValgtGuiElemement"];
+
+            try
             {
                 SelectedEvent = int.Parse(Request.Query["EventList"]);
+            }
+            catch
+            {
+            }
+            try
+            {
+                SelectedEventAktivitet = int.Parse(Request.Query["AktivitetList"]);
+            }
+            catch
+            {
+            }
+            try
+            {
+                SelectedOrder = int.Parse(Request.Query["OrderList"]);
             }
             catch
             {
@@ -43,19 +105,14 @@ namespace PowerEvent
             if (SelectedEvent == -1)
             {
                 loadTempDataEvent();
-                if (SelectedEvent != -1)
-                {
-                    
-                }
             }
 
-            ValgtGuiElemement = Request.Query["ValgtGuiElemement"];
             if (ValgtGuiElemement == "EventList")
             {
                 if (SelectedEvent != -1)
                 {
                     saveTempDataEvent();
-                    
+                    SelectedEventAktivitet = -1;
                 }
             }
         }
