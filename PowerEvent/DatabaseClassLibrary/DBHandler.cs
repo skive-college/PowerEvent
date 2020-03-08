@@ -34,7 +34,33 @@ namespace DatabaseClassLibrary
             }
             return retur;
         }
-        
+
+        public static void addEvent(string _navn)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "INSERT INTO Event Values(@Navn)";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Navn", _navn);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static void deleteEvent(int _id)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "Delete From Event WHERE id = @Id";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Id", _id);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
         public static void addEventAktivitet(int _eventId, int _aktivitetId)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
