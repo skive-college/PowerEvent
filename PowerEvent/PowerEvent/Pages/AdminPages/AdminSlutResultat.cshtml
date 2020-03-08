@@ -35,7 +35,7 @@
         <div class="row" style="">
             @{
                 //laver dynamisk et "table" til hvert hold der indeholde holdets deltagere
-                <div class="col-6 col-md-3 col-lg-1">
+                <div class="col-6 col-md-3 col-lg-2">
                     <br />
                     <div>
                         <table style=" height: auto; width: 100%;">
@@ -69,7 +69,7 @@
 
                 for (int _vis = 0; _vis < Model.Vis; _vis++)
                 {
-                    <div class="col-6 col-md-3 col-lg-1">
+                    <div class="col-6 col-md-3 col-lg-2">
                         <br />
                         <table style=" height: auto; width: 100%;">
                             <tr>
@@ -82,6 +82,7 @@
                                 {
                                     int? totalScore = 0;
                                     int? antalScores = 0;
+                                    int? point = 0;
                                     PowerEvent.Models.EventAktivitetHold _eventAktivitetHold = _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == Model.EventAktivitetList[_vis].Id).FirstOrDefault();
                                     if (_eventAktivitetHold != null)
                                     {
@@ -117,10 +118,15 @@
                                         {
                                             totalScore /= antalScores;
                                         }
+                                        
+                                        if (@_eventAktivitetHold.Point != null)
+                                        {
+                                            point = @_eventAktivitetHold.Point;
+                                        }
                                     }
                                     
                                     <tr>
-                                        <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-size: 1.4em;">@totalScore</td>
+                                        <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-size: 1.4em;">@totalScore @point</td>
                                     </tr>
                                 }
                             }
@@ -130,7 +136,7 @@
                 
 
                 //laver dynamisk et "table" til hvert hold der indeholde holdets deltagere
-                <div class="col-6 col-md-3 col-lg-1">
+                <div class="col-6 col-md-3 col-lg-2">
                     <br />
                     <div>
                         <table style=" height: auto; width: 100%;">

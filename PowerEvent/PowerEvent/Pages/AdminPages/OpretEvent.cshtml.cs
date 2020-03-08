@@ -57,7 +57,7 @@ namespace PowerEvent
 
         public void sletEvent()
         {
-            if (SelectedEvent != -1)
+            if (SelectedEvent != -1 && CurrentLogin.AdminType == 2)
             {
                 DBAdapter.deleteEvent(SelectedEvent);
                 loadEventList();
