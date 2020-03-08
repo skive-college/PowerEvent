@@ -321,7 +321,6 @@ namespace PowerEvent
                                 }
                                 _eventAktivitetHold.Point = 10 * (HoldList.Count() - plads + antalForan);
                             }
-
                         }
                     }
                 }
