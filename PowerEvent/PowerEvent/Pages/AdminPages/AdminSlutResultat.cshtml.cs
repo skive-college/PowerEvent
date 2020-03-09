@@ -117,13 +117,13 @@ namespace PowerEvent
         }
 
 
+        //giver point til hver aktivitet efter deres stilling
         private void udregnPoint()
         {
             if (Vis > 0)
             {
                 for (int _vis = 0; _vis < Vis; _vis++)
                 {
-                    //sorterer efter stilling
                     foreach (Hold _hold in HoldList)
                     {
                         EventAktivitetHold _eventAktivitetHold = _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == EventAktivitetList[_vis].Id).FirstOrDefault();
@@ -184,17 +184,6 @@ namespace PowerEvent
                                                     modstanderAntalScores++;
                                                 }
                                             }
-                                            else
-                                            {
-                                                modstanderTotalScore = 0;
-                                            }
-                                            if (_modstanderEventAktivitetHold.HoldOrder == _eventAktivitetHold.HoldOrder)
-                                            {
-                                                if (totalScore > modstanderTotalScore)
-                                                {
-                                                        
-                                                }
-                                            }
                                         }
                                         else if (_aktivitet.HoldSport == 1)
                                         {
@@ -220,11 +209,6 @@ namespace PowerEvent
                                         antalForan++;
                                     }
                                 }
-                            }
-
-                            if (_aktivitet.HoldSport == 1)
-                            {
-
                             }
                             _eventAktivitetHold.Point = 10 * (HoldList.Count() - antalForan);
                         }

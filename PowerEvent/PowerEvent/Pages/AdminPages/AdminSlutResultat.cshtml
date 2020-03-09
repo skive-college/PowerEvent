@@ -43,7 +43,10 @@
                                 if (Model.SelectedEvent != -1)
                                 {
                                     <tr>
-                                        <td class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-weight: bold; font-size: 1.4em;">Hold</td>
+                                        <td class="col" style="border: solid black; border-width: 1px 1px 0px 1px; text-align:center; font-weight: bold; font-size: 1.4em;">↓ Hold ↓</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-weight: bold; font-size: 0.8em;">Typen af score →</td>
                                     </tr>
                                 }
                             }
@@ -55,7 +58,7 @@
                                     if (_hold.Id == _hold.Id)
                                     {
                                         <tr>
-                                            <td class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em; background-color: @_hold.Farve; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; color: white">@_hold.Navn</td>
+                                            <td class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em; background-color: @_hold.Farve; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; color: white;">@_hold.Navn</td>
                                         </tr>
                                     }
                                 }
@@ -72,12 +75,33 @@
                     <div class="col-6 col-md-3 col-lg-2">
                         <br />
                         <table style=" height: auto; width: 100%;">
-                            <tr>
-                                <th class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em;">@Model.AktivitetList.Where(i => i.Id == Model.EventAktivitetList[_vis].AktivitetId).FirstOrDefault().Navn</th>
-                            </tr>
-
                             @*opretter score af hvert hold*@
                             @{
+                                PowerEvent.Models.Aktivitet _aktivitet = Model.AktivitetList.Where(i => i.Id == Model.EventAktivitetList[_vis].AktivitetId).FirstOrDefault();
+                                string aktivitetPointType = "";
+                                if (_aktivitet.PointType == 0)
+                                {
+                                    aktivitetPointType = "Score: laveste";
+                                }
+                                else if (_aktivitet.PointType == 1)
+                                {
+                                    aktivitetPointType = "Score: højeste";
+                                }
+                                else if (_aktivitet.PointType == 2)
+                                {
+                                    aktivitetPointType = "Sekunder: laveste";
+                                }
+                                else if (_aktivitet.PointType == 3)
+                                {
+                                    aktivitetPointType = "Sekunder: højeste";
+                                }
+                                <tr>
+                                    <th class="col" style="border: solid black; border-width: 1px 1px 0px 1px; text-align:center; font-size: 1.4em;">@_aktivitet.Navn</th>
+                                </tr>
+                                <tr>
+                                    <th class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-size: 0.7em;">@aktivitetPointType</th>
+                                </tr>
+
                                 foreach (var _hold in @Model.HoldList)
                                 {
                                     int? totalScore = 0;
@@ -86,7 +110,7 @@
                                     PowerEvent.Models.EventAktivitetHold _eventAktivitetHold = _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == Model.EventAktivitetList[_vis].Id).FirstOrDefault();
                                     if (_eventAktivitetHold != null)
                                     {
-                                        PowerEvent.Models.Aktivitet _aktivitet = Model.AktivitetList.Where(i => i.Id == Model.EventAktivitetList.Where(i => i.Id == _eventAktivitetHold.EventAktivitetId).FirstOrDefault().AktivitetId).FirstOrDefault();
+
                                         if (_eventAktivitetHold != null)
                                         {
                                             if (_aktivitet.HoldSport == 0)
@@ -118,13 +142,13 @@
                                         {
                                             totalScore /= antalScores;
                                         }
-                                        
+
                                         if (@_eventAktivitetHold.Point != null)
                                         {
                                             point = @_eventAktivitetHold.Point;
                                         }
                                     }
-                                    
+
                                     <tr>
                                         <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-size: 1.4em;">@totalScore @point</td>
                                     </tr>
@@ -144,7 +168,10 @@
                                 if (Model.SelectedEvent != -1)
                                 {
                                     <tr>
-                                        <td class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-weight: bold; font-size: 1.4em;">Point</td>
+                                        <td style="border: solid black; border-width: 1px 1px 0px 1px; text-align:center; font-weight: bold; font-size: 1.4em;">Point</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-weight: bold;  font-size: 0.7em;">Højeste point er bedst</td>
                                     </tr>
                                 }
                             }
@@ -162,9 +189,9 @@
                                     }
 
                                     <tr>
-                                        <td class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em;">@point</td>
+                                        <td style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em; background-color: @_hold.Farve; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; color: white;">@point</td>
                                     </tr>
-                                    
+
                                 }
                             }
                         </table>
