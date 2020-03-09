@@ -36,11 +36,11 @@
                 </select>
                 <style>
                     #AktivitetList {
-                        width: 130px;
+                        width: 140px;
                     }
 
                         #AktivitetList:focus {
-                            min-width: 130px;
+                            min-width: 140px;
                             width: auto;
                         }
                 </style>
@@ -87,64 +87,70 @@
         @{
             if (@Model.SelectedEvent != -1 && Model.SelectedOrder != -1)
             {
-                foreach (var _hold in Model.HoldList)
-                {
-                    <div class="row" style="font-weight: bolder; font-size: 1.4em;">
-                        <div class="col">
-                            <p>Team : @_hold.Navn</p>
-                        </div>
-                    </div>
+                <div class="row">
+                    @{
+                        foreach (var _hold in Model.HoldList)
+                        {
+                            <div class="col">
+                                <div class="row" style="font-weight: bolder; font-size: 1.4em;">
+                                    <div class="col">
+                                        <p>Hold : @_hold.Navn</p>
+                                    </div>
+                                </div>
 
-                    <div class="row justify-content-md-center">
-                        <div class="col-md">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Navn</th>
-                                        <th scope="col">Score</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @{
-                                        PowerEvent.Models.Aktivitet tempAktivitet = Model.AktivitetList.Where(i => i.Id == Model.EventAktivitetList.Where(i => i.Id == Model.SelectedEventAktivitet).FirstOrDefault().AktivitetId).FirstOrDefault();
-                                        if (tempAktivitet.HoldSport == 0)
-                                        {
-
-                                        }
-                                        else if (tempAktivitet.HoldSport == 1)
-                                        {
-                                            foreach (var _deltager in Model.DeltagerList.Where(i => i.HoldId == _hold.Id).ToList())
-                                            {
+                                <div class="row justify-content-md-center">
+                                    <div class="col-md">
+                                        <table class="table">
+                                            <thead>
                                                 <tr>
-                                                    <th>
-                                                        @_deltager.Navn
-                                                    </th>
-                                                    <th>
-                                                        @{
-                                                            _deltager.ScoreList = _deltager.ScoreList.OrderByDescending(i => i.Score).ToList();
-                                                            int antal = 3;
-                                                            if (_deltager.ScoreList.Count < 3)
-                                                            {
-                                                                antal = _deltager.ScoreList.Count;
-                                                            }
-                                                            for (int i = 0; i < antal; i++)
-                                                            {
-                                                                @: @_deltager.ScoreList[i].Score,
-                                                            }
-                                                        }
-
-                                                    </th>
+                                                    <th scope="col">Navn</th>
+                                                    <th scope="col">Score</th>
                                                 </tr>
-                                            }
-                                        }
-                                    }
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    PowerEvent.Models.Aktivitet tempAktivitet = Model.AktivitetList.Where(i => i.Id == Model.EventAktivitetList.Where(i => i.Id == Model.SelectedEventAktivitet).FirstOrDefault().AktivitetId).FirstOrDefault();
+                                                    if (tempAktivitet.HoldSport == 0)
+                                                    {
+
+                                                    }
+                                                    else if (tempAktivitet.HoldSport == 1)
+                                                    {
+                                                        foreach (var _deltager in Model.DeltagerList.Where(i => i.HoldId == _hold.Id).ToList())
+                                                        {
+                                                            <tr>
+                                                                <th>
+                                                                    @_deltager.Navn
+                                                                </th>
+                                                                <th>
+                                                                    @{
+                                                                        _deltager.ScoreList = _deltager.ScoreList.OrderByDescending(i => i.Score).ToList();
+                                                                        int antal = 3;
+                                                                        if (_deltager.ScoreList.Count < 3)
+                                                                        {
+                                                                            antal = _deltager.ScoreList.Count;
+                                                                        }
+                                                                        for (int i = 0; i < antal; i++)
+                                                                        {
+                                                                            @: @_deltager.ScoreList[i].Score
+                                                                        }
+                                                                    }
+
+                                                                </th>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                }
 
 
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
             }
         }
     </div>
