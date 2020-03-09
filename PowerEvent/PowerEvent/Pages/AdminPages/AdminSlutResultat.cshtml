@@ -10,7 +10,15 @@
         <div class="row">
             <div class="col, text-center" style="width:100%;">
                 <div style="border: 2px solid black; border-radius:15px;">
-                    <h1>Resultat</h1>
+                    @{
+                        PowerEvent.Models.Event tempEvent = @Model.EventList.Where(i => i.Id == Model.SelectedEvent).FirstOrDefault();
+                        string overSkrift = "Resultat for: ";
+                        if (tempEvent != null)
+                        {
+                            overSkrift += tempEvent.Navn;
+                        }
+                        <h1>@overSkrift</h1>
+                    }
                 </div>
             </div>
         </div>
@@ -46,12 +54,10 @@
                                         <td class="col" style="border: solid black; border-width: 1px 1px 0px 1px; text-align:center; font-weight: bold; font-size: 1.4em;">↓ Hold ↓</td>
                                     </tr>
                                     <tr>
-                                        <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-weight: bold; font-size: 0.8em;">Typen af score →</td>
+                                        <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-weight: bold; font-size: 0.7em;">Typen af score →</td>
                                     </tr>
                                 }
-                            }
 
-                            @{
                                 //opretter deltagerne af hver hold
                                 foreach (var _hold in @Model.HoldList)
                                 {
@@ -68,8 +74,6 @@
                 </div>
 
                 //laver dynamisk et "table" til hvert Aktivitet
-
-
                 for (int _vis = 0; _vis < Model.Vis; _vis++)
                 {
                     <div class="col-6 col-md-3 col-lg-2">
