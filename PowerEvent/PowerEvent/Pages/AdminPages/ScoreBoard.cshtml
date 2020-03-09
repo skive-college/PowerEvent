@@ -123,7 +123,23 @@
                                             @{
                                                 foreach (var itemsD in @Model.DeltagerList)
                                                 {
-                                                    <th>@itemsD.Navn, @itemsD.ScoreList</th>
+                                                    <th>
+                                                        @itemsD.Navn
+                                                        @{ 
+                                                            itemD.ScoreList = itemD.ScoreList.OrderByDescending(i => i.Score).ToList();
+                                                            int antal = 3;
+                                                            if (itemD.ScoreList.Count < 3)
+                                                            {
+                                                                antal = itemD.ScoreList.Count;
+                                                            }
+                                                            for (int i = 0; i < antal; i++)
+                                                            {
+                                                                @: @itemD.ScoreList[i].Score;
+                                                            }
+                                                            
+                                                        }
+                                                        
+                                                    </th>
                                                 }
                                             }
                                         </tr>

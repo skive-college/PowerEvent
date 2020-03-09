@@ -38,10 +38,6 @@ namespace PowerEvent
 
         public string EventName { get; set; }
 
-        public string TeamEt { get; set; }
-
-        public string TeamTo { get; set; }
-
 
         public IActionResult OnGet()
         {
@@ -56,13 +52,9 @@ namespace PowerEvent
             }
             else
             {
-                EventName = "test";
-                TeamEt = "teamet";
-                TeamTo = "teamto";
                 SelectedEvent = -1;
 
                 HoldList = new List<Hold>();
-                DeltagerList = new List<Deltager>();
                 EventList = DBAdapter.getEvent();
 
 
