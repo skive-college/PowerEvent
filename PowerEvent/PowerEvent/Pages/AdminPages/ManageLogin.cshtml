@@ -11,12 +11,21 @@
                 <p>Opret Login:</p>
             </div>
             <div class="row">
-                <input id="TxtBrugernavn" type="text" placeholder="Brugernavn" asp-for="TxtBrugernavn" />
-                <input id="TxtKodeord" type="text" placeholder="Manuelt kodeord" asp-for="TxtKodeord" />
-                <input id="TxtKodeordRepeat" type="text" placeholder="Indtast kodeord igen" asp-for="TxtKodeord" />
                 <input type="button" value="Tilfældig kode" onclick="elementChanged('CmdRndKode')" />
+                <input id="TxtKodeord" type="text" placeholder="Kodeord" asp-for="TxtKodeord" />
+                <input id="TxtKodeordRepeat" type="text" placeholder="Indtast kodeord igen" asp-for="TxtKodeord" />
+                <input id="TxtBrugernavn" type="text" placeholder="Brugernavn" asp-for="TxtBrugernavn" />
 
-                <style> #AdminTypeList { width: 120px; } #AdminTypeList:focus { min-width: 120px; width: auto; } </style>
+                <style>
+                    #AdminTypeList {
+                        width: 120px;
+                    }
+
+                        #AdminTypeList:focus {
+                            min-width: 120px;
+                            width: auto;
+                        }
+                </style>
                 <select id="AdminTypeList" data-val="true" asp-for="@Model.SelectedAdminType">
                     @{
                         if (@Model.SelectedAdminType == -1)
@@ -30,13 +39,19 @@
                         }
                     }
                 </select>
-                <style> #OpretLoginEventList { width: 120px; } #OpretLoginEventList:focus { min-width: 120px; width: auto; } </style>
+                <style>
+                    #OpretLoginEventList {
+                        width: 120px;
+                    }
+
+                        #OpretLoginEventList:focus {
+                            min-width: 120px;
+                            width: auto;
+                        }
+                </style>
                 <select id="OpretLoginEventList" data-val="true" asp-for="@Model.SelectedOpretloginEvent" onchange="elementChanged('OpretLoginEventList')">
                     @{
-                        if (@Model.SelectedOpretloginEvent == -1)
-                        {
-                            <option value="-1">Vælg et event</option>
-                        }
+                        <option value="-1">Vælg et event</option>
 
                         foreach (var item in @Model.EventList)
                         {
@@ -44,7 +59,16 @@
                         }
                     }
                 </select>
-                <style> #HoldList { width: 120px; } #HoldList:focus { min-width: 120px; width: auto; } </style>
+                <style>
+                    #HoldList {
+                        width: 120px;
+                    }
+
+                        #HoldList:focus {
+                            min-width: 120px;
+                            width: auto;
+                        }
+                </style>
                 <select id="HoldList" onchange="elementChanged('HoldList')" asp-for="@Model.SelectedHold">
                     @{
                         if (@Model.SelectedHold == -1)

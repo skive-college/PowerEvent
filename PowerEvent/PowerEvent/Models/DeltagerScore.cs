@@ -9,6 +9,8 @@ namespace PowerEvent.Models
     {
         public int Id { get; set; }
 
+        public int EventAktivitetId { get; set; }
+
         //NULL'able int
         public int? Score { get; set; }
     }

@@ -14,18 +14,9 @@
                 </div>
             </div>
         </div>
-
+        <br />
         <div class="row">
-            <style>
-                #EventList {
-                    width: 120px;
-                }
-
-                    #EventList:focus {
-                        min-width: 120px;
-                        width: auto;
-                    }
-            </style>
+            <style> #EventList { width: 120px; } #EventList:focus { min-width: 120px; width: auto; } </style>
             <!-- {asp-for="Model.SelectedEvent"} laver SelectedEvent int om til "value" property på det valgte element -->
             <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
                 @{
@@ -41,7 +32,7 @@
                 }
             </select>
         </div>
-        <div class="row">
+        <div class="row" style="">
             @{
                 //laver dynamisk et "table" til hvert hold der indeholde holdets deltagere
                 <div class="col-6 col-md-3 col-lg-2">
@@ -89,25 +80,53 @@
                             @{
                                 foreach (var _hold in @Model.HoldList)
                                 {
-                                    int totalScore = 0;
-                                    int antalScores = 0;
-                                    foreach (var _eventAktivitetHold in _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == Model.EventAktivitetList[_vis].Id).ToList())
+                                    int? totalScore = 0;
+                                    int? antalScores = 0;
+                                    int? point = 0;
+                                    PowerEvent.Models.EventAktivitetHold _eventAktivitetHold = _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == Model.EventAktivitetList[_vis].Id).FirstOrDefault();
+                                    if (_eventAktivitetHold != null)
                                     {
-                                        foreach (var _score in _eventAktivitetHold.HoldScores)
+                                        PowerEvent.Models.Aktivitet _aktivitet = Model.AktivitetList.Where(i => i.Id == Model.EventAktivitetList.Where(i => i.Id == _eventAktivitetHold.EventAktivitetId).FirstOrDefault().AktivitetId).FirstOrDefault();
+                                        if (_eventAktivitetHold != null)
                                         {
-                                            totalScore += _score.HoldScore;
-                                            antalScores++;
+                                            if (_aktivitet.HoldSport == 0)
+                                            {
+                                                foreach (var _score in _eventAktivitetHold.HoldScores)
+                                                {
+
+                                                    totalScore += _score.HoldScore;
+                                                    antalScores++;
+                                                }
+                                            }
+                                            else if (_aktivitet.HoldSport == 1)
+                                            {
+                                                foreach (var _deltager in Model.DeltagerList.Where(d => d.HoldId == _hold.Id).ToList())
+                                                {
+                                                    foreach (var _score in _deltager.ScoreList)
+                                                    {
+                                                        if (_score.Score != null && _score.EventAktivitetId == _eventAktivitetHold.EventAktivitetId)
+                                                        {
+                                                            totalScore += _score.Score;
+                                                            antalScores++;
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
-
                                         //kode for at få gennemsnittet ↓↓
-
                                         if (antalScores != 0)
                                         {
-                                            totalScore = totalScore / antalScores;
+                                            totalScore /= antalScores;
+                                        }
+                                        
+                                        if (@_eventAktivitetHold.Point != null)
+                                        {
+                                            point = @_eventAktivitetHold.Point;
                                         }
                                     }
+                                    
                                     <tr>
-                                        <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-size: 1.4em;">@totalScore</td>
+                                        <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-size: 1.4em;">@totalScore @point</td>
                                     </tr>
                                 }
                             }
@@ -153,6 +172,7 @@
                 </div>
             }
         </div>
+        <br/>
         @{
             if (Model.SelectedEvent != -1)
             {

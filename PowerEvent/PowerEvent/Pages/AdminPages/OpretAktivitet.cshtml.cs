@@ -154,10 +154,6 @@ namespace PowerEvent.Pages
             return this.Page();
         }
         
-        public void OnPost()
-        {
-
-        }
 
         public void CmdDeleteAktivitet()
         {
