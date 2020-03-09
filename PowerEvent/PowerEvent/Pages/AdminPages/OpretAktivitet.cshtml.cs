@@ -29,6 +29,8 @@ namespace PowerEvent.Pages
 
         public string TxtAktivitet { get; set; }
 
+        public string TxtEvent { get; set; }
+
         public string ValgtGuiElemement { get; set; }
 
         public List<Event> EventList { get; set; }
@@ -92,6 +94,8 @@ namespace PowerEvent.Pages
             }
             else
             {
+                SelectedEvent = -1;
+                loadEventList();
                 SelectedPointType = -1;
                 SelectedHoldSport = -1;
                 SelectedAktivitet = -1;
@@ -127,6 +131,14 @@ namespace PowerEvent.Pages
                 //saveTempDataHoldSport();
 
                 checkScript();
+                if (ValgtGuiElemement == "CmdGemEvent")
+                {
+                    gemEvent();
+                }
+                else if (ValgtGuiElemement == "CmdSletEvent")
+                {
+                    sletEvent();
+                }
 
                 if (SelectedEvent != -1)
                 {
@@ -153,7 +165,30 @@ namespace PowerEvent.Pages
             }
             return this.Page();
         }
-        
+
+        public void sletEvent()
+        {
+            if (SelectedEvent != -1 && CurrentLogin.AdminType == 2)
+            {
+                DBAdapter.deleteEvent(SelectedEvent);
+                loadEventList();
+                SelectedEvent = -1;
+            }
+        }
+
+        public void gemEvent()
+        {
+            if (TxtEvent != "")
+            {
+                DBAdapter.addEvent(TxtEvent);
+                loadEventList();
+            }
+        }
+
+        private void loadEventList()
+        {
+            EventList = DBAdapter.getEvent();
+        }
 
         public void CmdDeleteAktivitet()
         {
@@ -266,6 +301,13 @@ namespace PowerEvent.Pages
             try
             {
                 SelectedAktivitet = int.Parse(Request.Query["AktivitetList"]);
+            }
+            catch
+            {
+            }
+            try
+            {
+                TxtEvent = Request.Query["TxtEvent"];
             }
             catch
             {

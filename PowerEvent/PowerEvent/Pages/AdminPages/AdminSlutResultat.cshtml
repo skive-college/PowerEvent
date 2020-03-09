@@ -186,6 +186,7 @@
             <script>
                 function elementChanged(elementet) {
                     let url = new URL(location.href);
+                    url.searchParams.set("TxtEvent", '');
 
                     //lav nedenstående 3 linjer for hver "select" liste
                     let EventList = document.getElementById('EventList');

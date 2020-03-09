@@ -9,6 +9,35 @@
     {
         <div class="container">
             <div class="row">
+                <p>Opret event:</p>
+            </div>
+            <div class="row">
+                <input id="TxtEvent" type="text" placeholder="Event" />
+                <select id="EventList" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
+                    @{
+                        <option value="-1" hidden></option>
+                        foreach (var item in @Model.EventList)
+                        {
+                            <option value="@item.Id">@item.Navn</option>
+                        }
+                    }
+                </select>
+                <input type="button" value="Gem" onclick="elementChanged('CmdGemEvent')" />
+                @{
+                    if (@Model.CurrentLogin != null && Model.CurrentLogin.AdminType == 2)
+                    {
+                        <div class="row">
+                            <input type="button" value="Slet" onclick="elementChanged('CmdSletEvent')" />
+                        </div>
+                    }
+                }
+            </div>
+            <br />
+
+
+
+            
+            <div class="row">
                 <p>Opret aktivitet:</p>
             </div>
             <div class="row">
@@ -148,6 +177,11 @@
                     let AktivitetList = document.getElementById('AktivitetList');
                     let AktivitetListValgt = AktivitetList.options[AktivitetList.selectedIndex].value;
                     url.searchParams.set("AktivitetList", AktivitetListValgt);
+
+                    if (elementet == 'CmdGemEvent') {
+                        let TxtEvent = document.getElementById('TxtEvent').value;
+                        url.searchParams.set("TxtEvent", TxtEvent);
+                    }
 
                     if (elementet == 'CmdGemAktivitet') {
                         let valgtAktivitet = document.getElementById('TxtAktivitet').value;
