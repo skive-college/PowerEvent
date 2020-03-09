@@ -69,12 +69,9 @@ namespace PowerEvent
                 checkScript();
                 if (SelectedEvent != -1)
                 {
-                    loadTempDataEvent();
-                    if (SelectedEvent != -1)
-                    {
-                        EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
-                        AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
-                    }
+                    EventAktivitetList = DBAdapter.getEventAktivitet(SelectedEvent);
+                    AktivitetList = DBAdapter.getAktivitet(SelectedEvent);
+                    
                     if (SelectedEventAktivitet != -1)
                     {
                         OrderList = DBAdapter.getHoldOrder(SelectedEvent, SelectedEventAktivitet);
@@ -130,6 +127,10 @@ namespace PowerEvent
                     saveTempDataEvent();
                     SelectedEventAktivitet = -1;
                 }
+            }
+            if (ValgtGuiElemement == "AktivitetList")
+            {
+                SelectedOrder = -1;
             }
         }
 
