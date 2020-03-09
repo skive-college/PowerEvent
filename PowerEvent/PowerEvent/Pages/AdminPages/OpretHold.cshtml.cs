@@ -138,6 +138,7 @@ namespace PowerEvent
                 DBAdapter.deleteHold(SelectedHold);
                 loadHoldList();
                 SelectedHold = -1;
+                SelectedHoldAktivitet = -1;
             }
         }
 
