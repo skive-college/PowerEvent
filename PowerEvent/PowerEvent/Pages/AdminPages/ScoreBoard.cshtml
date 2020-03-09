@@ -101,13 +101,6 @@
                                 <div class="row justify-content-md-center">
                                     <div class="col-md">
                                         <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Navn</th>
-                                                    <th scope="col">Score</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
                                                 @{
                                                     PowerEvent.Models.Aktivitet tempAktivitet = Model.AktivitetList.Where(i => i.Id == Model.EventAktivitetList.Where(i => i.Id == Model.SelectedEventAktivitet).FirstOrDefault().AktivitetId).FirstOrDefault();
                                                     if (tempAktivitet.HoldSport == 0)
@@ -116,35 +109,43 @@
                                                     }
                                                     else if (tempAktivitet.HoldSport == 1)
                                                     {
-                                                        foreach (var _deltager in Model.DeltagerList.Where(i => i.HoldId == _hold.Id).ToList())
-                                                        {
+                                                        <thead>
                                                             <tr>
-                                                                <th>
-                                                                    @_deltager.Navn
-                                                                </th>
-                                                                <th>
-                                                                    @{
-                                                                        _deltager.ScoreList = _deltager.ScoreList.OrderByDescending(i => i.Score).ToList();
-                                                                        int antal = 3;
-                                                                        if (_deltager.ScoreList.Count < 3)
-                                                                        {
-                                                                            antal = _deltager.ScoreList.Count;
-                                                                        }
-                                                                        for (int i = 0; i < antal; i++)
-                                                                        {
-                                                                            @: @_deltager.ScoreList[i].Score
-                                                                        }
-                                                                    }
-
-                                                                </th>
+                                                                <th scope="col">Navn</th>
+                                                                <th scope="col">Score</th>
                                                             </tr>
-                                                        }
+                                                        </thead>
+                                                        <tbody>
+                                                            @{
+                                                                foreach (var _deltager in Model.DeltagerList.Where(i => i.HoldId == _hold.Id).ToList())
+                                                                {
+                                                                    <tr>
+                                                                        <th>
+                                                                            @_deltager.Navn
+                                                                        </th>
+                                                                        <th>
+                                                                            @{
+                                                                                _deltager.ScoreList = _deltager.ScoreList.OrderByDescending(i => i.Score).ToList();
+                                                                                int antal = 3;
+                                                                                if (_deltager.ScoreList.Count < 3)
+                                                                                {
+                                                                                    antal = _deltager.ScoreList.Count;
+                                                                                }
+                                                                                for (int i = 0; i < antal; i++)
+                                                                                {
+                                                                                    @: @_deltager.ScoreList[i].Score
+                                                                                }
+                                                                            }
+
+                                                                        </th>
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                        </tbody>
                                                     }
                                                 }
-
-
-                                            </tbody>
-                                        </table>
+                                                
+                                            </table>
                                     </div>
                                 </div>
                             </div>
