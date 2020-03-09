@@ -196,9 +196,9 @@ namespace PowerEvent.Helpers
             DBHandler.deleteHoldScore(_id);
         }
 
-        public static List<Deltager> getDeltagere(int _eventId, int? _aktivitetId = null, int? _holdId = null, int? _deltagerId = null)
+        public static List<Deltager> getDeltagere(int _eventId, int? _eventAktivitetId = null, int? _holdId = null, int? _deltagerId = null)
         {
-            List<object> DbList = DBHandler.getDeltagere(_eventId, _aktivitetId, _holdId, _deltagerId);
+            List<object> DbList = DBHandler.getDeltagere(_eventId, _eventAktivitetId, _holdId, _deltagerId);
             List<Deltager> retur = new List<Deltager>();
 
             foreach (object _object in DbList)

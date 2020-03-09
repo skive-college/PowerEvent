@@ -72,7 +72,7 @@ namespace PowerEvent
                             HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedEventAktivitet);
                             HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
                             HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
-                            DeltagerList= DBAdapter.getDeltagere(SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                            DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedEventAktivitet);
                         }
                     }
                 }

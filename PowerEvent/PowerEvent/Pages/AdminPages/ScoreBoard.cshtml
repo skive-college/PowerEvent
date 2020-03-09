@@ -7,152 +7,148 @@
 @{
     if (@Model.CurrentLogin != null && Model.CurrentLogin.Id != 0)
     {
-        <div container>
-            <div class="text-center">
-                <h1>ScoreBoard @Model.EventName</h1>
-                <div class="row justify-content-md-center">
-                    <style>
-                        #EventList {
-                            width: 120px;
+    <div container>
+        <div class="text-center">
+            <h1>ScoreBoard @Model.EventName</h1>
+            <div class="row justify-content-md-center">
+                <style>
+                    #EventList {
+                        width: 120px;
+                    }
+
+                        #EventList:focus {
+                            min-width: 120px;
+                            width: auto;
+                        }
+                </style>
+                <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
+                    @{
+                        if (@Model.SelectedEvent == -1)
+                        {
+                            <option value="-1">Vælg et event</option>
                         }
 
-                    #EventList:focus {
-                        min-width: 120px;
-                        width: auto;
+                        foreach (var item in @Model.EventList)
+                        {
+                            <option value="@item.Id">@item.Navn</option>
+                        }
                     }
-            </style>
-            <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
-                @{
-                    if (@Model.SelectedEvent == -1)
-                    {
-                        <option value="-1">Vælg et event</option>
+                </select>
+                <style>
+                    #AktivitetList {
+                        width: 130px;
                     }
 
-                    foreach (var item in @Model.EventList)
-                    {
-                        <option value="@item.Id">@item.Navn</option>
+                        #AktivitetList:focus {
+                            min-width: 130px;
+                            width: auto;
+                        }
+                </style>
+                <select id="AktivitetList" asp-for="@Model.SelectedEventAktivitet" onchange="elementChanged('AktivitetList')">
+                    @{
+                        if (@Model.SelectedEvent == -1)
+                        {
+                            <option value="-1" hidden></option>
+                        }
+                        if (@Model.SelectedEvent != -1)
+                        {
+                            if (@Model.SelectedEventAktivitet == -1)
+                            {
+                                <option value="-1">Vælg en Aktivitet</option>
+                            }
+                            foreach (var item in @Model.EventAktivitetList)
+                            {
+                                <option value="@item.Id">@Model.AktivitetList.Where(i => i.Id == item.AktivitetId).FirstOrDefault().Navn</option>
+                            }
+                        }
                     }
-                }
-            </select>
-            <style>
-                #AktivitetList {
-                    width: 120px;
-                }
-
-                    #AktivitetList:focus {
-                        min-width: 120px;
-                        width: auto;
-                    }
-            </style>
-            <select id="AktivitetList" asp-for="@Model.SelectedEventAktivitet" onchange="elementChanged('AktivitetList')">
-                @{
-                    if (@Model.SelectedEvent == -1)
-                    {
+                </select>
+                <select id="OrderList" asp-for="@Model.SelectedOrder" onchange="elementChanged('OrderList')">
+                    @{
                         <option value="-1" hidden></option>
-                    }
-                    if (@Model.SelectedEvent != -1)
-                    {
-                        if (@Model.SelectedEventAktivitet == -1)
+                        if (@Model.SelectedEvent != -1 && Model.SelectedEventAktivitet != -1)
                         {
-                            <option value="-1">Vælg en Aktivitet</option>
-                        }
-                        foreach (var item in @Model.EventAktivitetList)
-                        {
-                            <option value="@item.Id">@Model.AktivitetList.Where(i => i.Id == item.AktivitetId).FirstOrDefault().Navn</option>
-                        }
-                    }
-                }
-            </select>
-            <select id="OrderList" asp-for="@Model.SelectedOrder" onchange="elementChanged('OrderList')">
-                @{
-                    <option value="-1" hidden></option>
-                    if (@Model.SelectedEvent != -1 && Model.SelectedEventAktivitet != -1)
-                    {
-                        if (@Model.SelectedOrder == -1)
-                        {
-                            <option value="-1">Vælg en runde</option>
-                        }
-                        foreach (var item in @Model.OrderList)
-                        {
-                            <option value="@item">@item</option>
+                            if (@Model.SelectedOrder == -1)
+                            {
+                                <option value="-1">Vælg en runde</option>
+                            }
+                            foreach (var item in @Model.OrderList)
+                            {
+                                <option value="@item">@item</option>
+                            }
                         }
                     }
-                }
 
-            </select>
-            <br />
+                </select>
+                <br />
+            </div>
         </div>
 
-
-
-        <div class="row" style="font-weight: bolder; font-size: 1.4em;">
-            @{
-                if (@Model.SelectedEvent != -1 && Model.SelectedOrder != -1)
-                {
-                    foreach (var item in Model.HoldList)
-                    {
-                        <div class="col-sm-6">
-                            <p>Team : @item.Navn</p>
-                        </div>
-                    }
-                }
-            }
-
-        </div>
-    </div>
-    
-    @{
-        if (@Model.SelectedEvent != -1 && Model.SelectedOrder != -1)
-        {
-            foreach (var item in Model.HoldList)
+        @{
+            if (@Model.SelectedEvent != -1 && Model.SelectedOrder != -1)
             {
-                <div class="row justify-content-md-center">
-                    <div class="col-md">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Navn</th>
-                                    <th scope="col">Score</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                    foreach (var itemD in Model.DeltagerList)
-                                    {
-                                        <tr>
-                                            @{
-                                                foreach (var itemsD in @Model.DeltagerList)
-                                                {
+                foreach (var _hold in Model.HoldList)
+                {
+                    <div class="row" style="font-weight: bolder; font-size: 1.4em;">
+                        <div class="col">
+                            <p>Team : @_hold.Navn</p>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-md-center">
+                        <div class="col-md">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Navn</th>
+                                        <th scope="col">Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        PowerEvent.Models.Aktivitet tempAktivitet = Model.AktivitetList.Where(i => i.Id == Model.EventAktivitetList.Where(i => i.Id == Model.SelectedEventAktivitet).FirstOrDefault().AktivitetId).FirstOrDefault();
+                                        if (tempAktivitet.HoldSport == 0)
+                                        {
+
+                                        }
+                                        else if (tempAktivitet.HoldSport == 1)
+                                        {
+                                            foreach (var _deltager in Model.DeltagerList.Where(i => i.HoldId == _hold.Id).ToList())
+                                            {
+                                                <tr>
                                                     <th>
-                                                        @itemsD.Navn
-                                                        @{ 
-                                                            itemD.ScoreList = itemD.ScoreList.OrderByDescending(i => i.Score).ToList();
+                                                        @_deltager.Navn
+                                                    </th>
+                                                    <th>
+                                                        @{
+                                                            _deltager.ScoreList = _deltager.ScoreList.OrderByDescending(i => i.Score).ToList();
                                                             int antal = 3;
-                                                            if (itemD.ScoreList.Count < 3)
+                                                            if (_deltager.ScoreList.Count < 3)
                                                             {
-                                                                antal = itemD.ScoreList.Count;
+                                                                antal = _deltager.ScoreList.Count;
                                                             }
                                                             for (int i = 0; i < antal; i++)
                                                             {
-                                                                @: @itemD.ScoreList[i].Score;
+                                                                @: @_deltager.ScoreList[i].Score,
                                                             }
-                                                            
+
                                                         }
-                                                        
+
                                                     </th>
-                                                }
+                                                </tr>
                                             }
-                                        </tr>
+                                        }
                                     }
-                                }
-                            </tbody>
-                        </table>
+
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
+                }
             }
         }
-    }
-</div>
+    </div>
 @section Scripts
         {
     <script>
