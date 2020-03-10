@@ -114,14 +114,12 @@
                                     PowerEvent.Models.EventAktivitetHold _eventAktivitetHold = _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == Model.EventAktivitetList[_vis].Id).FirstOrDefault();
                                     if (_eventAktivitetHold != null)
                                     {
-
                                         if (_eventAktivitetHold != null)
                                         {
                                             if (_aktivitet.HoldSport == 0)
                                             {
                                                 foreach (var _score in _eventAktivitetHold.HoldScores)
                                                 {
-
                                                     totalScore += _score.HoldScore;
                                                     antalScores++;
                                                 }
@@ -154,7 +152,7 @@
                                     }
 
                                     <tr>
-                                        <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-size: 1.4em;">@totalScore @point</td>
+                                        <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-size: 1.4em;">@_eventAktivitetHold.HoldOrder @totalScore @point </td>
                                     </tr>
                                 }
                             }
