@@ -19,7 +19,7 @@
             <div class="row">
                 <select id="OpretEventList" asp-for="@Model.SelectedOpretEvent" onchange="elementChanged('OpretEventList')">
                     @{
-                        if (SelectedOpretEvent == -1)
+                        if (Model.SelectedOpretEvent == -1)
                         {
                             <option value="-1">Vælg et event</option>
                         }
