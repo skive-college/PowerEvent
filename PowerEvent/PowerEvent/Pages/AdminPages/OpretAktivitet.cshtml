@@ -44,8 +44,11 @@
                     if (@Model.CurrentLogin != null && Model.CurrentLogin.AdminType == 2)
                     {
                         <input type="button" value="Slet" onclick="elementChanged('CmdSletEvent')" />
-                        <p>skriv "@Model.OpretEventList.Where(i => i.Id == Model.SelectedOpretEvent).FirstOrDefault().Navn"</p>
-                        <input id="TxtSletEvent" type="text" placeholder="skriv navnet på event for at slette" />
+                        if (Model.SelectedOpretEvent != -1)
+                        {
+                            <input id="TxtSletEvent" type="text" placeholder="Bekræft sletning" />
+                            <p>Skriv "@Model.OpretEventList.Where(i => i.Id == Model.SelectedOpretEvent).FirstOrDefault().Navn for at slette"</p>
+                        }
                     }
                 }
             </div>
@@ -193,13 +196,13 @@
                     url.searchParams.set("AktivitetList", AktivitetListValgt);
 
                     if (elementet == 'CmdGemEvent') {
-                        let TxtEvent = document.getElementById('TxtSletEvent').value;
-                        url.searchParams.set("TxtSletEvent", TxtEvent);
+                        let TxtEvent = document.getElementById('TxtEvent').value;
+                        url.searchParams.set("TxtEvent", TxtEvent);
                     }
 
                     if (elementet == 'CmdSletEvent') {
-                        let valgtAktivitet = document.getElementById('TxtAktivitet').value;
-                        url.searchParams.set("TxtAktivitet", valgtAktivitet);
+                        let valgtAktivitet = document.getElementById('TxtSletEvent').value;
+                        url.searchParams.set("TxtSletEvent", valgtAktivitet);
                     }
 
                     if (elementet == 'CmdGemAktivitet') {

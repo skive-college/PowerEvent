@@ -34,6 +34,8 @@ namespace PowerEvent.Pages
 
         public string TxtEvent { get; set; }
 
+        public string TxtSletEvent { get; set; }
+
         public string ValgtGuiElemement { get; set; }
 
         public List<Event> EventList { get; set; }
@@ -173,7 +175,7 @@ namespace PowerEvent.Pages
 
         public void sletEvent()
         {
-            if (SelectedOpretEvent != -1 && CurrentLogin.AdminType == 2)
+            if (SelectedOpretEvent != -1 && CurrentLogin.AdminType == 2 && TxtSletEvent == OpretEventList.Where(i => i.Id == SelectedOpretEvent).FirstOrDefault().Navn)
             {
                 DBAdapter.deleteAllEvent(SelectedOpretEvent);
                 loadEventList();
@@ -345,6 +347,13 @@ namespace PowerEvent.Pages
             catch
             {
             }
+            try
+            {
+                TxtSletEvent = Request.Query["TxtSletEvent"];
+            }
+            catch
+            {
+            }
 
 
             ValgtGuiElemement = Request.Query["ValgtGuiElemement"];
@@ -358,11 +367,7 @@ namespace PowerEvent.Pages
                 }
             }
 
-            if (ValgtGuiElemement == "AktivitetList")
-            {
-
-            }
-            else if (ValgtGuiElemement == "EventList")
+            if (ValgtGuiElemement == "EventList")
             {
                 if (SelectedEvent != -1)
                 {
