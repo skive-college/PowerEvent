@@ -13,16 +13,16 @@
             </div>
             <div class="row">
                 <input id="TxtEvent" type="text" placeholder="Event" />
-                <select id="EventList" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
+                <select id="OpretEventList" asp-for="@Model.SelectedOpretEvent" onchange="elementChanged('OpretEventList')">
                     @{
                         <option value="-1" hidden></option>
-                        foreach (var item in @Model.EventList)
+                        foreach (var item in @Model.OpretEventList)
                         {
                             <option value="@item.Id">@item.Navn</option>
                         }
                     }
                 </select>
-                <input type="button" value="Gem" onclick="elementChanged('CmdGemEvent')" />
+                <input type="button" value="Gem" onclick="elementChanged('CmdGemEvent')" style="width: auto;"/>
                 @{
                     if (@Model.CurrentLogin != null && Model.CurrentLogin.AdminType == 2)
                     {
@@ -33,10 +33,7 @@
                 }
             </div>
             <br />
-
-
-
-            
+      
             <div class="row">
                 <p>Opret aktivitet:</p>
             </div>
@@ -195,6 +192,10 @@
                     let EventList = document.getElementById('EventList');
                     let EventListValgt = EventList.options[EventList.selectedIndex].value;
                     url.searchParams.set("EventList", EventListValgt);
+
+                    let OpretEventList = document.getElementById('OpretEventList');
+                    let OpretEventListValgt = OpretEventList.options[OpretEventList.selectedIndex].value;
+                    url.searchParams.set("OpretEventList", OpretEventListValgt);
 
 
                     url.searchParams.set("ValgtGuiElemement", elementet);

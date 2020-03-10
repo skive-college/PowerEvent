@@ -26,6 +26,9 @@ namespace PowerEvent.Pages
 
         [BindProperty]
         public int SelectedEvent { get; set; }
+        
+        [BindProperty]
+        public int SelectedOpretEvent { get; set; }
 
         public string TxtAktivitet { get; set; }
 
@@ -34,6 +37,8 @@ namespace PowerEvent.Pages
         public string ValgtGuiElemement { get; set; }
 
         public List<Event> EventList { get; set; }
+
+        public List<Event> OpretEventList { get; set; }
 
         public List<SelectListItem> GuiAktivitetList { get; set; }        
 
@@ -94,8 +99,6 @@ namespace PowerEvent.Pages
             }
             else
             {
-                SelectedEvent = -1;
-                loadEventList();
                 SelectedPointType = -1;
                 SelectedHoldSport = -1;
                 SelectedAktivitet = -1;
@@ -104,6 +107,7 @@ namespace PowerEvent.Pages
                 AktivitetList = new List<Aktivitet>();
                 EventAktivitetList = new List<EventAktivitet>();
                 EventList = DBAdapter.getEvent();
+                OpretEventList = DBAdapter.getEvent();
 
                 //loadTempDataTempPointTypeList();
                 //loadTempDataTempHoldSportList();
@@ -168,11 +172,11 @@ namespace PowerEvent.Pages
 
         public void sletEvent()
         {
-            if (SelectedEvent != -1 && CurrentLogin.AdminType == 2)
+            if (SelectedOpretEvent != -1 && CurrentLogin.AdminType == 2)
             {
-                DBAdapter.deleteEvent(SelectedEvent);
+                DBAdapter.deleteEvent(SelectedOpretEvent);
                 loadEventList();
-                SelectedEvent = -1;
+                SelectedOpretEvent = -1;
             }
         }
 
@@ -187,7 +191,7 @@ namespace PowerEvent.Pages
 
         private void loadEventList()
         {
-            EventList = DBAdapter.getEvent();
+            OpretEventList = DBAdapter.getEvent();
         }
 
         public void CmdDeleteAktivitet()
@@ -322,6 +326,13 @@ namespace PowerEvent.Pages
             try
             {
                 SelectedEvent = int.Parse(Request.Query["EventList"]);
+            }
+            catch
+            {
+            }
+            try
+            {
+                SelectedOpretEvent = int.Parse(Request.Query["OpretEventList"]);
             }
             catch
             {
