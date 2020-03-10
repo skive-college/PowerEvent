@@ -17,6 +17,16 @@
             </div>
             <br />
             <div class="row">
+                <style>
+                    #OpretEventList {
+                        width: 120px;
+                    }
+
+                        #OpretEventList:focus {
+                            min-width: 120px;
+                            width: auto;
+                        }
+                </style>
                 <select id="OpretEventList" asp-for="@Model.SelectedOpretEvent" onchange="elementChanged('OpretEventList')">
                     @{
                         if (Model.SelectedOpretEvent == -1)
@@ -33,9 +43,9 @@
                 @{
                     if (@Model.CurrentLogin != null && Model.CurrentLogin.AdminType == 2)
                     {
-                        <div class="row">
-                            <input type="button" value="Slet" onclick="elementChanged('CmdSletEvent')" />
-                        </div>
+                        <input type="button" value="Slet" onclick="elementChanged('CmdSletEvent')" />
+                        <p>skriv "@Model.OpretEventList.Where(i => i.Id == Model.SelectedOpretEvent).FirstOrDefault().Navn"</p>
+                        <input id="TxtSletEvent" type="text" placeholder="skriv navnet på event for at slette" />
                     }
                 }
             </div>
@@ -183,8 +193,13 @@
                     url.searchParams.set("AktivitetList", AktivitetListValgt);
 
                     if (elementet == 'CmdGemEvent') {
-                        let TxtEvent = document.getElementById('TxtEvent').value;
-                        url.searchParams.set("TxtEvent", TxtEvent);
+                        let TxtEvent = document.getElementById('TxtSletEvent').value;
+                        url.searchParams.set("TxtSletEvent", TxtEvent);
+                    }
+
+                    if (elementet == 'CmdSletEvent') {
+                        let valgtAktivitet = document.getElementById('TxtAktivitet').value;
+                        url.searchParams.set("TxtAktivitet", valgtAktivitet);
                     }
 
                     if (elementet == 'CmdGemAktivitet') {

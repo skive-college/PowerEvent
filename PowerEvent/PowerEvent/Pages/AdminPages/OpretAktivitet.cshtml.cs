@@ -104,6 +104,7 @@ namespace PowerEvent.Pages
                 SelectedAktivitet = -1;
                 SelectedEvent = -1;
                 SelectedEventAktivitet = -1;
+                SelectedOpretEvent = -1;
                 AktivitetList = new List<Aktivitet>();
                 EventAktivitetList = new List<EventAktivitet>();
                 EventList = DBAdapter.getEvent();
@@ -174,7 +175,7 @@ namespace PowerEvent.Pages
         {
             if (SelectedOpretEvent != -1 && CurrentLogin.AdminType == 2)
             {
-                DBAdapter.deleteEvent(SelectedOpretEvent);
+                DBAdapter.deleteAllEvent(SelectedOpretEvent);
                 loadEventList();
                 SelectedOpretEvent = -1;
             }

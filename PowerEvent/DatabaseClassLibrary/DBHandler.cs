@@ -61,15 +61,69 @@ namespace DatabaseClassLibrary
             }
         }
 
+        //sletter alt der har noget at gøre med et event
         public static void deleteAllEvent(int _id)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = "Delete From Event WHERE id = @Id";
-
-                SqlCommand command = new SqlCommand(sql, con);
-                command.Parameters.AddWithValue("@Id", _id);
                 con.Open();
+                string sql;
+                SqlCommand command;
+
+                //sletter EventAktivitetDeltager
+                List<Deltager> deltagerlist = getDeltagereIntern(_id);
+                foreach (var _deltager in deltagerlist)
+                {
+                    sql = "Delete From EventAktivitetDeltager WHERE DeltagerId = @DeltagerId";
+                    command = new SqlCommand(sql, con);
+                    command.Parameters.AddWithValue("@DeltagerId", _deltager.Id);
+                    command.ExecuteNonQuery();
+                }
+
+
+                //sletter EventDeltager
+                sql = "Delete From EventDeltager WHERE EventId = @Id";
+                command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Id", _id);
+                command.ExecuteNonQuery();
+
+
+                //sletter EventAktivitetHoldScore og EventAktivitetHold
+                List<EventAktivitetHold> aktivitetHoldList = getHoldAktivitetIntern(_id);
+                foreach (var _holdAktivitet in aktivitetHoldList)
+                {
+                    //sletter EventAktivitetHoldScore
+                    sql = "Delete From EventAktivitetHoldScore WHERE EventAktivitetHoldId = @EventAktivitetHoldId";
+                    command = new SqlCommand(sql, con);
+                    command.Parameters.AddWithValue("@EventAktivitetHoldId", _holdAktivitet.Id);
+                    command.ExecuteNonQuery();
+
+                    //sletter EventAktivitetHold
+                    sql = "Delete From EventAktivitetHold WHERE id = @Id";
+                    command = new SqlCommand(sql, con);
+                    command.Parameters.AddWithValue("@Id", _holdAktivitet.Id);
+                    command.ExecuteNonQuery();
+                }
+
+
+                //sletter EventAktivitet
+                sql = "Delete From EventAktivitet WHERE EventId = @EventId";
+                command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@EventId", _id);
+                command.ExecuteNonQuery();
+
+
+                //sletter Login
+                sql = "Delete From Login WHERE EventId = @EventId";
+                command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@EventId", _id);
+                command.ExecuteNonQuery();
+
+
+                //sletter Event
+                sql = "Delete From Event WHERE id = @Id";
+                command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Id", _id);
                 command.ExecuteNonQuery();
             }
         }
@@ -339,10 +393,8 @@ namespace DatabaseClassLibrary
                 }
                 con.Open();
                 SqlCommand cmd = new SqlCommand(sql, con);
-                if (_eventId != null)
-                {
-                    cmd.Parameters.AddWithValue("@EventId", _eventId);
-                }
+                cmd.Parameters.AddWithValue("@EventId", _eventId);
+
                 if (_holdOrder != null && _eventAktivitetId != null)
                 {
                     cmd.Parameters.AddWithValue("@HoldOrder", _holdOrder);
