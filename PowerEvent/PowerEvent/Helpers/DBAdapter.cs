@@ -257,7 +257,7 @@ namespace PowerEvent.Helpers
 
         public static void updateDeltagerScore(int _id, int _score)
         {
-            DBHandler.updateDeltager( _id,  _score);
+            DBHandler.updateDeltagerScore( _id,  _score);
         }
         //___________________________________________________________________________________________________________Alt med Deltager ↑
 

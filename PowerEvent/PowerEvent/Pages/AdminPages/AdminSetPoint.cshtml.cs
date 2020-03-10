@@ -235,7 +235,7 @@ namespace PowerEvent
                 {
                     if (SelectedPoint != -1)
                     {
-                        DBAdapter.updateHoldScore(SelectedPoint, tempscore);
+                        DBAdapter.updateDeltagerScore(SelectedPoint, tempscore);
                         DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedEventAktivitet, SelectedHold);
                     }
                     //HoldSport Add DELTAGER score

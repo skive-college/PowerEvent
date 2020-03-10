@@ -61,6 +61,20 @@ namespace DatabaseClassLibrary
             }
         }
 
+        public static void deleteAllEvent(int _id)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "Delete From Event WHERE id = @Id";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Id", _id);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+
         public static void addEventAktivitet(int _eventId, int _aktivitetId)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -87,6 +101,7 @@ namespace DatabaseClassLibrary
                 command.ExecuteNonQuery();
             }
         }
+
         //___________________________________________________________________________________________________________alt med Event ↑
 
         //___________________________________________________________________________________________________________alt med Aktivitet  ↓
