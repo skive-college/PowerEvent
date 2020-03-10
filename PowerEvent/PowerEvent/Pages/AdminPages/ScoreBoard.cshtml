@@ -16,7 +16,7 @@
                     PowerEvent.Models.Aktivitet tempAk = @Model.AktivitetList.Where(i => i.Id == Model.EventAktivitetList.Where(i => i.Id == Model.SelectedEventAktivitet).FirstOrDefault().AktivitetId).FirstOrDefault();
                     if (tempAk != null)
                     {
-                        title += " for " + tempAk.Navn;
+                        title += " for: " + tempAk.Navn;
                     }
                 }
             }
