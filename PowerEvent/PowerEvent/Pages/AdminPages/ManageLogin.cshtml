@@ -26,7 +26,7 @@
                             width: auto;
                         }
                 </style>
-                <select id="AdminTypeList" data-val="true" asp-for="@Model.SelectedAdminType">
+                <select id="AdminTypeList" data-val="true" asp-for="@Model.SelectedAdminType" onchange="elementChanged('AdminTypeList')">
                     @{
                         if (@Model.SelectedAdminType == -1)
                         {
@@ -51,12 +51,20 @@
                 </style>
                 <select id="OpretLoginEventList" data-val="true" asp-for="@Model.SelectedOpretloginEvent" onchange="elementChanged('OpretLoginEventList')">
                     @{
-                        <option value="-1">Vælg et event</option>
-
-                        foreach (var item in @Model.EventList)
+                        <option hidden value="-1"></option>
+                        if (@Model.SelectedAdminType == 0)
                         {
-                            <option value="@item.Id">@item.Navn</option>
+                            if (@Model.SelectedOpretloginEvent == -1)
+                            {
+                                <option value="-1">Vælg et event</option>
+                            }
+
+                            foreach (var item in @Model.EventList)
+                            {
+                                <option value="@item.Id">@item.Navn</option>
+                            }
                         }
+
                     }
                 </select>
                 <style>
@@ -71,7 +79,8 @@
                 </style>
                 <select id="HoldList" onchange="elementChanged('HoldList')" asp-for="@Model.SelectedHold">
                     @{
-                        if (@Model.SelectedHold == -1)
+                        <option hidden value="-1"></option>
+                        if (@Model.SelectedAdminType == 0 && @Model.SelectedOpretloginEvent == -1 && @Model.SelectedHold == -1)
                         {
                             <option value="-1">Vælg et Hold</option>
                         }
