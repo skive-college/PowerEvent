@@ -119,14 +119,18 @@
                                                 </thead>
                                                 <tbody>
                                                     @{
-                                                        foreach (var _holdScore in _hold.HoldAktiviteter.Where(i => i.Id == tempaktivitet.Id).FirstOrDefault().HoldScores)
+                                                        PowerEvent.Models.EventAktivitetHold tempEventAktivitetHold = _hold.HoldAktiviteter.Where(i => i.Id == tempaktivitet.Id).FirstOrDefault();
+                                                        if (tempEventAktivitetHold != null && tempEventAktivitetHold.HoldScores != null)
                                                         {
-                                                            <tr>
-                                                                @{
-                                                                    <th>@_holdScore.HoldScore</th>
+                                                            foreach (var _holdScore in tempEventAktivitetHold.HoldScores)
+                                                            {
+                                                                <tr>
+                                                                    @{
+                                                                        <th>@_holdScore.HoldScore</th>
 
-                                                                }
-                                                            </tr>
+                                                                    }
+                                                                </tr>
+                                                            }
                                                         }
                                                     }
                                                 </tbody>
