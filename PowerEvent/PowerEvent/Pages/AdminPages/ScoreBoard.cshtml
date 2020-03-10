@@ -9,7 +9,19 @@
     {
     <div container>
         <div class="text-center">
-            <h1>ScoreBoard for @Model.AktivitetList.Where(i => i.Navn == Model)</h1>
+            @{
+                string title = "ScoreBoard";
+                if (Model.SelectedEventAktivitet != -1)
+                {
+                    PowerEvent.Models.Aktivitet tempAk = @Model.AktivitetList.Where(i => i.Id == Model.EventAktivitetList.Where(i => i.Id == Model.SelectedEventAktivitet).FirstOrDefault().AktivitetId).FirstOrDefault();
+                    if (tempAk != null)
+                    {
+                        title += " for " + tempAk.Navn;
+                    }
+                }
+            }
+
+            <h1>@title</h1>
             <div class="row justify-content-md-center">
                 <style>
                     #EventList {

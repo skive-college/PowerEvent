@@ -53,9 +53,11 @@ namespace PowerEvent
             else
             {
                 SelectedEvent = -1;
-
+                SelectedEventAktivitet = -1;
                 HoldList = new List<Hold>();
                 EventList = DBAdapter.getEvent();
+                AktivitetList = new List<Aktivitet>();
+                EventAktivitetList = new List<EventAktivitet>();
 
 
                 checkScript();
