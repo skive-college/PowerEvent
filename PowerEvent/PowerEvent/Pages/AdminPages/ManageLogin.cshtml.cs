@@ -66,6 +66,7 @@ namespace PowerEvent
                 SelectedOpretloginEvent = -1;
                 SelectedHold = -1;
                 SelectedAdminType = -1;
+                EventList = new List<Event>();
                 LoginList = new List<Login>();
                 HoldList = new List<Hold>();
 
@@ -81,11 +82,14 @@ namespace PowerEvent
                 };
 
                 loadLoginList();
-
-                if (SelectedOpretloginEvent != -1)
+                if (SelectedAdminType == 0)
                 {
-                    HoldList = DBAdapter.getHold(SelectedOpretloginEvent);
+                    if (SelectedOpretloginEvent != -1)
+                    {
+                        HoldList = DBAdapter.getHold(SelectedOpretloginEvent);
+                    }
                 }
+                
 
                 if (ValgtGuiElemement == "CmdOpretLogin")
                 {
@@ -224,9 +228,20 @@ namespace PowerEvent
             {
             }
 
-            if (SelectedEvent == -1)
+            if (SelectedEvent == -1 || SelectedOpretloginEvent == -1)
             {
-                loadTempDataEvent();
+                if (SelectedOpretloginEvent != -1)
+                {
+                    SelectedEvent = SelectedOpretloginEvent;
+                }
+                else if (SelectedEvent != -1)
+                {
+                    SelectedOpretloginEvent = SelectedEvent;
+                }
+                else
+                {
+                    loadTempDataEvent();
+                }
             }
 
             ValgtGuiElemement = Request.Query["ValgtGuiElemement"];
@@ -238,15 +253,32 @@ namespace PowerEvent
                     saveTempDataEvent();
                 }
                 SelectedLogin = -1;
+                SelectedOpretloginEvent = SelectedEvent;
             }
-
+            else if (ValgtGuiElemement == "OpretLoginEventList")
+            {
+                if (SelectedOpretloginEvent != -1)
+                {
+                    saveTempDataEvent();
+                }
+                SelectedLogin = -1;
+                SelectedEvent = SelectedOpretloginEvent;
+            }
         }
 
 
         private void saveTempDataEvent()
         {
             List<int> tempEventList = new List<int>();
-            tempEventList.Add(SelectedEvent);
+            if (ValgtGuiElemement == "EventList")
+            {
+                tempEventList.Add(SelectedEvent);
+            }
+            if (ValgtGuiElemement == "OpretLoginEventList")
+            {
+                tempEventList.Add(SelectedOpretloginEvent);
+
+            }
             TempData.Set("SelectedEventId", tempEventList);
         }
 
@@ -256,6 +288,10 @@ namespace PowerEvent
             if (tempEventList != null)
             {
                 SelectedEvent = tempEventList[0];
+                if (SelectedAdminType == 0)
+                {
+                    SelectedOpretloginEvent = tempEventList[0];
+                }
             }
         }
 

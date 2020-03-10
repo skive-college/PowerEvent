@@ -111,30 +111,28 @@
                                     int? totalScore = 0;
                                     int? antalScores = 0;
                                     int? point = 0;
+                                    string holdorder = "";
                                     PowerEvent.Models.EventAktivitetHold _eventAktivitetHold = _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == Model.EventAktivitetList[_vis].Id).FirstOrDefault();
                                     if (_eventAktivitetHold != null)
                                     {
-                                        if (_eventAktivitetHold != null)
+                                        if (_aktivitet.HoldSport == 0)
                                         {
-                                            if (_aktivitet.HoldSport == 0)
+                                            foreach (var _score in _eventAktivitetHold.HoldScores)
                                             {
-                                                foreach (var _score in _eventAktivitetHold.HoldScores)
-                                                {
-                                                    totalScore += _score.HoldScore;
-                                                    antalScores++;
-                                                }
+                                                totalScore += _score.HoldScore;
+                                                antalScores++;
                                             }
-                                            else if (_aktivitet.HoldSport == 1)
+                                        }
+                                        else if (_aktivitet.HoldSport == 1)
+                                        {
+                                            foreach (var _deltager in Model.DeltagerList.Where(d => d.HoldId == _hold.Id).ToList())
                                             {
-                                                foreach (var _deltager in Model.DeltagerList.Where(d => d.HoldId == _hold.Id).ToList())
+                                                foreach (var _score in _deltager.ScoreList)
                                                 {
-                                                    foreach (var _score in _deltager.ScoreList)
+                                                    if (_score.Score != null && _score.EventAktivitetId == _eventAktivitetHold.EventAktivitetId)
                                                     {
-                                                        if (_score.Score != null && _score.EventAktivitetId == _eventAktivitetHold.EventAktivitetId)
-                                                        {
-                                                            totalScore += _score.Score;
-                                                            antalScores++;
-                                                        }
+                                                        totalScore += _score.Score;
+                                                        antalScores++;
                                                     }
                                                 }
                                             }
@@ -149,10 +147,11 @@
                                         {
                                             point = @_eventAktivitetHold.Point;
                                         }
+                                        holdorder = @_eventAktivitetHold.HoldOrder + ". ";
                                     }
 
                                     <tr>
-                                        <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-size: 1.4em;">@_eventAktivitetHold.HoldOrder @totalScore @point </td>
+                                        <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-size: 1em;">@holdorder gns. score @totalScore, @point. </td>
                                     </tr>
                                 }
                             }
@@ -173,7 +172,7 @@
                                         <td style="border: solid black; border-width: 1px 1px 0px 1px; text-align:center; font-weight: bold; font-size: 1.4em;">Point</td>
                                     </tr>
                                     <tr>
-                                        <td style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-weight: bold;  font-size: 0.7em;">Højeste point er bedst</td>
+                                        <td style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-weight: bold;  font-size: 0.7em;">Højeste point vinder</td>
                                     </tr>
                                 }
                             }
