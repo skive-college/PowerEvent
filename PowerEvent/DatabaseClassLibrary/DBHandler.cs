@@ -462,6 +462,20 @@ namespace DatabaseClassLibrary
             }
         }
 
+        public static void updateHoldScore(int _id, int _score)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "UPDATE EventAktivitetHoldScore SET HoldScore = @HoldScore WHERE id = @Id";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@HoldScore", _score);
+                command.Parameters.AddWithValue("@Id", _id);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
         //___________________________________________________________________________________________________________alt med Hold ↑
 
         //___________________________________________________________________________________________________________alt med Deltagere ↓
@@ -691,6 +705,21 @@ namespace DatabaseClassLibrary
                 command.ExecuteNonQuery();
             }
         }
+
+        public static void updateDeltagerScore(int _id, int _score)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "UPDATE EventAktivitetDeltager SET Score = @Score WHERE id = @Id";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Score", _score);
+                command.Parameters.AddWithValue("@Id", _id);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
         //___________________________________________________________________________________________________________alt med Deltagere ↑
 
         //___________________________________________________________________________________________________________Alt med Hold Order ↓
