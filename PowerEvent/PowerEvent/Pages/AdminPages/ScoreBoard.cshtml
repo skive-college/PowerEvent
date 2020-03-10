@@ -104,7 +104,36 @@
                             PowerEvent.Models.Aktivitet tempaktivitet = Model.AktivitetList.Where(i => i.Id == Model.EventAktivitetList.Where(i => i.Id == Model.SelectedEventAktivitet).FirstOrDefault().AktivitetId).FirstOrDefault();
                             if (tempaktivitet.HoldSport == 0)
                             {
+                                <div class="col">
+                                    <div class="row" style="font-weight: bolder; font-size: 1.4em;">
+                                        <p>Hold : @_hold.Navn</p>
+                                    </div>
 
+                                    <div class="row justify-content-md-center">
+                                        <div class="col-md">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Score</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        foreach (var _holdScore in _hold.HoldAktiviteter.Where(i => i.Id == tempaktivitet.Id).FirstOrDefault().HoldScores)
+                                                        {
+                                                            <tr>
+                                                                @{
+                                                                    <th>@_holdScore.HoldScore</th>
+
+                                                                }
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             }
                             else if (tempaktivitet.HoldSport == 1)
                             {
