@@ -189,6 +189,11 @@ namespace PowerEvent.Helpers
         {
             DBHandler.deleteHold(_id);
         }
+
+        public static void updateHoldScore(int _id, int _score)
+        {
+            DBHandler.updateHoldScore(_id, _score);
+        }
         //___________________________________________________________________________________________________________Alt med Hold ↑
 
         public static void deleteHoldScore(int _id)
@@ -250,6 +255,10 @@ namespace PowerEvent.Helpers
             DBHandler.deleteDeltager(_id);
         }
 
+        public static void updateDeltagerScore(int _id, int _score)
+        {
+            DBHandler.updateDeltager( _id,  _score);
+        }
         //___________________________________________________________________________________________________________Alt med Deltager ↑
 
         //___________________________________________________________________________________________________________Alt med Hold Order ↓

@@ -13,6 +13,10 @@
             </div>
             <div class="row">
                 <input id="TxtEvent" type="text" placeholder="Event" />
+                <input type="button" value="Gem" onclick="elementChanged('CmdGemEvent')" style="width: auto;" />
+            </div>
+            <br />
+            <div class="row">
                 <select id="OpretEventList" asp-for="@Model.SelectedOpretEvent" onchange="elementChanged('OpretEventList')">
                     @{
                         <option value="-1" hidden></option>
@@ -22,7 +26,7 @@
                         }
                     }
                 </select>
-                <input type="button" value="Gem" onclick="elementChanged('CmdGemEvent')" style="width: auto;"/>
+
                 @{
                     if (@Model.CurrentLogin != null && Model.CurrentLogin.AdminType == 2)
                     {
@@ -32,8 +36,9 @@
                     }
                 }
             </div>
+
             <br />
-      
+
             <div class="row">
                 <p>Opret aktivitet:</p>
             </div>
@@ -113,28 +118,28 @@
                 </div>
                 <br />
                 <div class="col-12 col-lg-6">
-                        <style>
-                            #EventList {
-                                width: 120px;
-                            }
+                    <style>
+                        #EventList {
+                            width: 120px;
+                        }
 
-                                #EventList:focus {
-                                    min-width: 120px;
-                                    width: auto;
-                                }
-                        </style>
-                        <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
-                            @{
-                                if (@Model.SelectedEvent == -1)
-                                {
-                                    <option value="-1" style="width:300px;">Vælg et event</option>
-                                }
-                                foreach (var item in @Model.EventList)
-                                {
-                                    <option value="@item.Id">@item.Navn</option>
-                                }
+                            #EventList:focus {
+                                min-width: 120px;
+                                width: auto;
                             }
-                        </select>
+                    </style>
+                    <select id="EventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('EventList')">
+                        @{
+                            if (@Model.SelectedEvent == -1)
+                            {
+                                <option value="-1" style="width:300px;">Vælg et event</option>
+                            }
+                            foreach (var item in @Model.EventList)
+                            {
+                                <option value="@item.Id">@item.Navn</option>
+                            }
+                        }
+                    </select>
                     <div class="row">
                         <div class="col">
                             <select id="EventAktivitetList" asp-for="@Model.SelectedEventAktivitet" onchange="elementChanged('EventAktivitetList')" multiple style=" height: 350px; width: 450px">
