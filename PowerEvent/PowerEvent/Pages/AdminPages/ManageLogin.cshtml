@@ -49,15 +49,16 @@
                             width: auto;
                         }
                 </style>
-                <select id="OpretLoginEventList" data-val="true" asp-for="@Model.SelectedOpretloginEvent" onchange="elementChanged('OpretLoginEventList')">
+                <select id="OpretLoginEventList" data-val="true" asp-for="@Model.SelectedEvent" onchange="elementChanged('OpretLoginEventList')">
                     @{
                         if (@Model.SelectedAdminType != 0)
                         {
                             <option hidden value="-1"></option>
                         }
-                        else if (@Model.SelectedAdminType == 0)
+
+                        if (@Model.SelectedAdminType == 0)
                         {
-                            if (@Model.SelectedOpretloginEvent == -1)
+                            if (@Model.SelectedEvent == -1 || @Model.SelectedEvent == 0)
                             {
                                 <option value="-1">Vælg et event</option>
                             }
@@ -81,11 +82,10 @@
                 </style>
                 <select id="HoldList" onchange="elementChanged('HoldList')" asp-for="@Model.SelectedHold">
                     @{
-                        if (@Model.SelectedOpretloginEvent == -1)
-                        {
-                            <option hidden value="-1"></option>
-                        }
-                        else if (@Model.SelectedAdminType == 0 && @Model.SelectedOpretloginEvent != -1 && @Model.SelectedHold == -1)
+
+                        <option hidden value="-1"></option>
+                        
+                        if (@Model.SelectedAdminType == 0 && @Model.SelectedEvent != -1 && @Model.SelectedHold == -1)
                         {
                             <option value="-1">Vælg et Hold</option>
                         }
