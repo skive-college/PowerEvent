@@ -366,7 +366,6 @@ namespace PowerEvent
             }
             HoldList = HoldList.OrderByDescending(i => i.HoldAktiviteter.Sum(i => i.Point)).ToList();
         }
-    
 
 
 
