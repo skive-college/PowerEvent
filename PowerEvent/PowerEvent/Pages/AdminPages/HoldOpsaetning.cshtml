@@ -52,6 +52,21 @@
                         <input type="number" hidden asp-for="@Model.DeltagerID" />
                         <input type="submit" value="Fjern" formmethod="post" asp-page-handler="CmdRemoveDeltager" />
                     </form>
+                    <div>
+                        @{
+                            Dictionary<string, int> teams = Model.teamCount();
+                            foreach (KeyValuePair<string, int> pair in teams)
+                            {
+                                <p>@(string.Format("{0} - {1} personer", pair.Key, pair.Value))</p>
+                            }
+                            @*for (int i = 0; i < teams.Count; i++)
+                            {
+                                <p>@(string.Format("{0} - {1} personer", teams.Keys.GetEnumerator().Current, teams.Values.GetEnumerator().Current))</p>
+                                teams.Keys.GetEnumerator().MoveNext();
+                                teams.Values.GetEnumerator().MoveNext();
+                            }*@
+                        }
+                    </div>
                 </div>
                 <div class="col-sm-2">
                     <div>
@@ -105,18 +120,5 @@
 
         document.getElementById("addplayertoteam").children[1].setAttribute("value", hold)
     }
-
-    function addPlayerToTeam() {
-        let playerindex = document.getElementById("deltagerselect").selectedIndex;
-        let playerelement = document.getElementById("deltagerselect").children[playerindex];
-        let player = playerelement.getAttribute("value");
-
-        let teamindex = document.getElementById("holdselect").selectedIndex;
-        let teamelement = document.getElementById("holdselect").children[teamindex];
-        let team = teamelement.getAttribute("value");
-    }
-
-
-
 </script>
 
