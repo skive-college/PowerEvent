@@ -60,11 +60,11 @@
                                 <p>@(string.Format("{0} - {1} personer", pair.Key, pair.Value))</p>
                             }
                             @*for (int i = 0; i < teams.Count; i++)
-                            {
-                                <p>@(string.Format("{0} - {1} personer", teams.Keys.GetEnumerator().Current, teams.Values.GetEnumerator().Current))</p>
-                                teams.Keys.GetEnumerator().MoveNext();
-                                teams.Values.GetEnumerator().MoveNext();
-                            }*@
+            {
+                <p>@(string.Format("{0} - {1} personer", teams.Keys.GetEnumerator().Current, teams.Values.GetEnumerator().Current))</p>
+                teams.Keys.GetEnumerator().MoveNext();
+                teams.Values.GetEnumerator().MoveNext();
+            }*@
                         }
                     </div>
                 </div>
