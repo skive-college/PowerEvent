@@ -227,7 +227,6 @@ namespace PowerEvent
                                         }
                                     }
                                 }
-
                             }
                             if (_aktivitet.HoldSport == 0 && tempHoldList != null && tempHoldList.Count != 0)
                             {
@@ -278,7 +277,7 @@ namespace PowerEvent
                             }
                             else if (_holdlist == HoldTabere)
                             {
-                                if (HoldTabere != null)
+                                if (HoldStodLige != null)
                                 {
                                     holdlistenummer += HoldStodLige.Count;
                                 }
