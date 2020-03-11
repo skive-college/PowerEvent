@@ -26,12 +26,21 @@ namespace PowerEvent.Pages
 
         [BindProperty]
         public int SelectedEvent { get; set; }
+        
+        [BindProperty]
+        public int SelectedOpretEvent { get; set; }
 
         public string TxtAktivitet { get; set; }
+
+        public string TxtEvent { get; set; }
+
+        public string TxtSletEvent { get; set; }
 
         public string ValgtGuiElemement { get; set; }
 
         public List<Event> EventList { get; set; }
+
+        public List<Event> OpretEventList { get; set; }
 
         public List<SelectListItem> GuiAktivitetList { get; set; }        
 
@@ -97,9 +106,10 @@ namespace PowerEvent.Pages
                 SelectedAktivitet = -1;
                 SelectedEvent = -1;
                 SelectedEventAktivitet = -1;
+                SelectedOpretEvent = -1;
                 AktivitetList = new List<Aktivitet>();
                 EventAktivitetList = new List<EventAktivitet>();
-                EventList = DBAdapter.getEvent();
+                loadEventLister();
 
                 //loadTempDataTempPointTypeList();
                 //loadTempDataTempHoldSportList();
@@ -127,6 +137,14 @@ namespace PowerEvent.Pages
                 //saveTempDataHoldSport();
 
                 checkScript();
+                if (ValgtGuiElemement == "CmdGemEvent")
+                {
+                    gemEvent();
+                }
+                else if (ValgtGuiElemement == "CmdSletEvent")
+                {
+                    sletEvent();
+                }
 
                 if (SelectedEvent != -1)
                 {
@@ -153,10 +171,30 @@ namespace PowerEvent.Pages
             }
             return this.Page();
         }
-        
-        public void OnPost()
-        {
 
+        public void sletEvent()
+        {
+            if (SelectedOpretEvent != -1 && CurrentLogin.AdminType == 2 && TxtSletEvent == OpretEventList.Where(i => i.Id == SelectedOpretEvent).FirstOrDefault().Navn)
+            {
+                DBAdapter.deleteAllEvent(SelectedOpretEvent);
+                loadEventLister();
+                SelectedOpretEvent = -1;
+            }
+        }
+
+        public void gemEvent()
+        {
+            if (TxtEvent != "")
+            {
+                DBAdapter.addEvent(TxtEvent);
+                loadEventLister();
+            }
+        }
+
+        private void loadEventLister()
+        {
+            EventList = DBAdapter.getEvent();
+            OpretEventList = DBAdapter.getEvent();
         }
 
         public void CmdDeleteAktivitet()
@@ -276,6 +314,13 @@ namespace PowerEvent.Pages
             }
             try
             {
+                TxtEvent = Request.Query["TxtEvent"];
+            }
+            catch
+            {
+            }
+            try
+            {
                 TxtAktivitet = Request.Query["TxtAktivitet"];
             }
             catch
@@ -290,7 +335,21 @@ namespace PowerEvent.Pages
             }
             try
             {
+                SelectedOpretEvent = int.Parse(Request.Query["OpretEventList"]);
+            }
+            catch
+            {
+            }
+            try
+            {
                 SelectedEventAktivitet = int.Parse(Request.Query["EventAktivitetList"]);
+            }
+            catch
+            {
+            }
+            try
+            {
+                TxtSletEvent = Request.Query["TxtSletEvent"];
             }
             catch
             {
@@ -308,11 +367,7 @@ namespace PowerEvent.Pages
                 }
             }
 
-            if (ValgtGuiElemement == "AktivitetList")
-            {
-
-            }
-            else if (ValgtGuiElemement == "EventList")
+            if (ValgtGuiElemement == "EventList")
             {
                 if (SelectedEvent != -1)
                 {

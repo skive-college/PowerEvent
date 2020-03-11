@@ -34,7 +34,101 @@ namespace DatabaseClassLibrary
             }
             return retur;
         }
-        
+
+        public static void addEvent(string _navn)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "INSERT INTO Event Values(@Navn)";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Navn", _navn);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static void deleteEvent(int _id)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "Delete From Event WHERE id = @Id";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Id", _id);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        //sletter alt der har noget at gøre med et event
+        public static void deleteAllEvent(int _id)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+                string sql;
+                SqlCommand command;
+
+                //sletter EventAktivitetDeltager
+                List<Deltager> deltagerlist = getDeltagereIntern(_id);
+                foreach (var _deltager in deltagerlist)
+                {
+                    sql = "Delete From EventAktivitetDeltager WHERE DeltagerId = @DeltagerId";
+                    command = new SqlCommand(sql, con);
+                    command.Parameters.AddWithValue("@DeltagerId", _deltager.Id);
+                    command.ExecuteNonQuery();
+                }
+
+
+                //sletter EventDeltager
+                sql = "Delete From EventDeltager WHERE EventId = @Id";
+                command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Id", _id);
+                command.ExecuteNonQuery();
+
+
+                //sletter EventAktivitetHoldScore og EventAktivitetHold
+                List<EventAktivitetHold> aktivitetHoldList = getHoldAktivitetIntern(_id);
+                foreach (var _holdAktivitet in aktivitetHoldList)
+                {
+                    //sletter EventAktivitetHoldScore
+                    sql = "Delete From EventAktivitetHoldScore WHERE EventAktivitetHoldId = @EventAktivitetHoldId";
+                    command = new SqlCommand(sql, con);
+                    command.Parameters.AddWithValue("@EventAktivitetHoldId", _holdAktivitet.Id);
+                    command.ExecuteNonQuery();
+
+                    //sletter EventAktivitetHold
+                    sql = "Delete From EventAktivitetHold WHERE id = @Id";
+                    command = new SqlCommand(sql, con);
+                    command.Parameters.AddWithValue("@Id", _holdAktivitet.Id);
+                    command.ExecuteNonQuery();
+                }
+
+
+                //sletter EventAktivitet
+                sql = "Delete From EventAktivitet WHERE EventId = @EventId";
+                command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@EventId", _id);
+                command.ExecuteNonQuery();
+
+
+                //sletter Login
+                sql = "Delete From Login WHERE EventId = @EventId";
+                command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@EventId", _id);
+                command.ExecuteNonQuery();
+
+
+                //sletter Event
+                sql = "Delete From Event WHERE id = @Id";
+                command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Id", _id);
+                command.ExecuteNonQuery();
+            }
+        }
+
+
         public static void addEventAktivitet(int _eventId, int _aktivitetId)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -61,6 +155,7 @@ namespace DatabaseClassLibrary
                 command.ExecuteNonQuery();
             }
         }
+
         //___________________________________________________________________________________________________________alt med Event ↑
 
         //___________________________________________________________________________________________________________alt med Aktivitet  ↓
@@ -298,10 +393,8 @@ namespace DatabaseClassLibrary
                 }
                 con.Open();
                 SqlCommand cmd = new SqlCommand(sql, con);
-                if (_eventId != null)
-                {
-                    cmd.Parameters.AddWithValue("@EventId", _eventId);
-                }
+                cmd.Parameters.AddWithValue("@EventId", _eventId);
+
                 if (_holdOrder != null && _eventAktivitetId != null)
                 {
                     cmd.Parameters.AddWithValue("@HoldOrder", _holdOrder);
@@ -436,6 +529,20 @@ namespace DatabaseClassLibrary
             }
         }
 
+        public static void updateHoldScore(int _id, int _score)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "UPDATE EventAktivitetHoldScore SET HoldScore = @HoldScore WHERE id = @Id";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@HoldScore", _score);
+                command.Parameters.AddWithValue("@Id", _id);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
         //___________________________________________________________________________________________________________alt med Hold ↑
 
         //___________________________________________________________________________________________________________alt med Deltagere ↓
@@ -450,13 +557,11 @@ namespace DatabaseClassLibrary
             {
                 List<object> dScoreList = new List<object>();
                 //konverterer List<DBDeltagerScore> til List<object>
-                if (_eventAktivitetId != null)
+
+                foreach (DBDeltagerScore _dScore in _deltager.ScoreList)
                 {
-                    foreach (DBDeltagerScore _dScore in _deltager.ScoreList)
-                    {
-                        object o = new { _dScore.Id, _dScore.Score };
-                        dScoreList.Add(o);
-                    }
+                    object o = new { Id = _dScore.Id, EventAktivitetId = _dScore.EventAktivitetId , Score = _dScore.Score };
+                    dScoreList.Add(o);
                 }
                 retur.Add(new { Id = _deltager.Id, Navn = _deltager.Navn, HoldId = _deltager.HoldId, EventId = _deltager.EventId, ScoreList = dScoreList }
                     );
@@ -473,12 +578,12 @@ namespace DatabaseClassLibrary
 
                 if (_eventAktivitetId != null)
                 {
-                    sql += ", EventAktivitetDeltager _ead, EventAktivitet _ea";
+                    sql += ", EventAktivitet _ea";
                 }
                 sql += " WHERE";
                 if (_eventAktivitetId != null)
                 {
-                    sql += " _ead.EventAktivitetId = _ea.Id AND _ead.DeltagerId = _ed.Id AND _ea.Id = @EventAktivitetId AND";
+                    sql += " _ea.Id = @EventAktivitetId AND";
                 }
                 sql += " _ed.EventId = @EventId";
 
@@ -534,18 +639,15 @@ namespace DatabaseClassLibrary
             }
 
             //får alle scores for deltagere i den angivne "EventAktivitet" og tilføjer dem til de relevante deltagere
-            if (_eventAktivitetId != null)
+            List<DBDeltagerScore> scoreList = new List<DBDeltagerScore>();
+            scoreList = getDeltagerScores(_eventId, _eventAktivitetId, _deltagerId);
+            foreach (Deltager _deltager in deltagerList)
             {
-                List<DBDeltagerScore> scoreList = new List<DBDeltagerScore>();
-                scoreList = getDeltagerScores(_eventId, _eventAktivitetId);
-                foreach (Deltager _deltager in deltagerList)
+                _deltager.ScoreList = new List<DBDeltagerScore>();
+                _deltager.ScoreList.AddRange(scoreList.Where(i => i.DeltagerId == _deltager.Id).ToList());
+                if (_deltager.ScoreList != null)
                 {
-                    _deltager.ScoreList = new List<DBDeltagerScore>();
-                    _deltager.ScoreList.AddRange(scoreList.Where(i => i.DeltagerId == _deltager.Id).ToList());
-                    if (_deltager.ScoreList != null)
-                    {
-                        scoreList.RemoveAll(i => i.DeltagerId == _deltager.Id);
-                    }
+                    scoreList.RemoveAll(i => i.DeltagerId == _deltager.Id);
                 }
             }
             return deltagerList;
@@ -557,7 +659,11 @@ namespace DatabaseClassLibrary
             List<DBDeltagerScore> retur = new List<DBDeltagerScore>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = "SELECT * FROM EventAktivitetDeltager _ead, EventAktivitet _ea WHERE _ead.EventAktivitetId = _ea.Id AND _ea.EventId = @EventId AND _ea.Id = @EventAktivitetId";
+                string sql = "SELECT * FROM EventAktivitetDeltager _ead, EventAktivitet _ea WHERE _ead.EventAktivitetId = _ea.Id AND _ea.EventId = @EventId";
+                if (_eventAktivitetId != null)
+                {
+                    sql += " AND _ea.Id = @EventAktivitetId";
+                }
                 if (_deltagerId != null)
                 {
                     sql += " AND _ead.Id = @DeltagerId";
@@ -567,7 +673,10 @@ namespace DatabaseClassLibrary
                 SqlCommand cmd = new SqlCommand(sql, con);
 
                 cmd.Parameters.AddWithValue("@EventId", _eventId);
-                cmd.Parameters.AddWithValue("@EventAktivitetId", _eventAktivitetId);
+                if (_eventAktivitetId != null)
+                {
+                    cmd.Parameters.AddWithValue("@EventAktivitetId", _eventAktivitetId);
+                }
                 if (_deltagerId != null)
                 {
                     cmd.Parameters.AddWithValue("@DeltagerId", _deltagerId);
@@ -578,12 +687,9 @@ namespace DatabaseClassLibrary
 
                 while (reader.Read())
                 {
-                    if (_eventAktivitetId != null)
-                    {
-                        retur.Add(
-                            new DBDeltagerScore{ Id = int.Parse(reader["Id"].ToString()), DeltagerId = int.Parse(reader["DeltagerId"].ToString()), EventAktivitetId = int.Parse(reader["EventAktivitetId"].ToString()), Score = int.Parse(reader["Score"].ToString()) }
-                        );
-                    }
+                    retur.Add(
+                        new DBDeltagerScore{ Id = int.Parse(reader["Id"].ToString()), DeltagerId = int.Parse(reader["DeltagerId"].ToString()), EventAktivitetId = int.Parse(reader["EventAktivitetId"].ToString()), Score = int.Parse(reader["Score"].ToString()) }
+                    );
                 }
                 reader.Close();
             }
@@ -666,6 +772,21 @@ namespace DatabaseClassLibrary
                 command.ExecuteNonQuery();
             }
         }
+
+        public static void updateDeltagerScore(int _id, int _score)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = "UPDATE EventAktivitetDeltager SET Score = @Score WHERE id = @Id";
+
+                SqlCommand command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@Score", _score);
+                command.Parameters.AddWithValue("@Id", _id);
+                con.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
         //___________________________________________________________________________________________________________alt med Deltagere ↑
 
         //___________________________________________________________________________________________________________Alt med Hold Order ↓

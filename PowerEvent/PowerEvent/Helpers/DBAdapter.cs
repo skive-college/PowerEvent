@@ -29,6 +29,21 @@ namespace PowerEvent.Helpers
             return eventList;
         }
 
+        public static void addEvent(string _navn)
+        {
+            DBHandler.addEvent(_navn);
+        }
+
+        public static void deleteEvent(int _id)
+        {
+            DBHandler.deleteEvent(_id);
+        }
+
+        public static void deleteAllEvent(int _id)
+        {
+            DBHandler.deleteAllEvent(_id);
+        }
+
         public static void addEventAktivitet(int _eventId, int _aktivitetId)
         {
             DBHandler.addEventAktivitet(_eventId, _aktivitetId);
@@ -179,6 +194,11 @@ namespace PowerEvent.Helpers
         {
             DBHandler.deleteHold(_id);
         }
+
+        public static void updateHoldScore(int _id, int _score)
+        {
+            DBHandler.updateHoldScore(_id, _score);
+        }
         //___________________________________________________________________________________________________________Alt med Hold ↑
 
         public static void deleteHoldScore(int _id)
@@ -186,9 +206,9 @@ namespace PowerEvent.Helpers
             DBHandler.deleteHoldScore(_id);
         }
 
-        public static List<Deltager> getDeltagere(int _eventId, int? _aktivitetId = null, int? _holdId = null, int? _deltagerId = null)
+        public static List<Deltager> getDeltagere(int _eventId, int? _eventAktivitetId = null, int? _holdId = null, int? _deltagerId = null)
         {
-            List<object> DbList = DBHandler.getDeltagere(_eventId, _aktivitetId, _holdId, _deltagerId);
+            List<object> DbList = DBHandler.getDeltagere(_eventId, _eventAktivitetId, _holdId, _deltagerId);
             List<Deltager> retur = new List<Deltager>();
 
             foreach (object _object in DbList)
@@ -199,20 +219,18 @@ namespace PowerEvent.Helpers
                 tempdeltager.Navn = adapt<string>("Navn", _object);
                 tempdeltager.HoldId = adapt<int?>("HoldId", _object);
                 tempdeltager.EventId = adapt<int>("EventId", _object);
-                if (_aktivitetId != null)
+
+                List<object> o = adapt<List<object>>("ScoreList", _object);
+                foreach (object _score in o)
                 {
-                    List<object> o = adapt<List<object>>("ScoreList", _object);
-                    foreach (object _score in o)
-                    {
-                        DeltagerScore ds = new DeltagerScore();
-                        ds.Id = adapt<int>("Id", _score);
-                        ds.Score = adapt<int>("Score", _score);
-                        tempdeltager.ScoreList.Add(ds);
-                    }
+                    DeltagerScore ds = new DeltagerScore();
+                    ds.Id = adapt<int>("Id", _score);
+                    ds.EventAktivitetId = adapt<int>("EventAktivitetId", _score);
+                    ds.Score = adapt<int>("Score", _score);
+                    tempdeltager.ScoreList.Add(ds);
                 }
                 retur.Add(tempdeltager);
             }
-
             return retur;
         }
 
@@ -242,6 +260,10 @@ namespace PowerEvent.Helpers
             DBHandler.deleteDeltager(_id);
         }
 
+        public static void updateDeltagerScore(int _id, int _score)
+        {
+            DBHandler.updateDeltagerScore( _id,  _score);
+        }
         //___________________________________________________________________________________________________________Alt med Deltager ↑
 
         //___________________________________________________________________________________________________________Alt med Hold Order ↓
@@ -280,12 +302,15 @@ namespace PowerEvent.Helpers
                 tempLogin.EventId = adapt<int?>("EventId", _object);
                 tempLogin.HoldId = adapt<int?>("HoldId", _object);
 
+                if (tempLogin.AdminType == 0)
+                {
+                    string encryptedPassword = adapt<string>("Kodeord", _object);
 
-                string encryptedPassword = adapt<string>("Kodeord", _object);
-
-                string encryptionkey = GenerateEncryptionKey(tempLogin.Brugernavn);
-                string actualPassword = Decrypt(encryptedPassword, encryptionkey);
-                tempLogin.Kodeord = actualPassword;
+                    string encryptionkey = GenerateEncryptionKey(tempLogin.Brugernavn);
+                    string actualPassword = Decrypt(encryptedPassword, encryptionkey);
+                    tempLogin.Kodeord = actualPassword;
+                }
+                
                 retur.Add(tempLogin);
             }
             return retur;
