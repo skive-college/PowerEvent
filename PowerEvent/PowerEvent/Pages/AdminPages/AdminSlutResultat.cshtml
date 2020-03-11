@@ -6,7 +6,7 @@
 @{
     if (@Model.CurrentLogin != null && Model.CurrentLogin.Id != 0)
     {
-    <div class="container">
+    <div class="container" style="max-width: 2000px;">
         <div class="row">
             <div class="col, text-center" style="width:100%;">
                 <div style="border: 2px solid black; border-radius:15px;">
@@ -43,7 +43,7 @@
         <div class="row" style="">
             @{
                 //laver dynamisk et "table" til hvert hold der indeholde holdets deltagere
-                <div class="col-6 col-md-3 col-lg-2">
+                <div class="col-6 col-md-3 col-lg-2 col-xl-1">
                     <br />
                     <div>
                         <table style=" height: auto; width: 100%;">
@@ -76,7 +76,7 @@
                 //laver dynamisk et "table" til hvert Aktivitet
                 for (int _vis = 0; _vis < Model.Vis; _vis++)
                 {
-                    <div class="col-6 col-md-3 col-lg-2">
+                    <div class="col-6 col-md-3 col-lg-2 col-xl-1">
                         <br />
                         <table style=" height: auto; width: 100%;">
                             @*opretter score af hvert hold*@
@@ -151,7 +151,7 @@
                                     }
 
                                     <tr style="height: 3em;">
-                                        <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-size: 0.9em;">@holdorder Score: @totalScore. Point  (@point)</td>
+                                        <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-size: 0.9em;">@holdorder Score: <b>@totalScore</b>. Point  (@point)</td>
                                     </tr>
                                 }
                             }
@@ -161,7 +161,7 @@
                 
 
                 //laver dynamisk et "table" til hvert hold der indeholde holdets deltagere
-                <div class="col-6 col-md-3 col-lg-2">
+                <div class="col-6 col-md-3 col-lg-2 col-xl-1">
                     <br />
                     <div>
                         <table style=" height: auto; width: 100%;">
