@@ -231,7 +231,7 @@ namespace PowerEvent
                             }
                             if (_aktivitet.HoldSport == 0 && tempHoldList != null && tempHoldList.Count != 0)
                             {
-                                if (antalLige == tempHoldList.Count)
+                                if (antalLige == tempHoldList.Count - 1)
                                 {
                                     HoldStodLige.Add(_hold);
                                 }
@@ -280,7 +280,7 @@ namespace PowerEvent
                             {
                                 if (HoldTabere != null)
                                 {
-                                    holdlistenummer += HoldTabere.Count;
+                                    holdlistenummer += HoldStodLige.Count;
                                 }
                             }
                             foreach (Hold _hold in _holdlist)

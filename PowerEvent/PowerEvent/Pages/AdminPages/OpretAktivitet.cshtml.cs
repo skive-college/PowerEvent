@@ -109,8 +109,7 @@ namespace PowerEvent.Pages
                 SelectedOpretEvent = -1;
                 AktivitetList = new List<Aktivitet>();
                 EventAktivitetList = new List<EventAktivitet>();
-                EventList = DBAdapter.getEvent();
-                OpretEventList = DBAdapter.getEvent();
+                loadEventLister();
 
                 //loadTempDataTempPointTypeList();
                 //loadTempDataTempHoldSportList();
@@ -178,7 +177,7 @@ namespace PowerEvent.Pages
             if (SelectedOpretEvent != -1 && CurrentLogin.AdminType == 2 && TxtSletEvent == OpretEventList.Where(i => i.Id == SelectedOpretEvent).FirstOrDefault().Navn)
             {
                 DBAdapter.deleteAllEvent(SelectedOpretEvent);
-                loadEventList();
+                loadEventLister();
                 SelectedOpretEvent = -1;
             }
         }
@@ -188,12 +187,13 @@ namespace PowerEvent.Pages
             if (TxtEvent != "")
             {
                 DBAdapter.addEvent(TxtEvent);
-                loadEventList();
+                loadEventLister();
             }
         }
 
-        private void loadEventList()
+        private void loadEventLister()
         {
+            EventList = DBAdapter.getEvent();
             OpretEventList = DBAdapter.getEvent();
         }
 

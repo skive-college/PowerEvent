@@ -51,8 +51,11 @@
                 </style>
                 <select id="OpretLoginEventList" data-val="true" asp-for="@Model.SelectedOpretloginEvent" onchange="elementChanged('OpretLoginEventList')">
                     @{
-                        <option hidden value="-1"></option>
-                        if (@Model.SelectedAdminType == 0)
+                        if (@Model.SelectedAdminType != 0)
+                        {
+                            <option hidden value="-1"></option>
+                        }
+                        else if (@Model.SelectedAdminType == 0)
                         {
                             if (@Model.SelectedOpretloginEvent == -1)
                             {
@@ -64,7 +67,6 @@
                                 <option value="@item.Id">@item.Navn</option>
                             }
                         }
-
                     }
                 </select>
                 <style>
@@ -79,12 +81,14 @@
                 </style>
                 <select id="HoldList" onchange="elementChanged('HoldList')" asp-for="@Model.SelectedHold">
                     @{
-                        <option hidden value="-1"></option>
-                        if (@Model.SelectedAdminType == 0 && @Model.SelectedOpretloginEvent == -1 && @Model.SelectedHold == -1)
+                        if (@Model.SelectedOpretloginEvent == -1)
+                        {
+                            <option hidden value="-1"></option>
+                        }
+                        else if (@Model.SelectedAdminType == 0 && @Model.SelectedOpretloginEvent != -1 && @Model.SelectedHold == -1)
                         {
                             <option value="-1">Vælg et Hold</option>
                         }
-
                         foreach (var item in @Model.HoldList)
                         {
                             <option value="@item.Id">@item.Navn</option>

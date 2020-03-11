@@ -253,7 +253,14 @@ namespace PowerEvent
                     saveTempDataEvent();
                 }
                 SelectedLogin = -1;
-                SelectedOpretloginEvent = SelectedEvent;
+                if (SelectedEvent == 0)
+                {
+                    SelectedOpretloginEvent = -1;
+                }
+                else
+                {
+                    SelectedOpretloginEvent = SelectedEvent;
+                }
             }
             else if (ValgtGuiElemement == "OpretLoginEventList")
             {
