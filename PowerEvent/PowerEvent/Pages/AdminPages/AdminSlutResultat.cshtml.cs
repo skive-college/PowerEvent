@@ -274,14 +274,15 @@ namespace PowerEvent
                                 {
                                     holdlistenummer += HoldVindere.Count;
                                 }
-                            }
-                            else if (_holdlist == HoldTabere)
-                            {
-                                if (HoldStodLige != null)
+                                if (_holdlist == HoldTabere)
                                 {
-                                    holdlistenummer += HoldStodLige.Count;
+                                    if (HoldStodLige != null)
+                                    {
+                                        holdlistenummer += HoldStodLige.Count;
+                                    }
                                 }
                             }
+                            
                             foreach (Hold _hold in _holdlist)
                             {
                                 EventAktivitetHold _eventAktivitetHold = _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == EventAktivitetList[_vis].Id).FirstOrDefault();
