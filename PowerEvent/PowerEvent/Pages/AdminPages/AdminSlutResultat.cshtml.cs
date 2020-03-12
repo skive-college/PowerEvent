@@ -127,6 +127,7 @@ namespace PowerEvent
                     List<Hold> HoldVindere = new List<Hold>();
                     List<Hold> HoldTabere = new List<Hold>();
                     List<Hold> HoldStodLige = new List<Hold>();
+                    List<Hold> HoldResterende = new List<Hold>();
                     foreach (Hold _hold in HoldList)
                     {
                         EventAktivitetHold _eventAktivitetHold = _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == EventAktivitetList[_vis].Id).FirstOrDefault();
@@ -141,7 +142,6 @@ namespace PowerEvent
                             int antalForan = 0;
                             int antalLige = 0;
                             List<Hold> tempHoldList = new List<Hold>();
-                            
 
                             if (_aktivitet.HoldSport == 0)
                             {
@@ -248,6 +248,10 @@ namespace PowerEvent
                                 _eventAktivitetHold.Point = 10 * (HoldList.Count() - antalForan);
                             }
                         }
+                        else
+                        {
+                            HoldResterende.Add(_hold);
+                        }
                     }
 
                     //hvis det er hold mod hold og point gives til vinderen af de individuelle hold mod hold.
@@ -295,7 +299,6 @@ namespace PowerEvent
                                     int? modstanderTotalScore = 0;
                                     int? modstanderAntalScores = 0;
                                     int antalForan = 0;
-
 
                                     if (_aktivitet.HoldSport == 0)
                                     {
@@ -362,6 +365,7 @@ namespace PowerEvent
                             }
                             HoldList.AddRange(_holdlist);
                         }
+                        HoldList.AddRange(HoldResterende);
                     }
                 }
             }

@@ -51,7 +51,7 @@
                                 if (Model.SelectedEvent != -1)
                                 {
                                     <tr style="height: 2em;">
-                                        <td class="col" style="border: solid black; border-width: 1px 1px 0px 1px; text-align:center; font-weight: bold; font-size: 1.4em;">↓ Hold ↓</td>
+                                        <td class="col" style="border: solid black; border-width: 1px 1px 0px 1px; text-align:center; font-weight: bold; font-size: 1.2em;">↓ Hold</td>
                                     </tr>
                                     <tr style="height: 1em;">
                                         <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-weight: bold; font-size: 0.7em;">Typen af score →</td>
@@ -63,7 +63,7 @@
                                 {
                                     if (_hold.Id == _hold.Id)
                                     {
-                                        <tr style="height: 3em;">
+                                        <tr style="height: 4em;">
                                             <td class="col" style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em; background-color: @_hold.Farve; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; color: white;">@_hold.Navn</td>
                                         </tr>
                                     }
@@ -100,7 +100,7 @@
                                     aktivitetPointType = "Sekunder: højeste";
                                 }
                                 <tr style="height: 2em;">
-                                    <th class="col" style="border: solid black; border-width: 1px 1px 0px 1px; text-align:center; font-size: 1.4em;">@_aktivitet.Navn</th>
+                                    <th class="col" style="border: solid black; border-width: 1px 1px 0px 1px; text-align:center; font-size: 1.2em;">@_aktivitet.Navn</th>
                                 </tr>
                                 <tr style="height: 1em;">
                                     <th class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-size: 0.7em;">@aktivitetPointType</th>
@@ -150,8 +150,8 @@
                                         holdorder = "Runde: " + @_eventAktivitetHold.HoldOrder + ". ";
                                     }
 
-                                    <tr style="height: 3em;">
-                                        <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-size: 0.9em;">@holdorder Score: <b>@totalScore</b>. Point  (@point)</td>
+                                    <tr style="height: 4em;">
+                                        <td class="col" style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-size: 0.8em;">@holdorder Score: <b>@totalScore</b>. Point  (@point)</td>
                                     </tr>
                                 }
                             }
@@ -169,7 +169,7 @@
                                 if (Model.SelectedEvent != -1)
                                 {
                                     <tr style="height: 2em;">
-                                        <td style="border: solid black; border-width: 1px 1px 0px 1px; text-align:center; font-weight: bold; font-size: 1.4em;">Point</td>
+                                        <td style="border: solid black; border-width: 1px 1px 0px 1px; text-align:center; font-weight: bold; font-size: 1.2em;">Point</td>
                                     </tr>
                                     <tr style="height: 1em;">
                                         <td style="border: solid black; border-width: 0px 1px 1px 1px; text-align:center; font-weight: bold;  font-size: 0.7em;">Højeste point vinder</td>
@@ -189,7 +189,7 @@
                                         }
                                     }
 
-                                    <tr style="height: 3em;">
+                                    <tr style="height: 4em;">
                                         <td style="border: solid black; border-width: 1px 1px 1px 1px; text-align:center; font-size: 1.4em; background-color: @_hold.Farve; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; color: white;">@point</td>
                                     </tr>
 

@@ -11,6 +11,8 @@ namespace PowerEvent
 {
     public class HoldOpsaetningModel : PageModel
     {
+        public Login CurrentLogin { get; set; }
+
         [BindProperty]
         public string DeltagerNavn { get; set; }
 
@@ -30,29 +32,42 @@ namespace PowerEvent
         public List<Hold> HoldList { get; set; }
 
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            if (Request.Query.ContainsKey("Event"))
+            loadTempDataLogin();
+            if (CurrentLogin != null)
             {
-                SelectedEvent = int.Parse(Request.Query["Event"]);
-                DeltagerList = DBAdapter.getDeltagere(SelectedEvent);
-                HoldList = DBAdapter.getHold();
+                CurrentLogin = DBAdapter.verifyLogin(CurrentLogin.Brugernavn, CurrentLogin.Kodeord);
+            }
+            if (CurrentLogin == null || CurrentLogin.Id == 0 || CurrentLogin.AdminType == 0)
+            {
+                return Redirect("/Index");
             }
             else
             {
-                if (TempData.Peek("SelectedEvent") != null)
+                if (Request.Query.ContainsKey("Event"))
                 {
-                    TempData.Keep("SelectedEvent");
+                    SelectedEvent = int.Parse(Request.Query["Event"]);
                     DeltagerList = DBAdapter.getDeltagere(SelectedEvent);
                     HoldList = DBAdapter.getHold();
                 }
                 else
                 {
-                    SelectedEvent = -1;
+                    if (TempData.Peek("SelectedEvent") != null)
+                    {
+                        TempData.Keep("SelectedEvent");
+                        DeltagerList = DBAdapter.getDeltagere(SelectedEvent);
+                        HoldList = DBAdapter.getHold();
+                    }
+                    else
+                    {
+                        SelectedEvent = -1;
+                    }
                 }
+                EventList = DBAdapter.getEvent();
+
+                return this.Page();
             }
-            
-            EventList = DBAdapter.getEvent();
         }
 
         public void OnPostCmdSubmitDeltagerNavn()
@@ -69,7 +84,7 @@ namespace PowerEvent
 
         public void OnPostCmdAddDeltagerToHold()
         {
-            if(HoldID != -1)
+            if(HoldID != 0)
             {
                 DBAdapter.updateDeltager(DeltagerID, HoldID);
             }
@@ -173,6 +188,16 @@ namespace PowerEvent
             //    pairs.GetEnumerator().MoveNext();
             //}
             return teamcount;
+        }
+
+
+        private void loadTempDataLogin()
+        {
+            Login tempLogin = TempData.Peek<Login>("CurrentLogin");
+            if (tempLogin != null)
+            {
+                CurrentLogin = tempLogin;
+            }
         }
     }
 }

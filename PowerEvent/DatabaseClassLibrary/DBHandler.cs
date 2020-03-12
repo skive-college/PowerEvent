@@ -753,7 +753,15 @@ namespace DatabaseClassLibrary
                 string sql = "UPDATE EventDeltager SET holdid = @HoldId WHERE id = @Id";
 
                 SqlCommand command = new SqlCommand(sql, con);
-                command.Parameters.AddWithValue("@HoldId", _holdid);
+                if (_holdid != null)
+                {
+                    command.Parameters.AddWithValue("@HoldId", _holdid);
+                }
+                else if (_holdid == null)
+                {
+                    command.Parameters.AddWithValue("@HoldId", DBNull.Value);
+                }
+                
                 command.Parameters.AddWithValue("@Id", _id);
                 con.Open();
                 command.ExecuteNonQuery();
