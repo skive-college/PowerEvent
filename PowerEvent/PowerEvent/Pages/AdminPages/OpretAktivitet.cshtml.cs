@@ -231,7 +231,7 @@ namespace PowerEvent.Pages
         {
             if (SelectedEventAktivitet != -1)
             {
-                DBAdapter.deleteEventAktivitet(SelectedEventAktivitet);
+                DBAdapter.deleteEventAktivitet(SelectedEventAktivitet, SelectedOpretEvent);
                 loadAktivitetList();
                 loadEventAktivitetList();
                 SelectedEventAktivitet = -1;

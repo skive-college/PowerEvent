@@ -49,9 +49,9 @@ namespace PowerEvent.Helpers
             DBHandler.addEventAktivitet(_eventId, _aktivitetId);
         }
 
-        public static void deleteEventAktivitet(int _id)
+        public static void deleteEventAktivitet(int _id, int _eventId)
         {
-            DBHandler.deleteEventAktivitet(_id);
+            DBHandler.deleteEventAktivitet(_id, _eventId);
         }
 
         //___________________________________________________________________________________________________________Alt med Event ↑
