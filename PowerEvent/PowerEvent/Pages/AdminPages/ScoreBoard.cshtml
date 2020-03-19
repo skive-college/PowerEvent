@@ -9,7 +9,19 @@
     {
     <div container>
         <div class="text-center">
-            <h1>ScoreBoard @Model.EventName</h1>
+            @{
+                string title = "ScoreBoard";
+                if (Model.SelectedEventAktivitet != -1)
+                {
+                    PowerEvent.Models.Aktivitet tempAk = @Model.AktivitetList.Where(i => i.Id == Model.EventAktivitetList.Where(i => i.Id == Model.SelectedEventAktivitet).FirstOrDefault().AktivitetId).FirstOrDefault();
+                    if (tempAk != null)
+                    {
+                        title += " for: " + tempAk.Navn;
+                    }
+                }
+            }
+
+            <h1>@title</h1>
             <div class="row justify-content-md-center">
                 <style>
                     #EventList {
@@ -92,10 +104,6 @@
                 </select>
                 <br />
             </div>
-
-
-
-
         </div>
 
         @{
@@ -108,7 +116,39 @@
                             PowerEvent.Models.Aktivitet tempaktivitet = Model.AktivitetList.Where(i => i.Id == Model.EventAktivitetList.Where(i => i.Id == Model.SelectedEventAktivitet).FirstOrDefault().AktivitetId).FirstOrDefault();
                             if (tempaktivitet.HoldSport == 0)
                             {
+                                <div class="col">
+                                    <div class="row" style="font-weight: bolder; font-size: 1.4em;">
+                                        <p>Hold : @_hold.Navn</p>
+                                    </div>
 
+                                    <div class="row justify-content-md-center">
+                                        <div class="col-md">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Score</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        PowerEvent.Models.EventAktivitetHold tempEventAktivitetHold = _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == Model.SelectedEventAktivitet).FirstOrDefault();
+                                                        if (tempEventAktivitetHold != null && tempEventAktivitetHold.HoldScores != null)
+                                                        {
+                                                            foreach (var _holdScore in tempEventAktivitetHold.HoldScores)
+                                                            {
+                                                                <tr>
+                                                                    @{
+                                                                        <th>@_holdScore.HoldScore</th>
+                                                                    }
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             }
                             else if (tempaktivitet.HoldSport == 1)
                             {

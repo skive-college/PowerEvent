@@ -34,6 +34,8 @@ namespace PowerEvent.Pages
 
         public string TxtEvent { get; set; }
 
+        public string TxtSletEvent { get; set; }
+
         public string ValgtGuiElemement { get; set; }
 
         public List<Event> EventList { get; set; }
@@ -104,10 +106,10 @@ namespace PowerEvent.Pages
                 SelectedAktivitet = -1;
                 SelectedEvent = -1;
                 SelectedEventAktivitet = -1;
+                SelectedOpretEvent = -1;
                 AktivitetList = new List<Aktivitet>();
                 EventAktivitetList = new List<EventAktivitet>();
-                EventList = DBAdapter.getEvent();
-                OpretEventList = DBAdapter.getEvent();
+                loadEventLister();
 
                 //loadTempDataTempPointTypeList();
                 //loadTempDataTempHoldSportList();
@@ -172,10 +174,10 @@ namespace PowerEvent.Pages
 
         public void sletEvent()
         {
-            if (SelectedOpretEvent != -1 && CurrentLogin.AdminType == 2)
+            if (SelectedOpretEvent != -1 && CurrentLogin.AdminType == 2 && TxtSletEvent == OpretEventList.Where(i => i.Id == SelectedOpretEvent).FirstOrDefault().Navn)
             {
-                DBAdapter.deleteEvent(SelectedOpretEvent);
-                loadEventList();
+                DBAdapter.deleteAllEvent(SelectedOpretEvent);
+                loadEventLister();
                 SelectedOpretEvent = -1;
             }
         }
@@ -185,12 +187,13 @@ namespace PowerEvent.Pages
             if (TxtEvent != "")
             {
                 DBAdapter.addEvent(TxtEvent);
-                loadEventList();
+                loadEventLister();
             }
         }
 
-        private void loadEventList()
+        private void loadEventLister()
         {
+            EventList = DBAdapter.getEvent();
             OpretEventList = DBAdapter.getEvent();
         }
 
@@ -228,7 +231,7 @@ namespace PowerEvent.Pages
         {
             if (SelectedEventAktivitet != -1)
             {
-                DBAdapter.deleteEventAktivitet(SelectedEventAktivitet);
+                DBAdapter.deleteEventAktivitet(SelectedEventAktivitet, SelectedOpretEvent);
                 loadAktivitetList();
                 loadEventAktivitetList();
                 SelectedEventAktivitet = -1;
@@ -344,6 +347,13 @@ namespace PowerEvent.Pages
             catch
             {
             }
+            try
+            {
+                TxtSletEvent = Request.Query["TxtSletEvent"];
+            }
+            catch
+            {
+            }
 
 
             ValgtGuiElemement = Request.Query["ValgtGuiElemement"];
@@ -357,11 +367,7 @@ namespace PowerEvent.Pages
                 }
             }
 
-            if (ValgtGuiElemement == "AktivitetList")
-            {
-
-            }
-            else if (ValgtGuiElemement == "EventList")
+            if (ValgtGuiElemement == "EventList")
             {
                 if (SelectedEvent != -1)
                 {

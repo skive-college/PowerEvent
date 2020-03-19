@@ -39,14 +39,19 @@ namespace PowerEvent.Helpers
             DBHandler.deleteEvent(_id);
         }
 
+        public static void deleteAllEvent(int _id)
+        {
+            DBHandler.deleteAllEvent(_id);
+        }
+
         public static void addEventAktivitet(int _eventId, int _aktivitetId)
         {
             DBHandler.addEventAktivitet(_eventId, _aktivitetId);
         }
 
-        public static void deleteEventAktivitet(int _id)
+        public static void deleteEventAktivitet(int _id, int _eventId)
         {
-            DBHandler.deleteEventAktivitet(_id);
+            DBHandler.deleteEventAktivitet(_id, _eventId);
         }
 
         //___________________________________________________________________________________________________________Alt med Event ↑
@@ -189,6 +194,11 @@ namespace PowerEvent.Helpers
         {
             DBHandler.deleteHold(_id);
         }
+
+        public static void updateHoldScore(int _id, int _score)
+        {
+            DBHandler.updateHoldScore(_id, _score);
+        }
         //___________________________________________________________________________________________________________Alt med Hold ↑
 
         public static void deleteHoldScore(int _id)
@@ -250,6 +260,10 @@ namespace PowerEvent.Helpers
             DBHandler.deleteDeltager(_id);
         }
 
+        public static void updateDeltagerScore(int _id, int _score)
+        {
+            DBHandler.updateDeltagerScore( _id,  _score);
+        }
         //___________________________________________________________________________________________________________Alt med Deltager ↑
 
         //___________________________________________________________________________________________________________Alt med Hold Order ↓

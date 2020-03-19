@@ -34,6 +34,8 @@ namespace PowerEvent
         [BindProperty]
         public int SelectedPoint { get; set; }
 
+        public int SelectedScoreValue { get; set; }
+
         public string ValgtGuiElemement { get; set; }
 
 
@@ -159,7 +161,7 @@ namespace PowerEvent
                             }
                         }
                     }
-                    if (ValgtGuiElemement == "CmdAddPoint" || ValgtGuiElemement == "CmdDeletePoint")
+                    if (ValgtGuiElemement == "CmdAddPoint" || ValgtGuiElemement == "CmdDeletePoint" || ValgtGuiElemement == "CmdUpdatePoint+" || ValgtGuiElemement == "CmdUpdatePoint-")
                     {
                         if (ValgtGuiElemement == "CmdAddPoint")
                         {
@@ -168,6 +170,10 @@ namespace PowerEvent
                         else if (ValgtGuiElemement == "CmdDeletePoint")
                         {
                             CmdDeletePoint();
+                        }
+                        else if (ValgtGuiElemement == "CmdUpdatePoint+" || ValgtGuiElemement == "CmdUpdatePoint-")
+                        {
+                            CmdUpdatePoint();
                         }
                         if (ValgtAktivitet.HoldSport == 0)
                         {
@@ -186,9 +192,56 @@ namespace PowerEvent
             return this.Page();
         }
 
-        public void OnPost()
+        public void CmdUpdatePoint()
         {
+            if (SelectedPoint != -1)
+            {
+                int? score = 0;
+                if (ValgtAktivitet.HoldSport == 0)
+                {
+                    score = HoldList.Where(i => i.Id == SelectedHold).FirstOrDefault().HoldAktiviteter.Where(i => i.HoldId == SelectedHold).FirstOrDefault().HoldScores.Where(i => i.Id == SelectedPoint).FirstOrDefault().HoldScore;
+                }
+                else
+                {
+                    score = DeltagerList.Where(i => i.Id == SelectedDeltager).FirstOrDefault().ScoreList.Where(i => i.Id == SelectedPoint).FirstOrDefault().Score;
+                }
 
+                if (ValgtGuiElemement == "CmdUpdatePoint+")
+                {
+                    score++;
+                }
+                else if (ValgtGuiElemement == "CmdUpdatePoint-")
+                {
+                    score--;
+                }
+                if (score != null)
+                {
+                    int tempscore = (int)score;
+                    if (ValgtAktivitet.HoldSport == 0)
+                    {
+                        //HoldSport Add HOLD score 
+                        if (SelectedPoint != -1)
+                        {
+                            DBAdapter.updateHoldScore(SelectedPoint, tempscore);
+                            HoldList = DBAdapter.getHold(SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                            HoldList = DBAdapter.getHoldAktivitet(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                            HoldList = DBAdapter.getHoldAktivitetScores(HoldList, SelectedEvent, SelectedOrder, SelectedEventAktivitet);
+                        }
+                    }
+                    else if (ValgtAktivitet.HoldSport == 1)
+                    {
+                        if (SelectedPoint != -1)
+                        {
+                            DBAdapter.updateDeltagerScore(SelectedPoint, tempscore);
+                            DeltagerList = DBAdapter.getDeltagere(SelectedEvent, SelectedEventAktivitet, SelectedHold);
+                        }
+                        //HoldSport Add DELTAGER score
+                    }
+
+                }
+            }
+            
+            
         }
 
         public void CmdAddPoint()

@@ -177,6 +177,7 @@ namespace PowerEvent
                 DBAdapter.deleteEventAktivitetHold(SelectedHoldAktivitet);
                 loadHoldAktivitetList();
                 SelectedHold = -1;
+                SelectedHoldAktivitet = -1;
             }
         }
 

@@ -124,6 +124,10 @@ namespace PowerEvent
             {
                 for (int _vis = 0; _vis < Vis; _vis++)
                 {
+                    List<Hold> HoldVindere = new List<Hold>();
+                    List<Hold> HoldTabere = new List<Hold>();
+                    List<Hold> HoldStodLige = new List<Hold>();
+                    List<Hold> HoldResterende = new List<Hold>();
                     foreach (Hold _hold in HoldList)
                     {
                         EventAktivitetHold _eventAktivitetHold = _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == EventAktivitetList[_vis].Id).FirstOrDefault();
@@ -136,6 +140,9 @@ namespace PowerEvent
                             int? modstanderTotalScore = 0;
                             int? modstanderAntalScores = 0;
                             int antalForan = 0;
+                            int antalLige = 0;
+                            List<Hold> tempHoldList = new List<Hold>();
+
                             if (_aktivitet.HoldSport == 0)
                             {
                                 if (_eventAktivitetHold.HoldScores.Count != 0)
@@ -165,268 +172,206 @@ namespace PowerEvent
                             {
                                 totalScore /= antalScores;
                             }
+                            if (_aktivitet.HoldSport == 0)
+                            {
+                                tempHoldList = HoldList.Where(i => i.HoldAktiviteter.Where(i => i.HoldOrder == _eventAktivitetHold.HoldOrder && i.EventAktivitetId == _eventAktivitetHold.EventAktivitetId).ToList().Count != 0).ToList();
+                            }
                             for (int i = 0; i < HoldList.Count; i++)
                             {
                                 if (HoldList[i] != _hold)
                                 {
-                                    modstanderTotalScore = 0;
-                                    modstanderAntalScores = 0;
-                                    EventAktivitetHold _modstanderEventAktivitetHold = HoldList[i].HoldAktiviteter.Where(i => i.EventAktivitetId == EventAktivitetList[_vis].Id).FirstOrDefault();
-                                    if (_modstanderEventAktivitetHold != null)
+                                    if (tempHoldList == null || tempHoldList.Count == 0 || tempHoldList != null && tempHoldList.Count != 0 && tempHoldList.Contains(HoldList[i]))
                                     {
-                                        if (_aktivitet.HoldSport == 0)
+                                        modstanderTotalScore = 0;
+                                        modstanderAntalScores = 0;
+                                        EventAktivitetHold _modstanderEventAktivitetHold = HoldList[i].HoldAktiviteter.Where(i => i.EventAktivitetId == EventAktivitetList[_vis].Id).FirstOrDefault();
+                                        if (_modstanderEventAktivitetHold != null)
                                         {
-                                            if (_modstanderEventAktivitetHold.HoldScores.Count != 0)
+                                            if (_aktivitet.HoldSport == 0)
                                             {
-                                                foreach (var _score in _modstanderEventAktivitetHold.HoldScores)
+                                                if (_modstanderEventAktivitetHold.HoldScores.Count != 0)
                                                 {
-                                                    modstanderTotalScore += _score.HoldScore;
-                                                    modstanderAntalScores++;
-                                                }
-                                            }
-                                        }
-                                        else if (_aktivitet.HoldSport == 1)
-                                        {
-                                            foreach (var _deltager in DeltagerList.Where(d => d.HoldId == HoldList[i].Id).ToList())
-                                            {
-                                                foreach (var _score in _deltager.ScoreList.Where(i => i.EventAktivitetId == EventAktivitetList[_vis].Id).ToList())
-                                                {
-                                                    if (_score.Score != null)
+                                                    foreach (var _score in _modstanderEventAktivitetHold.HoldScores)
                                                     {
-                                                        modstanderTotalScore += _score.Score;
+                                                        modstanderTotalScore += _score.HoldScore;
                                                         modstanderAntalScores++;
                                                     }
                                                 }
+                                                if (tempHoldList != null && tempHoldList.Count != 0 && totalScore == modstanderTotalScore)
+                                                {
+                                                    antalLige++;
+                                                }
+                                            }
+                                            else if (_aktivitet.HoldSport == 1)
+                                            {
+                                                foreach (var _deltager in DeltagerList.Where(d => d.HoldId == HoldList[i].Id).ToList())
+                                                {
+                                                    foreach (var _score in _deltager.ScoreList.Where(i => i.EventAktivitetId == EventAktivitetList[_vis].Id).ToList())
+                                                    {
+                                                        if (_score.Score != null)
+                                                        {
+                                                            modstanderTotalScore += _score.Score;
+                                                            modstanderAntalScores++;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            if (modstanderAntalScores != 0 && _aktivitet.HoldSport == 1)
+                                            {
+                                                modstanderTotalScore /= modstanderAntalScores;
+                                            }
+                                            if (totalScore > modstanderTotalScore && _aktivitet.PointType != 1 && _aktivitet.PointType != 3 || totalScore < modstanderTotalScore && _aktivitet.PointType != 0 && _aktivitet.PointType != 2)
+                                            {
+                                                antalForan++;
                                             }
                                         }
-                                        if (modstanderAntalScores != 0 && _aktivitet.HoldSport == 1)
-                                        {
-                                            modstanderTotalScore /= modstanderAntalScores;
-                                        }
-                                    }
-                                    if (totalScore > modstanderTotalScore && _aktivitet.PointType != 1 && _aktivitet.PointType != 3 && _modstanderEventAktivitetHold != null || totalScore < modstanderTotalScore && _aktivitet.PointType != 0 && _aktivitet.PointType != 2 && _modstanderEventAktivitetHold != null)
-                                    {
-                                        antalForan++;
                                     }
                                 }
                             }
-                            _eventAktivitetHold.Point = 10 * (HoldList.Count() - antalForan);
+                            if (_aktivitet.HoldSport == 0 && tempHoldList != null && tempHoldList.Count != 0)
+                            {
+                                if (antalLige == tempHoldList.Count - 1)
+                                {
+                                    HoldStodLige.Add(_hold);
+                                }
+                                else if (antalForan == 0)
+                                {
+                                    HoldVindere.Add(_hold);
+                                }
+                                else
+                                {
+                                    HoldTabere.Add(_hold);
+                                }
+                            }
+                            else
+                            {
+                                _eventAktivitetHold.Point = 10 * (HoldList.Count() - antalForan);
+                            }
+                        }
+                        else
+                        {
+                            HoldResterende.Add(_hold);
                         }
                     }
-                    
+
+                    //hvis det er hold mod hold og point gives til vinderen af de individuelle hold mod hold.
+                    if (HoldVindere.Count != 0 && HoldTabere.Count != 0 || HoldStodLige.Count != 0)
+                    {
+                        List<List<Hold>> listerAfHold = new List<List<Hold>>();
+                        if (HoldVindere.Count != 0 && HoldTabere.Count != 0)
+                        {
+                            listerAfHold.Add(HoldVindere);
+                            listerAfHold.Add(HoldTabere);
+                        }
+                        if (HoldStodLige.Count != 0)
+                        {
+                            listerAfHold.Add(HoldStodLige);
+                        }
+                        HoldList.Clear();
+                        foreach (List<Hold> _holdlist in listerAfHold)
+                        {
+                            //hvor mange hold der er i de andre lister før den liste som den nuværende hold er i
+                            int holdlistenummer = 0;
+                            if (_holdlist == HoldStodLige || _holdlist == HoldTabere)
+                            {
+                                if (HoldVindere != null)
+                                {
+                                    holdlistenummer += HoldVindere.Count;
+                                }
+                                if (_holdlist == HoldTabere)
+                                {
+                                    if (HoldStodLige != null)
+                                    {
+                                        holdlistenummer += HoldStodLige.Count;
+                                    }
+                                }
+                            }
+                            
+                            foreach (Hold _hold in _holdlist)
+                            {
+                                EventAktivitetHold _eventAktivitetHold = _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == EventAktivitetList[_vis].Id).FirstOrDefault();
+
+                                if (_eventAktivitetHold != null)
+                                {
+                                    Aktivitet _aktivitet = AktivitetList.Where(i => i.Id == EventAktivitetList.Where(i => i.Id == _eventAktivitetHold.EventAktivitetId).FirstOrDefault().AktivitetId).FirstOrDefault();
+                                    int? totalScore = 0;
+                                    int? antalScores = 0;
+                                    int? modstanderTotalScore = 0;
+                                    int? modstanderAntalScores = 0;
+                                    int antalForan = 0;
+
+                                    if (_aktivitet.HoldSport == 0)
+                                    {
+                                        if (_eventAktivitetHold.HoldScores.Count != 0)
+                                        {
+                                            foreach (var _score in _eventAktivitetHold.HoldScores)
+                                            {
+                                                totalScore += _score.HoldScore;
+                                                antalScores++;
+                                            }
+                                        }
+                                    }
+                                    if (antalScores != 0 && _aktivitet.HoldSport == 1)
+                                    {
+                                        totalScore /= antalScores;
+                                    }
+                                    for (int i = 0; i < _holdlist.Count; i++)
+                                    {
+                                        if (_holdlist[i] != _hold)
+                                        {
+                                            modstanderTotalScore = 0;
+                                            modstanderAntalScores = 0;
+                                            EventAktivitetHold _modstanderEventAktivitetHold = _holdlist[i].HoldAktiviteter.Where(i => i.EventAktivitetId == EventAktivitetList[_vis].Id).FirstOrDefault();
+                                            if (_modstanderEventAktivitetHold != null)
+                                            {
+                                                if (_aktivitet.HoldSport == 0)
+                                                {
+                                                    if (_modstanderEventAktivitetHold.HoldScores.Count != 0)
+                                                    {
+                                                        foreach (var _score in _modstanderEventAktivitetHold.HoldScores)
+                                                        {
+                                                            modstanderTotalScore += _score.HoldScore;
+                                                            modstanderAntalScores++;
+                                                        }
+                                                    }
+                                                }
+                                                else if (_aktivitet.HoldSport == 1)
+                                                {
+                                                    foreach (var _deltager in DeltagerList.Where(d => d.HoldId == _holdlist[i].Id).ToList())
+                                                    {
+                                                        foreach (var _score in _deltager.ScoreList.Where(i => i.EventAktivitetId == EventAktivitetList[_vis].Id).ToList())
+                                                        {
+                                                            if (_score.Score != null)
+                                                            {
+                                                                modstanderTotalScore += _score.Score;
+                                                                modstanderAntalScores++;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                if (modstanderAntalScores != 0 && _aktivitet.HoldSport == 1)
+                                                {
+                                                    modstanderTotalScore /= modstanderAntalScores;
+                                                }
+                                                if (totalScore > modstanderTotalScore && _aktivitet.PointType != 1 && _aktivitet.PointType != 3 || totalScore < modstanderTotalScore && _aktivitet.PointType != 0 && _aktivitet.PointType != 2)
+                                                {
+                                                    antalForan++;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    _eventAktivitetHold.Point = 10 * (HoldVindere.Count + HoldTabere.Count + HoldStodLige.Count - antalForan - holdlistenummer);
+                                }
+                            }
+                            HoldList.AddRange(_holdlist);
+                        }
+                        HoldList.AddRange(HoldResterende);
+                    }
                 }
-                HoldList = HoldList.OrderByDescending(i => i.HoldAktiviteter.Sum(i => i.Point)).ToList();
             }
+            HoldList = HoldList.OrderByDescending(i => i.HoldAktiviteter.Sum(i => i.Point)).ToList();
         }
 
-        //original point udregning:
-        //if (Vis > 0)
-        //{
-        //    for (int _vis = 0; _vis < Vis; _vis++)
-        //    {
-        //        for (int _stop = 0; _stop < HoldList.Count; _stop++)
-        //        {//sorterer efter stilling
-        //            foreach (Hold _hold in HoldList)
-        //            {
-        //                EventAktivitetHold _eventAktivitetHold = _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == EventAktivitetList[_vis].Id).FirstOrDefault();
-
-        //                if (_eventAktivitetHold != null)
-        //                {
-        //                    Aktivitet _aktivitet = AktivitetList.Where(i => i.Id == EventAktivitetList.Where(i => i.Id == _eventAktivitetHold.EventAktivitetId).FirstOrDefault().AktivitetId).FirstOrDefault();
-        //                    int? totalScore = 0;
-        //                    int? antalScores = 0;
-        //                    int? andetTotalScore = 0;
-        //                    int? andetAntalScores = 0;
-        //                    int check = 0;
-        //                    if (_aktivitet.HoldSport == 0)
-        //                    {
-        //                        if (_eventAktivitetHold.HoldScores.Count != 0)
-        //                        {
-        //                            foreach (var _score in _eventAktivitetHold.HoldScores)
-        //                            {
-        //                                totalScore += _score.HoldScore;
-        //                                antalScores++;
-        //                            }
-        //                        }
-        //                    }
-        //                    else if (_aktivitet.HoldSport == 1)
-        //                    {
-        //                        foreach (var _deltager in DeltagerList.Where(d => d.HoldId == _hold.Id).ToList())
-        //                        {
-        //                            foreach (var _score in _deltager.ScoreList)
-        //                            {
-        //                                if (_score.Score != null && _score.EventAktivitetId == _eventAktivitetHold.EventAktivitetId)
-        //                                {
-        //                                    totalScore += _score.Score;
-        //                                    antalScores++;
-        //                                }
-        //                            }
-        //                        }
-        //                    }
-        //                    if (antalScores != 0)
-        //                    {
-        //                        totalScore /= antalScores;
-        //                    }
-        //                    for (int i = 0; i < HoldList.Count; i++)
-        //                    {
-        //                        if (HoldList[i] != _hold)
-        //                        {
-        //                            EventAktivitetHold _andetEventAktivitetHold = HoldList[i].HoldAktiviteter.Where(i => i.EventAktivitetId == EventAktivitetList[_vis].Id).FirstOrDefault();
-        //                            if (_andetEventAktivitetHold != null)
-        //                            {
-        //                                if (_aktivitet.HoldSport == 0)
-        //                                {
-        //                                    if (_andetEventAktivitetHold.HoldScores.Count != 0)
-        //                                    {
-        //                                        foreach (var _score in _andetEventAktivitetHold.HoldScores)
-        //                                        {
-        //                                            andetTotalScore += _score.HoldScore;
-        //                                            andetAntalScores++;
-        //                                        }
-        //                                    }
-        //                                }
-        //                                else if (_aktivitet.HoldSport == 1)
-        //                                {
-        //                                    foreach (var _deltager in DeltagerList.Where(d => d.HoldId == HoldList[i].Id).ToList())
-        //                                    {
-        //                                        foreach (var _score in _deltager.ScoreList)
-        //                                        {
-        //                                            if (_score.Score != null)
-        //                                            {
-        //                                                andetTotalScore += _score.Score;
-        //                                                andetAntalScores++;
-        //                                            }
-        //                                        }
-        //                                    }
-        //                                }
-        //                                if (andetAntalScores != 0)
-        //                                {
-        //                                    andetTotalScore /= andetAntalScores;
-        //                                }
-        //                            }
-        //                            if (_andetEventAktivitetHold == null || totalScore < andetTotalScore && _aktivitet.PointType != 1 && _aktivitet.PointType != 3 && _andetEventAktivitetHold != null || totalScore > andetTotalScore && _aktivitet.PointType != 0 && _aktivitet.PointType != 2 && _andetEventAktivitetHold != null)
-        //                            {
-        //                                if (HoldList.IndexOf(_hold) > i)
-        //                                {
-        //                                    HoldList.Remove(_hold);
-        //                                    HoldList.Insert(i, _hold);
-        //                                    i++;
-        //                                    check = 1;
-        //                                }
-        //                            }
-        //                        }
-        //                    }
-        //                    if (check == 1)
-        //                    {
-        //                        break;
-        //                    }
-
-        //                    else if (_aktivitet.HoldSport == 1)
-        //                    {
-
-        //                    }
-
-        //                }
-        //            }
-
-        //            //giver point
-        //            foreach (var _hold in HoldList)
-        //            {
-        //                if (_vis == 4)
-        //                {
-
-        //                }
-        //                EventAktivitetHold _eventAktivitetHold = _hold.HoldAktiviteter.Where(i => i.EventAktivitetId == EventAktivitetList[_vis].Id).FirstOrDefault();
-        //                if (_eventAktivitetHold != null)
-        //                {
-        //                    int plads = HoldList.IndexOf(_hold);
-        //                    int antalForan = 0;
-        //                    Aktivitet _aktivitet = AktivitetList.Where(i => i.Id == EventAktivitetList.Where(i => i.Id == _eventAktivitetHold.EventAktivitetId).FirstOrDefault().AktivitetId).FirstOrDefault();
-        //                    int? totalScore = 0;
-        //                    int? antalScores = 0;
-        //                    if (_aktivitet.HoldSport == 0)
-        //                    {
-        //                        if (_eventAktivitetHold.HoldScores.Count != 0)
-        //                        {
-        //                            foreach (var _score in _eventAktivitetHold.HoldScores)
-        //                            {
-        //                                totalScore += _score.HoldScore;
-        //                                antalScores++;
-        //                            }
-        //                        }
-        //                    }
-        //                    else if (_aktivitet.HoldSport == 1)
-        //                    {
-        //                        foreach (var _deltager in DeltagerList.Where(d => d.HoldId == _hold.Id).ToList())
-        //                        {
-        //                            foreach (var _score in _deltager.ScoreList)
-        //                            {
-        //                                if (_score.Score != null && _score.EventAktivitetId == _eventAktivitetHold.EventAktivitetId)
-        //                                {
-        //                                    totalScore += _score.Score;
-        //                                    antalScores++;
-        //                                }
-        //                            }
-        //                        }
-        //                    }
-        //                    if (antalScores != 0)
-        //                    {
-        //                        totalScore /= antalScores;
-        //                    }
-
-        //                    if (plads != 0)
-        //                    {
-        //                        for (int i = plads - 1; i > -1; i--)
-        //                        {
-        //                            EventAktivitetHold _eventAktivitetModstanderHold = HoldList[i].HoldAktiviteter.Where(i => i.EventAktivitetId == EventAktivitetList[_vis].Id).FirstOrDefault();
-        //                            if (_eventAktivitetModstanderHold != null)
-        //                            {
-        //                                int? andetTotalScore = 0;
-        //                                int? andetAntalScores = 0;
-        //                                if (_aktivitet.HoldSport == 0)
-        //                                {
-        //                                    if (_eventAktivitetModstanderHold.HoldScores.Count != 0)
-        //                                    {
-        //                                        foreach (var _score in _eventAktivitetModstanderHold.HoldScores)
-        //                                        {
-        //                                            andetTotalScore += _score.HoldScore;
-        //                                            andetAntalScores++;
-        //                                        }
-        //                                    }
-        //                                }
-        //                                else if (_aktivitet.HoldSport == 1)
-        //                                {
-        //                                    foreach (var _deltager in DeltagerList.Where(d => d.HoldId == HoldList[i].Id).ToList())
-        //                                    {
-        //                                        foreach (var _score in _deltager.ScoreList)
-        //                                        {
-        //                                            if (_score.Score != null)
-        //                                            {
-        //                                                andetTotalScore += _score.Score;
-        //                                                andetAntalScores++;
-        //                                            }
-        //                                        }
-        //                                    }
-        //                                }
-        //                                if (andetAntalScores != 0)
-        //                                {
-        //                                    andetTotalScore /= andetAntalScores;
-        //                                }
-
-        //                                if (andetTotalScore == totalScore)
-        //                                {
-        //                                    antalForan++;
-        //                                }
-        //                            }
-        //                        }
-        //                    }
-        //                    _eventAktivitetHold.Point = 10 * (HoldList.Count() - plads + antalForan);
-        //                }
-        //            }
-        //        }
-        //    }
-        //    HoldList = HoldList.OrderByDescending(i => i.HoldAktiviteter.Sum(i => i.Point)).ToList();
-        //}
 
 
         private void saveTempDataEvent()
